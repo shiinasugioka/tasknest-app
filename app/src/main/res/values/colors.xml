@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_orange">#EF8354</color>
+    <color name="light_orange">#f6d7c3</color>
+    <color name="primary_text">#2D3142</color>
+    <color name="secondary_text">#abadb4</color>
 </resources>

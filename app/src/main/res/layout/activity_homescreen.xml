@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="193dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="37dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/tasknest_logo" />
+
+    <View
+        android:id="@+id/horizontal_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="611dp"
+        android:background="#cbced7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_nest_button" />
+
+    <Button
+        android:id="@+id/view_nest_button"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="View Nest"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_text"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toStartOf="@+id/view_day_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/view_day_button"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginEnd="43dp"
+        android:fontFamily="@font/poppins"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="View Day"
+        android:textAllCaps="false"
+        android:textColor="#2D3142"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toStartOf="@+id/new_nest_button"
+        app:layout_constraintStart_toEndOf="@+id/view_nest_button"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/new_nest_button"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rectangular_button"
+        android:fontFamily="@font/poppins"
+        android:paddingStart="5dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="0dp"
+        android:text="Create New Nest +"
+        android:textColor="#2D3142"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_day_button"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
