@@ -8,17 +8,20 @@
         <CheckBoxPreference
             android:key="notification_app"
             android:title="App Notifications"
-            android:summary="Enable notifications from the app"/>
+            android:summary="Enable notifications from the app"
+            android:icon="@drawable/app_notification"/>
 
         <CheckBoxPreference
             android:key="notification_email"
             android:title="Email Notifications"
-            android:summary="Enable email notifications"/>
+            android:summary="Enable email notifications"
+            android:icon="@drawable/email_notification"/>
 
         <CheckBoxPreference
             android:key="notification_sms"
             android:title="SMS Notifications"
-            android:summary="Enable SMS notifications"/>
+            android:summary="Enable SMS notifications"
+            android:icon="@drawable/sms_notification"/>
 
         <EditTextPreference
             android:key="email_address"
@@ -44,7 +47,7 @@
             android:title="Frequency"
             android:summary="Enter notification frequency"
             android:inputType="number"
-            android:defaultValue="1"/>
+            android:defaultValue="2"/>
 
         <ListPreference
             android:key="frequency_unit"
@@ -53,7 +56,7 @@
             android:dialogTitle="Select Frequency Unit"
             android:entries="@array/frequency_units"
             android:entryValues="@array/frequency_units_values"
-            android:defaultValue="minutes"/>
+            android:defaultValue="hour"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
