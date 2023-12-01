@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--  Logo  -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="193dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="42dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/tasknest_logo" />
+
+    <!--  Horizontal Bar  -->
+    <View
+        android:id="@+id/horizontal_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="611dp"
+        android:background="#cbced7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--  NavBar Items  -->
+    <LinearLayout
+        android:id="@+id/navbar_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo">
+
+        <LinearLayout
+            android:id="@+id/view_nest_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="44dp"
+            tools:layout_editor_absoluteY="188dp">
+
+            <Button
+                android:id="@+id/view_nest_button"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:fontFamily="@font/poppins"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="@string/view_nest_button"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_text"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/view_day_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/underline_bar_view_nest"
+                android:layout_width="80dp"
+                android:layout_height="3dp"
+                android:background="@drawable/underline_rectangle"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="116dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_day_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="83dp">
+
+            <Button
+                android:id="@+id/view_day_button"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:fontFamily="@font/poppins"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="@string/view_day_button"
+                android:textAllCaps="false"
+                android:textColor="#2D3142"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/new_nest_button"
+                app:layout_constraintStart_toEndOf="@+id/view_nest_button"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/underline_bar_view_day"
+                android:layout_width="80dp"
+                android:layout_height="3dp"
+                android:background="@drawable/underline_rectangle"
+                tools:layout_editor_absoluteX="128dp"
+                tools:layout_editor_absoluteY="116dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/new_nest_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/rectangular_button"
+            android:fontFamily="@font/poppins"
+            android:paddingStart="5dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="0dp"
+            android:text="@string/create_new_nest"
+            android:textAllCaps="false"
+            android:textColor="#2D3142"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_day_button"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/todoListContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/navbar_items"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- RecyclerView for the to-do list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/todoListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <!--  Footer Items -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="522dp"
+        android:background="@color/main_orange"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="290dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/round_sort_24" />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/settings_icon" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="493dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="32dp"
+        android:background="@android:color/transparent"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:srcCompat="@drawable/add_task_button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
