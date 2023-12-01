@@ -6,4 +6,5 @@
     <color name="light_orange">#f6d7c3</color>
     <color name="primary_text">#2D3142</color>
     <color name="secondary_text">#abadb4</color>
+    <color name="underline_bar">#4F5D75</color>
 </resources>
