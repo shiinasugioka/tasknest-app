@@ -8,10 +8,7 @@
     <!--  Logo  -->
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="193dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="42dp"
+        style="@style/logo"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,10 +18,7 @@
     <!--  Horizontal Bar  -->
     <View
         android:id="@+id/horizontal_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="611dp"
-        android:background="#cbced7"
+        style="@style/horizontal_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -33,11 +27,7 @@
     <!--  NavBar Items  -->
     <LinearLayout
         android:id="@+id/navbar_items"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        style="@style/navbar_items"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,26 +35,14 @@
 
         <LinearLayout
             android:id="@+id/view_nest_button_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/view_nest_button_container"
             tools:layout_editor_absoluteX="44dp"
             tools:layout_editor_absoluteY="188dp">
 
             <Button
                 android:id="@+id/view_nest_button"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:fontFamily="@font/poppins"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
+                style="@style/view_nest_button"
                 android:text="@string/view_nest_button"
-                android:textAllCaps="false"
-                android:textColor="@color/primary_text"
-                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
                 app:layout_constraintEnd_toStartOf="@+id/view_day_button"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,9 +51,7 @@
 
             <View
                 android:id="@+id/underline_bar_view_nest"
-                android:layout_width="80dp"
-                android:layout_height="3dp"
-                android:background="@drawable/underline_rectangle"
+                style="@style/underline_bar_view_nest"
                 tools:layout_editor_absoluteX="29dp"
                 tools:layout_editor_absoluteY="116dp" />
 
@@ -83,26 +59,14 @@
 
         <LinearLayout
             android:id="@+id/view_day_button_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="60dp"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/view_day_button_container"
             tools:layout_editor_absoluteX="128dp"
             tools:layout_editor_absoluteY="83dp">
 
             <Button
                 android:id="@+id/view_day_button"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:fontFamily="@font/poppins"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
+                style="@style/view_day_button"
                 android:text="@string/view_day_button"
-                android:textAllCaps="false"
-                android:textColor="#2D3142"
-                android:textSize="12sp"
                 app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
                 app:layout_constraintEnd_toStartOf="@+id/new_nest_button"
                 app:layout_constraintStart_toEndOf="@+id/view_nest_button"
@@ -111,9 +75,7 @@
 
             <View
                 android:id="@+id/underline_bar_view_day"
-                android:layout_width="80dp"
-                android:layout_height="3dp"
-                android:background="@drawable/underline_rectangle"
+                style="@style/underline_bar_view_day"
                 tools:layout_editor_absoluteX="128dp"
                 tools:layout_editor_absoluteY="116dp" />
 
@@ -121,18 +83,8 @@
 
         <Button
             android:id="@+id/new_nest_button"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:background="@drawable/rectangular_button"
-            android:fontFamily="@font/poppins"
-            android:paddingStart="5dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="0dp"
+            style="@style/new_nest_button"
             android:text="@string/create_new_nest"
-            android:textAllCaps="false"
-            android:textColor="#2D3142"
-            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view_day_button"
@@ -143,13 +95,8 @@
 
     <!--  Footer Items -->
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginTop="522dp"
-        android:background="@color/main_orange"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:id="@+id/footer_items"
+        style="@style/footer_items"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -159,38 +106,82 @@
 
 
         <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="290dp"
-            android:background="@android:color/transparent"
+            android:id="@+id/sort_button"
+            style="@style/sort_button"
             app:srcCompat="@drawable/round_sort_24" />
 
         <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:scaleType="centerCrop"
+            android:id="@+id/settings_button"
+            style="@style/settings_button"
             app:srcCompat="@drawable/settings_icon" />
 
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="493dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="32dp"
-        android:background="@android:color/transparent"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        android:id="@+id/new_task_button"
+        style="@style/new_task_button"
+        app:layout_constraintBottom_toBottomOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="@+id/footer_items"
+        app:layout_constraintStart_toStartOf="@+id/footer_items"
         app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
         app:srcCompat="@drawable/add_task_button" />
+
+    <!-- Content -->
+    <Spinner
+        android:id="@+id/nest_drop_down"
+        style="@style/nest_drop_down"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
+
+    <TextView
+        android:id="@+id/sample_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="260dp"
+        android:layout_marginBottom="410dp"
+        android:fontFamily="@font/poppins"
+        android:text="Today, Monday 11/27"
+        android:textColor="@color/primary_text"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nest_drop_down" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="370dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sample_date_text">
+
+        <CheckBox
+            android:id="@+id/sample_checkbox_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Sample todo list task 1"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+        <CheckBox
+            android:id="@+id/sample_checkbox_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Sample todo list task 2"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
