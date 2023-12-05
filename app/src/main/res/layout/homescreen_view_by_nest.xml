@@ -51,7 +51,7 @@
 
             <View
                 android:id="@+id/underline_bar_view_nest"
-                style="@style/underline_bar_view_nest"
+                style="@style/underline_bar_view_button"
                 tools:layout_editor_absoluteX="29dp"
                 tools:layout_editor_absoluteY="116dp" />
 
@@ -177,13 +177,6 @@
             android:textSize="13sp" />
 
     </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

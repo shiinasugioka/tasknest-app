@@ -55,7 +55,6 @@
         <LinearLayout
             android:id="@+id/view_day_button_container"
             style="@style/view_day_button_container"
-            android:layout_marginEnd="195dp"
             tools:layout_editor_absoluteX="128dp"
             tools:layout_editor_absoluteY="83dp">
 
@@ -71,11 +70,31 @@
 
             <View
                 android:id="@+id/underline_bar_view_day"
-                style="@style/underline_bar_view_day"
-                tools:layout_editor_absoluteX="128dp"
+                style="@style/underline_bar_view_button"
+                tools:layout_editor_absoluteX="29dp"
                 tools:layout_editor_absoluteY="116dp" />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="135dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_day_button"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <!--        <Button-->
+<!--            android:id="@+id/new_nest_button"-->
+<!--            style="@style/new_nest_button"-->
+<!--            android:text="@string/create_new_nest"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/view_day_button"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/logo"-->
+<!--            app:layout_constraintVertical_bias="1.0" />-->
 
     </LinearLayout>
 
