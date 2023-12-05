@@ -39,6 +39,12 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="underline_bar_view_button">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:background">@drawable/underline_rectangle</item>
+    </style>
+
     <style name="new_nest_button">
         <item name="android:layout_width">135dp</item>
         <item name="android:layout_height">35dp</item>

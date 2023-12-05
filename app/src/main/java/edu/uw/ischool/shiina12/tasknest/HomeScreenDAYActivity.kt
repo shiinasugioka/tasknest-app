@@ -1,8 +1,8 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
 class HomeScreenDAYActivity : AppCompatActivity() {
@@ -11,15 +11,24 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         setContentView(R.layout.homescreen_view_by_day)
 
 //      Identify Elements
-        val nest_dropdown = findViewById<Spinner>(R.id.nest_drop_down)
+        val view_nest_button: Button = findViewById(R.id.view_nest_button)
 
 //      Set Element values
-        val nest_dropdown_items =
-            arrayOf<String?>("Sample Nest 1", "Sample Nest 2", "Sample Nest 3")
-        val arrayAdapter =
-            ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
-        nest_dropdown.adapter = arrayAdapter
 
 
+        view_nest_button.setOnClickListener {
+            switchToViewByNest()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, 0)
+    }
+
+    private fun switchToViewByNest() {
+        val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+        startActivity(nestScreenIntent)
+        overridePendingTransition(0, 0)
     }
 }
