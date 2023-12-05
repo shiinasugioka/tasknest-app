@@ -12,48 +12,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:layout_marginEnd="39dp"
-        android:text="Add a New Task"
+        android:minHeight="52dp"
+        android:text="Add New Task"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTask"
-        android:layout_width="223dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="101dp"
-        android:ems="10"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:text="Task Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <ImageButton
+        android:id="@+id/imageButtonExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="56dp"
+        android:background="@null"
+        android:contentDescription="Exit button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTask" />
-
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="224dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Enter date"
-        android:inputType="none"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTask" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector" />
 
     <EditText
         android:id="@+id/editTextTime"
         android:layout_width="224dp"
         android:layout_height="41dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
         android:ems="10"
         android:hint="Enter time"
         android:inputType="none"
@@ -62,55 +44,115 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
     <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="All Day"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTime"
+        app:layout_constraintStart_toEndOf="@+id/imageView3" />
+
+    <CheckBox
         android:id="@+id/checkboxRepeating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="137dp"
         android:text="Repeating Event"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
 
-    <ImageButton
-        android:id="@+id/imageButtonExit"
+    <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="84dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/repeat_button_1" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="28dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/clock_1" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="29dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="132dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="229dp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextTask"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="Exit button"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/color_palette_1" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="95dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="1dp"
-        android:text="All Day"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTime"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/editTextDate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/calendar__2__1" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="224dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter date"
+        android:inputType="date"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTask" />
+
+    <EditText
+        android:id="@+id/editTextTask"
+        android:layout_width="223dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="101dp"
+        android:ems="10"
+        android:inputType="text"
+        android:minHeight="52dp"
+        android:text="Task Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTask" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="127dp"
-        android:layout_marginTop="181dp"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="80dp"
-        android:text="Create New Task"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="171dp"
+        android:text="Add New Task"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkboxRepeating" />
 
