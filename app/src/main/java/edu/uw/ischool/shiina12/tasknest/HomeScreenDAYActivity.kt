@@ -5,10 +5,10 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
-class HomeScreenActivity : AppCompatActivity() {
+class HomeScreenDAYActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_homescreen)
+        setContentView(R.layout.homescreen_view_by_day)
 
 //      Identify Elements
         val nest_dropdown = findViewById<Spinner>(R.id.nest_drop_down)
