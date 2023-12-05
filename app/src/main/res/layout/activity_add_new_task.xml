@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="58dp"
         android:layout_marginEnd="39dp"
-        android:text="Task Details"
+        android:text="Add a New Task"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="Enter date"
-        android:inputType="date"
+        android:inputType="none"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,7 +53,7 @@
         android:layout_width="224dp"
         android:layout_height="41dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:hint="Enter time"
         android:inputType="none"
@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="137dp"
         android:text="Repeating Event"
         android:textSize="18sp"
@@ -86,61 +86,33 @@
         android:contentDescription="Exit button"
         app:srcCompat="@android:drawable/ic_delete" />
 
-    <TextView
-        android:id="@+id/textViewNotes"
+    <CheckBox
+        android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="368dp"
-        android:text="Notes"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonExit" />
-
-    <Button
-        android:id="@+id/buttonGoogleCalendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="123dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="124dp"
-        android:backgroundTint="@color/button"
-        android:text="Add to Google Tasks"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="1dp"
+        android:text="All Day"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkboxRepeating" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="300dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="63dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNotes">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="top|start"
-            android:hint="Enter notes here" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="43dp"
-        android:text="Save"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="181dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginBottom="80dp"
+        android:text="Create New Task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/checkboxRepeating" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
