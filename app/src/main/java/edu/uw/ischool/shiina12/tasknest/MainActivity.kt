@@ -15,15 +15,15 @@ class MainActivity : AppCompatActivity() {
 
         Log.i(TAG, "MainActivity Launched")
 
-        val homeScreenButton: Button = findViewById(R.id.homescreen_button)
+        val nestButton: Button = findViewById(R.id.homescreen_button)
 
-        homeScreenButton.setOnClickListener {
-            goToHome()
+        nestButton.setOnClickListener {
+            goToNestHome()
         }
     }
 
-    private fun goToHome() {
-        val homeScreenIntent = Intent(this, HomeScreenActivity::class.java)
-        startActivity(homeScreenIntent)
+    private fun goToNestHome() {
+        val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+        startActivity(nestScreenIntent)
     }
 }

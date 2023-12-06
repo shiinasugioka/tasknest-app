@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="view_day_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">#2D3142</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>
