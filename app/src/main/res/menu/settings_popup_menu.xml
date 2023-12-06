@@ -13,11 +13,11 @@
     <!-- Group 2: App Settings -->
     <group android:id="@+id/group_app_settings">
         <item
-            android:id="@+id/menu_settings"
+            android:id="@+id/menu_app_settings"
             android:title="App Settings" />
         <item
             android:id="@+id/menu_google"
-            android:title="Google" />
+            android:title="Connect with Google" />
     </group>
 </menu>
 

@@ -55,8 +55,10 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                 }
 
                 // Group 2: App Settings
-                R.id.menu_settings -> {
+                R.id.menu_app_settings -> {
                     // Handle Settings or other actions in this group
+                    val intent = Intent(this, PreferencesActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.menu_google -> {
