@@ -43,7 +43,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         }
     }
     override fun onTimeSet(hourOfDay: Int, minute: Int) {
-        // fix time formatting
+        // TODO: fix time formatting with ints < 10
         var correctedHour = hourOfDay
         var isAm = true
         if (hourOfDay > 12) {
@@ -92,6 +92,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
+        // format time correctly
         listener?.onTimeSet(hourOfDay, minute)
     }
 }
