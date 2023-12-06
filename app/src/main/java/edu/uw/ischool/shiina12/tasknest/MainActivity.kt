@@ -12,12 +12,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        prefBtn = findViewById(R.id.btnPref)
-
-        prefBtn.setOnClickListener {
-            val intent = Intent(this, PreferencesActivity::class.java)
-            startActivity(intent)
-        }
     }
 }
