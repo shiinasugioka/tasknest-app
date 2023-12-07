@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--  Logo  -->
+    <ImageView
+        android:id="@+id/logo"
+        style="@style/logo"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/tasknest_logo" />
+
+    <!--  Horizontal Bar  -->
+    <View
+        android:id="@+id/horizontal_bar"
+        style="@style/horizontal_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--  NavBar Items  -->
+    <LinearLayout
+        android:id="@+id/navbar_items"
+        style="@style/navbar_items"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo">
+
+        <LinearLayout
+            android:id="@+id/view_nest_button_container"
+            style="@style/view_nest_button_container"
+            tools:layout_editor_absoluteX="44dp"
+            tools:layout_editor_absoluteY="188dp">
+
+            <Button
+                android:id="@+id/view_nest_button"
+                style="@style/view_nest_button"
+                android:paddingBottom="3dp"
+                android:text="@string/view_nest_button"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/view_day_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_day_button_container"
+            style="@style/view_day_button_container"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="83dp">
+
+            <Button
+                android:id="@+id/view_day_button"
+                style="@style/view_day_button"
+                android:text="@string/view_day_button"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/new_nest_button"
+                app:layout_constraintStart_toEndOf="@+id/view_nest_button"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/underline_bar_view_day"
+                style="@style/underline_bar_view_button"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="116dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="135dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_day_button"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </LinearLayout>
+
+    <!--  Footer Items -->
+    <LinearLayout
+        android:id="@+id/footer_items"
+        style="@style/footer_items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <ImageButton
+            android:id="@+id/sort_button"
+            style="@style/sort_button"
+            app:srcCompat="@drawable/round_sort_24" />
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            style="@style/settings_button"
+            app:srcCompat="@drawable/settings_icon" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/new_task_button"
+        style="@style/new_task_button"
+        app:layout_constraintBottom_toBottomOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="@+id/footer_items"
+        app:layout_constraintStart_toStartOf="@+id/footer_items"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:srcCompat="@drawable/add_task_button" />
+
+    <!-- Content -->
+
+    <TextView
+        android:id="@+id/day_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="470dp"
+        android:fontFamily="@font/poppins"
+        android:text="November 23, 2023"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
+
+    <TextView
+        android:id="@+id/sample_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="290dp"
+        android:layout_marginBottom="410dp"
+        android:fontFamily="@font/poppins"
+        android:text="School TODO List"
+        android:textColor="@color/primary_text"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_title" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="370dp"
+        android:divider="@drawable/empty_checkbox_divider"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sample_date_text">
+
+        <CheckBox
+            android:id="@+id/sample_checkbox_1"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@color/faded_green"
+            android:fontFamily="@font/poppins"
+            android:text="Sample todo list task 1"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+        <CheckBox
+            android:id="@+id/sample_checkbox_2"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@color/faded_pink"
+            android:fontFamily="@font/poppins"
+            android:text="Sample todo list task 2"
+            android:textColor="@color/primary_text"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
