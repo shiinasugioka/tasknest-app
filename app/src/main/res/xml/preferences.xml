@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Notification Type Preferences -->
+    <PreferenceCategory
+        android:title="Notification Type">
+
+        <CheckBoxPreference
+            android:key="notification_app"
+            android:title="App Notifications"
+            android:summary="Enable notifications from the app"
+            android:icon="@drawable/app_notification"/>
+
+        <CheckBoxPreference
+            android:key="notification_email"
+            android:title="Email Notifications"
+            android:summary="Enable email notifications"
+            android:icon="@drawable/email_notification"/>
+
+        <CheckBoxPreference
+            android:key="notification_sms"
+            android:title="SMS Notifications"
+            android:summary="Enable SMS notifications"
+            android:icon="@drawable/sms_notification"/>
+
+        <EditTextPreference
+            android:key="email_address"
+            android:title="Email Address"
+            android:summary="Enter your email address"
+            android:inputType="textEmailAddress"
+            android:dependency="notification_email"/>
+
+        <EditTextPreference
+            android:key="sms_number"
+            android:title="SMS Number"
+            android:summary="Enter your phone number"
+            android:inputType="phone"
+            android:dependency="notification_sms"/>
+    </PreferenceCategory>
+
+    <!-- Notification Frequency Preferences -->
+    <PreferenceCategory
+        android:title="Notification Frequency">
+
+        <EditTextPreference
+            android:key="notification_frequency"
+            android:title="Frequency"
+            android:summary="Enter notification frequency"
+            android:inputType="number"
+            android:defaultValue="2"/>
+
+        <ListPreference
+            android:key="frequency_unit"
+            android:title="Frequency Unit"
+            android:summary="Select frequency unit"
+            android:dialogTitle="Select Frequency Unit"
+            android:entries="@array/frequency_units"
+            android:entryValues="@array/frequency_units_values"
+            android:defaultValue="hour"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
