@@ -35,6 +35,15 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val settings_button: ImageButton = findViewById(R.id.settings_button)
         settings_button.setOnClickListener { showPopupMenu(it) }
 
+        //
+        val newNest_button: Button = findViewById(R.id.new_nest_button)
+        newNest_button.setOnClickListener { createNest() }
+
+    }
+
+    private fun createNest() {
+        val createNestIntent = Intent(this, CreateNestActivity::class.java)
+        startActivity(createNestIntent)
     }
 
     private fun showPopupMenu(view: View) {
