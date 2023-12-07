@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        /*val intent = Intent(this, AddNewTaskActivity::class.java)
+        startActivity(intent)*/
         Log.i(TAG, "MainActivity Launched")
 
         val nestButton: Button = findViewById(R.id.homescreen_button)
