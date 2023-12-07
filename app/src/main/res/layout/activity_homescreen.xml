@@ -18,17 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/tasknest_logo" />
 
-    <!--  Horizontal Bar  -->
-    <View
-        android:id="@+id/horizontal_bar"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="611dp"
-        android:background="#cbced7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
     <!--  NavBar Items  -->
     <LinearLayout
@@ -140,6 +130,17 @@
             app:layout_constraintVertical_bias="1.0" />
 
     </LinearLayout>
+    <!--  Horizontal Bar  -->
+    <View
+        android:id="@+id/horizontal_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="611dp"
+        android:background="#cbced7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--  Footer Items -->
     <LinearLayout

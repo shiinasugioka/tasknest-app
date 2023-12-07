@@ -9,13 +9,11 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="193dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="42dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/tasknest_logo" />
 
     <!--  Horizontal Bar  -->
@@ -23,12 +21,10 @@
         android:id="@+id/horizontal_bar"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginBottom="611dp"
         android:background="#cbced7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!--  NavBar Items  -->
     <LinearLayout
@@ -38,10 +34,10 @@
         android:layout_marginTop="11dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo">
+        app:layout_constraintEnd_toEndOf="parent">
+
 
         <LinearLayout
             android:id="@+id/view_nest_button_container"
