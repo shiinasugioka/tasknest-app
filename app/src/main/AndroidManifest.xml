@@ -13,6 +13,9 @@
         android:theme="@style/Theme.TaskNest"
         tools:targetApi="31">
         <activity
+            android:name=".CreateNestActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -21,20 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".HomeScreenNESTActivity" />
-
         <activity android:name=".HomeScreenDAYActivity" />
-
         <activity
             android:name=".PreferencesActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>
