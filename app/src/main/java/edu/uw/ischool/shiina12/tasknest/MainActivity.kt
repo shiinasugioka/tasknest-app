@@ -13,11 +13,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*val intent = Intent(this, AddNewTaskActivity::class.java)
-        startActivity(intent)*/
+        val intent = Intent(this, AddNewTaskActivity::class.java)
+        startActivity(intent)
         Log.i(TAG, "MainActivity Launched")
 
-        val nestButton: Button = findViewById(R.id.homescreen_button)
+        /*val nestButton: Button = findViewById(R.id.homescreen_button)
 
         nestButton.setOnClickListener {
             goToNestHome()
@@ -27,5 +27,6 @@ class MainActivity : AppCompatActivity() {
     private fun goToNestHome() {
         val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
         startActivity(nestScreenIntent)
+    }*/
     }
 }

@@ -1,196 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TaskActivity">
 
-    <TextView
-        android:id="@+id/textViewTask"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/imageButtonExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="40dp"
+            android:background="@null"
+            android:contentDescription="Exit button"
+            app:srcCompat="@drawable/vector" />
+
+        <TextView
+            android:id="@+id/textViewTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="172dp"
+            android:layout_marginTop="40dp"
+            android:minHeight="52dp"
+            android:text="Task Details"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="29dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="52dp"
+            app:srcCompat="@drawable/color_palette_1" />
+
+        <EditText
+            android:id="@+id/editTextTask"
+            android:layout_width="224dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="24dp"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:text="Task Title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="16dp"
+            app:srcCompat="@drawable/calendar__2__1" />
+
+
+        <EditText
+            android:id="@+id/editTextDate"
+            android:layout_width="224dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:hint="Enter date"
+            android:inputType="date"
+            android:minHeight="48dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="28dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="16dp"
+            app:srcCompat="@drawable/clock_1" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="All Day" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="224dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="104dp"
+            android:layout_marginTop="4dp"
+            android:hint="Enter time"
+            android:minHeight="48dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="16dp"
+            app:srcCompat="@drawable/repeat_button_1" />
+
+        <CheckBox
+            android:id="@+id/checkboxRepeating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="6dp"
+            android:text="Repeating Event"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="58dp"
-        android:layout_marginEnd="39dp"
-        android:minHeight="52dp"
-        android:text="Task Details"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/imageButtonExit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="56dp"
-        android:background="@null"
-        android:contentDescription="Exit button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vector" />
-
-    <Button
-        android:id="@+id/buttonGoogleCalendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="123dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="124dp"
-        android:backgroundTint="@color/button"
-        android:text="Add to Google Tasks"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkboxRepeating" />
-
-    <EditText
-        android:id="@+id/editTextTime"
-        android:layout_width="224dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Enter time"
-        android:inputType="none"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="29dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="229dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewNotes"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTask"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/color_palette_1" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/editTextDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/calendar__2__1" />
-
-    <EditText
-        android:id="@+id/editTextDate"
-        android:layout_width="224dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Enter date"
-        android:inputType="date"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTask" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="28dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="61dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/clock_1" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="37dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/repeat_button_1" />
-
-    <CheckBox
-        android:id="@+id/checkboxRepeating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="137dp"
-        android:text="Repeating Event"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
-
-    <TextView
-        android:id="@+id/textViewNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="352dp"
-        android:text="Notes"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonExit" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="310dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="63dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNotes">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="300dp"
-            android:layout_height="90dp"
-            android:gravity="top|start"
-            android:hint="Enter notes here" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <EditText
-        android:id="@+id/editTextTask"
-        android:layout_width="223dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="101dp"
-        android:ems="10"
-        android:inputType="text"
-        android:minHeight="52dp"
-        android:text="Task Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTask" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="16dp"
-        android:text="Save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        android:gravity="center">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonGoogleCalendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/button"
+            android:text="Add to Google Tasks" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textViewNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="8dp"
+            android:text="Notes"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButtonExit" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="310dp"
+            android:layout_height="140dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="300dp"
+                android:layout_height="120dp"
+                android:gravity="top|start"
+                android:hint="Enter notes here" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Add New Task" />
+
+    </LinearLayout>
+
+</LinearLayout>
