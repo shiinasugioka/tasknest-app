@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sort_menu_title"
+        android:title="Sort By:              "
+        android:enabled="false"
+        android:alphabeticShortcut=" "
+        android:numericShortcut=" "
+        android:textStyle="bold" />
+
+    <group android:id="@+id/sort_group">
+        <item
+            android:id="@+id/menu_sort_date_created"
+            android:title="Date Created" />
+        <item
+            android:id="@+id/menu_sort_due_date"
+            android:title="Due Date" />
+    </group>
+</menu>
+
