@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class HomeScreenDAYActivity : AppCompatActivity() {
 
@@ -31,6 +32,14 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         // Get today's date in millis to compare with task deadlines
         val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
+        val todayBuilder = LocalDate.now()
+
+        val formattedDate = todayBuilder.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
+
+        // Set the formatted date to the TextView
+        val dateTextView = findViewById<TextView>(R.id.day_title)
+        dateTextView.text = formattedDate
+
         // Iterate through each TodoNest
         repository.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
@@ -45,6 +54,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     setTypeface(null, Typeface.BOLD) // Set text style to bold
                     typeface = ResourcesCompat.getFont(context, R.font.poppins) // Set font family
                     setTextColor(ContextCompat.getColor(context, R.color.primary_text)) // Set text color
+
+                    val leftPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+                    val topPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+                    setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
                 }
 
                 linearLayoutContainer.addView(titleTextView)

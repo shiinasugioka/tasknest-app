@@ -126,36 +126,31 @@
         android:id="@+id/day_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:textColor="@color/primary_text"
-        android:text="November 23, 2023"
-        android:textSize="20sp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="210dp"
         android:layout_marginBottom="470dp"
+        android:fontFamily="@font/poppins"
+        android:text="November 23, 2023"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/footer_items"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"/>
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
 
-    <TextView
-        android:id="@+id/sample_nest_text"
-        android:text="School TODO List"
-        app:layout_constraintBottom_toTopOf="@+id/footer_items"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/day_title"
-        style="@style/sample_nest_text" />
 
     <LinearLayout
         android:id="@+id/linearLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="428dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/sample_nest_text"
         app:layout_constraintBottom_toTopOf="@id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/day_title">
         <!-- Dynamic content will be added here -->
     </LinearLayout>
 
