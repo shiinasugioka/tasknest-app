@@ -46,11 +46,20 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val newNestBtn: Button = findViewById(R.id.new_nest_button)
         newNestBtn.setOnClickListener { createNest() }
 
+        // New Task Button
+        val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
+        newTaskBtn.setOnClickListener { createNewTask() }
+
     }
 
     private fun createNest() {
         val createNestIntent = Intent(this, CreateNestActivity::class.java)
         startActivity(createNestIntent)
+    }
+
+    private fun createNewTask() {
+        val createNewTaskIntent = Intent(this, AddNewTaskActivity::class.java)
+        startActivity(createNewTaskIntent)
     }
 
     private fun showSettingsPopupMenu(view: View) {

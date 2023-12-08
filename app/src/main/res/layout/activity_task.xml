@@ -189,6 +189,7 @@
         android:layout_marginStart="161dp"
         android:layout_marginTop="16dp"
         android:text="Save"
+        android:background="@drawable/rectangular_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
