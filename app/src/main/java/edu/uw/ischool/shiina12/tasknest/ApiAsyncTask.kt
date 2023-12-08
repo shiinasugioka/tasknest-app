@@ -47,7 +47,7 @@ class ApiAsyncTask internal constructor(private val mActivity: TaskActivity) :
             val eventStrings: MutableList<String> = ArrayList()
             val events: Events? = mActivity.mService!!.events().list("primary")
                 .setMaxResults(10)
-                .setOrderBy("startDate")
+                .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute()
 

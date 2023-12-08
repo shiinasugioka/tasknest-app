@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToTaskViewPage() {
-        val taskViewIntent = Intent(this, AddNewTaskActivity::class.java)
-        startActivity(taskViewIntent)
+        val taskIntent = Intent(this, TaskActivity::class.java)
+        startActivity(taskIntent)
     }
 }

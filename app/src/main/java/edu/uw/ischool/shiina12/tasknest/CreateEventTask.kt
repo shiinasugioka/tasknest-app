@@ -22,8 +22,8 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
         val eventLocation = "1410 NE Campus Pkwy, Seattle, WA 98195"
         val eventDescription = "This is a sample event to make sure the app works"
 
-        val eventStartDateTime = "2023-12-7T09:00:00-07:00"
-        val eventEndDateTime = "2023-12-7T17:00:00-07:00"
+        val eventStartDateTime = "2023-12-07T09:00:00-07:00"
+        val eventEndDateTime = "2023-12-07T17:00:00-07:00"
 
         val event: Event = Event()
             .setSummary(eventTitle)
