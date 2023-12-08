@@ -1,11 +1,11 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var time: EditText
@@ -34,6 +34,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             datePickerFragment.show(supportFragmentManager, "datePicker")
         }
     }
+
     override fun onTimeSet(hourOfDay: Int, minute: Int) {
         // fix time formatting
         var correctedHour = hourOfDay
