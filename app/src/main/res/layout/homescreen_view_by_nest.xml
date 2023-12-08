@@ -9,7 +9,8 @@
     <ImageView
         android:id="@+id/logo"
         style="@style/logo"
-        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/navbar_items"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,15 +20,17 @@
     <View
         android:id="@+id/horizontal_bar"
         style="@style/horizontal_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navbar_items" />
 
     <!--  NavBar Items  -->
     <LinearLayout
         android:id="@+id/navbar_items"
         style="@style/navbar_items"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,9 +98,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <ImageButton
@@ -118,15 +119,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/footer_items"
         app:layout_constraintEnd_toEndOf="@+id/footer_items"
         app:layout_constraintStart_toStartOf="@+id/footer_items"
-        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
         app:srcCompat="@drawable/add_task_button" />
 
     <!-- Content -->
+
     <Spinner
         android:id="@+id/nest_drop_down"
         style="@style/nest_drop_down"
-        app:layout_constraintBottom_toTopOf="@+id/footer_items"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
 
@@ -135,14 +136,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="260dp"
-        android:layout_marginBottom="410dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/poppins"
         android:text="Today, Monday 11/27"
         android:textColor="@color/primary_text"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/footer_items"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nest_drop_down" />
 
@@ -150,12 +148,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="370dp"
+        android:layout_marginTop="16dp"
         android:divider="@drawable/empty_checkbox_divider"
         android:orientation="vertical"
         android:showDividers="middle"
-        app:layout_constraintBottom_toTopOf="@+id/footer_items"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sample_date_text">
