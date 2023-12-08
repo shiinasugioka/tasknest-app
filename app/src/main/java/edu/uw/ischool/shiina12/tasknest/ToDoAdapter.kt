@@ -1,22 +1,28 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 
 class TodoAdapter(
     private var items: List<Task>,
-    private val onItemChecked: (Task, Int) -> Unit // Add a callback for when an item is checked
+    private val onItemChecked: (Task, Int, ViewHolder) -> Unit // Add a callback for when an item is checked
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
         val textView: TextView = view.findViewById(R.id.todoTextView)
     }
+
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,13 +31,41 @@ class TodoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.textView.text = item.title
-        holder.checkBox.isChecked = item.isFinished
+        val task = items[position]
+        holder.textView.text = task.title
+        holder.checkBox.isChecked = task.isFinished
+
+        // Set initial text appearance
+        updateTextAppearance(holder.textView, task.isFinished)
 
         // Set a click listener for the checkbox
         holder.checkBox.setOnClickListener {
-            onItemChecked(item, position) // Call the passed in callback function
+            onItemChecked(task, position, holder) // Call the passed in callback function
+            updateTextAppearance(holder.textView, task.isFinished)
+
+        }
+
+        if (task.isFinished) {
+            holder.itemView.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction {
+                    // Remove the item after fade-out completes
+                    items = items.filter { it != task }
+                    notifyItemRemoved(position)
+                }
+        } else {
+            holder.itemView.alpha = 1f // Ensure full opacity if not finished
+        }
+    }
+
+    private fun updateTextAppearance(textView: TextView, isFinished: Boolean) {
+        if (isFinished) {
+            textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            textView.setTextColor(Color.GRAY)
+        } else {
+            textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            textView.setTextColor(ContextCompat.getColor(textView.context, R.color.primary_text))
         }
     }
 

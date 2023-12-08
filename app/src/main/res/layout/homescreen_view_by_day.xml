@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--  Logo  -->
+    <ImageView
+        android:id="@+id/logo"
+        style="@style/logo"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/tasknest_logo" />
+
+    <!--  Horizontal Bar  -->
+    <View
+        android:id="@+id/horizontal_bar"
+        style="@style/horizontal_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--  NavBar Items  -->
+    <LinearLayout
+        android:id="@+id/navbar_items"
+        style="@style/navbar_items"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo">
+
+        <LinearLayout
+            android:id="@+id/view_nest_button_container"
+            style="@style/view_nest_button_container"
+            tools:layout_editor_absoluteX="44dp"
+            tools:layout_editor_absoluteY="188dp">
+
+            <Button
+                android:id="@+id/view_nest_button"
+                style="@style/view_nest_button"
+                android:paddingBottom="3dp"
+                android:text="@string/view_nest_button"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/view_day_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_day_button_container"
+            style="@style/view_day_button_container"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="83dp">
+
+            <Button
+                android:id="@+id/view_day_button"
+                style="@style/view_day_button"
+                android:text="@string/view_day_button"
+                app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+                app:layout_constraintEnd_toStartOf="@+id/new_nest_button"
+                app:layout_constraintStart_toEndOf="@+id/view_nest_button"
+                app:layout_constraintTop_toBottomOf="@+id/logo"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/underline_bar_view_day"
+                style="@style/underline_bar_view_button"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="116dp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="135dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_day_button"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </LinearLayout>
+
+    <!--  Footer Items -->
+    <LinearLayout
+        android:id="@+id/footer_items"
+        style="@style/footer_items"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <ImageButton
+            android:id="@+id/sort_button"
+            style="@style/sort_button"
+            app:srcCompat="@drawable/round_sort_24" />
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            style="@style/settings_button"
+            app:srcCompat="@drawable/settings_icon" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/new_task_button"
+        style="@style/new_task_button"
+        app:layout_constraintBottom_toBottomOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="@+id/footer_items"
+        app:layout_constraintStart_toStartOf="@+id/footer_items"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"
+        app:srcCompat="@drawable/add_task_button" />
+
+    <!-- Content -->
+
+    <TextView
+        android:id="@+id/day_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/primary_text"
+        android:text="November 23, 2023"
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="470dp"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_bar"/>
+
+    <TextView
+        android:id="@+id/sample_nest_text"
+        android:text="School TODO List"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_title"
+        style="@style/sample_nest_text" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/sample_nest_text"
+        app:layout_constraintBottom_toTopOf="@id/footer_items"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Dynamic content will be added here -->
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Theme Colors  -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_orange">#EF8354</color>
@@ -7,4 +8,25 @@
     <color name="primary_text">#2D3142</color>
     <color name="secondary_text">#abadb4</color>
     <color name="underline_bar">#4F5D75</color>
+
+    <!--  Checkbox Colors  -->
+    <color name="faded_red">#D18B85</color>
+    <color name="faded_orange">#EBBC9D</color>
+    <color name="faded_yellow">#F1F0BB</color>
+    <color name="faded_green">#A4B49E</color>
+    <color name="faded_sky">#C5D6E0</color>
+    <color name="faded_blue">#A2A8B6</color>
+    <color name="faded_purple">#C4A4CF</color>
+    <color name="faded_pink">#F0D3F1</color>
+
+    <!--  Pigmented Colors  -->
+    <color name="bold_red">#BD1E1E</color>
+    <color name="bold_orange">#EF8354</color>
+    <color name="bold_yellow">#EFEB94</color>
+    <color name="bold_green">#50754F</color>
+    <color name="bold_sky">#92B8C8</color>
+    <color name="bold_blue">#4F5D75</color>
+    <color name="bold_purple">#9A53A0</color>
+    <color name="bold_pink">#F2AFE7</color>
+
 </resources>
