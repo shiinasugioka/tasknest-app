@@ -2,7 +2,10 @@ package edu.uw.ischool.shiina12.tasknest
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.ContextThemeWrapper
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -32,12 +35,16 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
 
         // Settings Button Popup
-        val settings_button: ImageButton = findViewById(R.id.settings_button)
-        settings_button.setOnClickListener { showPopupMenu(it) }
+        val settingsBtn: ImageButton = findViewById(R.id.settings_button)
+        settingsBtn.setOnClickListener { showSettingsPopupMenu(it) }
 
-        //
-        val newNest_button: Button = findViewById(R.id.new_nest_button)
-        newNest_button.setOnClickListener { createNest() }
+        // Sort By Button Popup
+        val sortButton: ImageButton = findViewById(R.id.sort_button)
+        sortButton.setOnClickListener { showSortByPopupMenu(it) }
+
+        // New Nest Button
+        val newNestBtn: Button = findViewById(R.id.new_nest_button)
+        newNestBtn.setOnClickListener { createNest() }
 
     }
 
@@ -46,10 +53,16 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         startActivity(createNestIntent)
     }
 
-    private fun showPopupMenu(view: View) {
-        val contextWrapper = ContextThemeWrapper(this, R.style.PopupMenuStyle)
+    private fun showSettingsPopupMenu(view: View) {
+        val contextWrapper = ContextThemeWrapper(this, R.style.PopupSettingsMenuStyle)
         val popupMenu = PopupMenu(contextWrapper, view)
         popupMenu.inflate(R.menu.settings_popup_menu)
+
+        val titleItem1 = popupMenu.menu.findItem(R.id.app_settings_title)
+        applyTitleUnderline(titleItem1)
+
+        val titleItem2 = popupMenu.menu.findItem(R.id.nest_settings_title)
+        applyTitleUnderline(titleItem2)
 
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -79,6 +92,40 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
 
         popupMenu.show()
+    }
+
+    private fun showSortByPopupMenu(view: View) {
+        val contextWrapper = ContextThemeWrapper(this, R.style.PopupSortByMenuStyle)
+        val popupMenu = PopupMenu(contextWrapper, view)
+        popupMenu.inflate(R.menu.sort_by_menu)
+
+        val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
+        applyTitleUnderline(titleItem)
+
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_sort_date_created -> {
+                    // Handle sorting by date created
+                    // Call a function to update the UI with sorted data
+                    true
+                }
+                R.id.menu_sort_due_date -> {
+                    // Handle sorting by due date
+                    // Call a function to update the UI with sorted data
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
+    private fun applyTitleUnderline(titleItem: MenuItem) {
+        val titleString = SpannableString(titleItem.title)
+        titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
+        titleItem.title = titleString
     }
 
 
