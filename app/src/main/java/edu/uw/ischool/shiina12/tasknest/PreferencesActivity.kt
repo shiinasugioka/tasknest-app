@@ -12,7 +12,6 @@ class PreferencesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(TAG, "Preference Activity Launched")
         
         supportFragmentManager.beginTransaction()
             .replace(android.R.id.content, SettingsFragment())
