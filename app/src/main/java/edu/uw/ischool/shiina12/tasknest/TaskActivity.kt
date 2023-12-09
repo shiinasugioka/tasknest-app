@@ -60,7 +60,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             }
         }
 
-
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
         apiResultsText = ""
         apiStatusText = ""
@@ -105,7 +104,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
-
 
         time.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
@@ -152,6 +150,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
 
     @Deprecated("Deprecated in Java")
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -270,7 +269,8 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             apiStatusText = "No data found."
         } else {
             apiStatusText = "Data retrieved using the Google Calendar API:"
-            apiResultsText = TextUtils.join("\n\n", dataStrings)
+
+            apiResultsText = TextUtils.join("\n", dataStrings)
 
             Log.d(TAG, "api status: $apiStatusText")
             Log.d(TAG, "api results: $apiResultsText")
