@@ -3,6 +3,7 @@
     <!--  Theme Colors  -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="button">#5D92FF</color>
     <color name="main_orange">#EF8354</color>
     <color name="light_orange">#f6d7c3</color>
     <color name="primary_text">#2D3142</color>

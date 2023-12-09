@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -13,9 +21,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskNest"
         tools:targetApi="31">
-        <activity android:name=".SingleDayHomescreenActivity">
 
-        </activity>
+        <activity
+            android:name=".AddNewTaskActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".TaskActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CreateNestActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,13 +50,11 @@
 
         <activity
             android:name=".PreferencesActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
 
 </manifest>
