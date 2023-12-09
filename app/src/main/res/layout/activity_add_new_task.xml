@@ -16,8 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="36dp"
             android:background="@null"
+            android:minHeight="48dp"
             android:contentDescription="Exit button"
             app:srcCompat="@drawable/vector" />
 
@@ -74,7 +75,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:hint="Enter date"
-            android:inputType="date"
             android:minHeight="48dp" />
 
     </LinearLayout>
@@ -158,6 +158,9 @@
                 android:text="Repeat Every"></TextView>
 
             <EditText
+                android:id="@+id/timeInterval"
+                android:hint="##"
+                android:minHeight="48dp"
                 android:layout_width="52dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
@@ -168,6 +171,7 @@
             <Spinner
                 android:id="@+id/intervalSpinner"
                 android:layout_width="154dp"
+                android:minHeight="48dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp" />
@@ -185,7 +189,8 @@
                 android:text="at"></TextView>
 
             <EditText
-                android:id="@+id/timeInterval"
+                android:id="@+id/reminderTime"
+                android:hint="HH:MM"
                 android:layout_width="120dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
@@ -205,10 +210,13 @@
 
             <EditText
                 android:id="@+id/startsOn"
+                android:hint="MM/DD/YYYY"
+                android:minHeight="48dp"
                 android:layout_width="164dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"></EditText>
+                android:layout_marginTop="8dp"
+                android:inputType="textNoSuggestions"></EditText>
 
 
         </LinearLayout>
@@ -226,9 +234,11 @@
 
             <EditText
                 android:id="@+id/endsOn"
+                android:hint="MM/DD/YYYY"
                 android:layout_width="164dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
+                android:minHeight="48dp"
                 android:layout_marginTop="8dp"></EditText>
         </LinearLayout>
 

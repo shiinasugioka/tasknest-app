@@ -16,8 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="36dp"
             android:background="@null"
+            android:minHeight="48dp"
             android:contentDescription="Exit button"
             app:srcCompat="@drawable/vector" />
 
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="172dp"
             android:layout_marginTop="40dp"
-            android:minHeight="52dp"
+            android:minHeight="48dp"
             android:text="Task Details"
             android:textSize="18sp" />
 
@@ -74,7 +75,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:hint="Enter date"
-            android:inputType="date"
             android:minHeight="48dp" />
 
     </LinearLayout>
@@ -108,7 +108,7 @@
             android:id="@+id/editTextTime"
             android:layout_width="224dp"
             android:layout_height="41dp"
-            android:layout_marginStart="104dp"
+            android:layout_marginStart="108dp"
             android:layout_marginTop="4dp"
             android:hint="Enter time"
             android:minHeight="48dp" />
@@ -143,14 +143,13 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-
         <Button
             android:id="@+id/buttonGoogleCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/button"
-            android:text="Add to Google Tasks" />
+            android:text="Add to Google Calendar" />
 
 
     </LinearLayout>
@@ -165,9 +164,7 @@
             android:layout_marginStart="52dp"
             android:layout_marginTop="8dp"
             android:text="Notes"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButtonExit" />
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -202,8 +199,7 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Add New Task" />
+            android:text="Save" />
 
     </LinearLayout>
 
