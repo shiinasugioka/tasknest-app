@@ -149,6 +149,8 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 
 
+    @Deprecated("Deprecated in Java")
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -267,6 +269,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             apiStatusText = "No data found."
         } else {
             apiStatusText = "Data retrieved using the Google Calendar API:"
+
             apiResultsText = TextUtils.join("\n", dataStrings)
 
             Log.d(TAG, "api status: $apiStatusText")
