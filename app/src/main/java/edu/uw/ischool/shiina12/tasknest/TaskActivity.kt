@@ -1,30 +1,22 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import android.widget.Button
-
-import android.app.AlertDialog
-import android.os.Bundle
 import android.accounts.AccountManager
-import android.app.DatePickerDialog
-import android.app.Dialog
+import android.app.AlertDialog
 import android.app.ProgressDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Bundle
 import android.text.TextUtils
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -34,7 +26,6 @@ import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.util.Constants
 import com.google.api.services.calendar.Calendar as GoogleCalendar
-import java.util.Calendar as JavaCalendar
 
 const val TAG = "TaskActivity"
 
@@ -160,145 +151,146 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 
 
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-            when (requestCode) {
-                Constants.REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != RESULT_OK) {
-                    isGooglePlayServicesAvailable()
-                }
+        when (requestCode) {
+            Constants.REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != RESULT_OK) {
+                isGooglePlayServicesAvailable()
+            }
 
-                Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
-                    if (resultCode == RESULT_OK && data.extras != null) {
-                        val accountName: String? =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                        mCredential?.setSelectedAccountName(accountName)
-                        val settings = getPreferences(MODE_PRIVATE)
-                        val editor = settings.edit()
-                        editor.putString(Constants.PREF_ACCOUNT_NAME, accountName)
-                        editor.apply()
-                    } else if (resultCode == RESULT_CANCELED) {
-                        apiStatusText = "Account upspecified."
-                    }
-                }
-
-                Constants.REQUEST_AUTHORIZATION -> if (resultCode != RESULT_OK) {
-                    chooseAccount()
+            Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
+                if (resultCode == RESULT_OK && data.extras != null) {
+                    val accountName: String? =
+                        data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    mCredential?.setSelectedAccountName(accountName)
+                    val settings = getPreferences(MODE_PRIVATE)
+                    val editor = settings.edit()
+                    editor.putString(Constants.PREF_ACCOUNT_NAME, accountName)
+                    editor.apply()
+                } else if (resultCode == RESULT_CANCELED) {
+                    apiStatusText = "Account upspecified."
                 }
             }
 
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-
-        override fun onResume() {
-            super.onResume()
-
-            if (isGooglePlayServicesAvailable()) {
-                refreshResults()
-            } else {
-                apiStatusText =
-                    "Google Play Services required: after installing, close and relaunch this app."
-                Log.d(TAG, "api status: $apiStatusText")
-            }
-        }
-
-        // initialize credentials and user's Google account
-        private fun initCredentials() {
-            mCredential = GoogleAccountCredential.usingOAuth2(
-                applicationContext,
-                arrayListOf(CalendarScopes.CALENDAR)
-            )
-                .setBackOff(ExponentialBackOff())
-
-            initCalendarBuild(mCredential)
-        }
-
-        // initialize user's Google calendar
-        private fun initCalendarBuild(credential: GoogleAccountCredential?) {
-            val transport = AndroidHttp.newCompatibleTransport()
-            val jsonFactory = JacksonFactory.getDefaultInstance()
-
-            mService = GoogleCalendar.Builder(
-                transport, jsonFactory, credential
-            )
-                .setApplicationName(Constants.APPLICATION_NAME)
-                .build()
-        }
-
-        private fun addCalendarEvent() {
-            CreateEventTask(mService).execute()
-        }
-
-        private fun isGooglePlayServicesAvailable(): Boolean {
-            val apiAvailability = GoogleApiAvailability.getInstance()
-            val connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(applicationContext)
-            return connectionStatusCode == ConnectionResult.SUCCESS
-        }
-
-        private fun refreshResults() {
-            if (mCredential!!.selectedAccountName == null) {
+            Constants.REQUEST_AUTHORIZATION -> if (resultCode != RESULT_OK) {
                 chooseAccount()
-            } else if (!isDeviceOnline()) {
-                apiStatusText = "No network connection available"
-                Log.d(TAG, "api status: $apiStatusText")
             }
-
-            mProgress?.show()
-            ApiAsyncTask(this).execute()
         }
 
-        private fun chooseAccount() {
-            startActivityForResult(
-                mCredential!!.newChooseAccountIntent(),
-                Constants.REQUEST_ACCOUNT_PICKER
-            )
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (isGooglePlayServicesAvailable()) {
+            refreshResults()
+        } else {
+            apiStatusText =
+                "Google Play Services required: after installing, close and relaunch this app."
+            Log.d(TAG, "api status: $apiStatusText")
+        }
+    }
+
+    // initialize credentials and user's Google account
+    private fun initCredentials() {
+        mCredential = GoogleAccountCredential.usingOAuth2(
+            applicationContext,
+            arrayListOf(CalendarScopes.CALENDAR)
+        )
+            .setBackOff(ExponentialBackOff())
+
+        initCalendarBuild(mCredential)
+    }
+
+    // initialize user's Google calendar
+    private fun initCalendarBuild(credential: GoogleAccountCredential?) {
+        val transport = AndroidHttp.newCompatibleTransport()
+        val jsonFactory = JacksonFactory.getDefaultInstance()
+
+        mService = GoogleCalendar.Builder(
+            transport, jsonFactory, credential
+        )
+            .setApplicationName(Constants.APPLICATION_NAME)
+            .build()
+    }
+
+    private fun addCalendarEvent() {
+        CreateEventTask(mService).execute()
+    }
+
+    private fun isGooglePlayServicesAvailable(): Boolean {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val connectionStatusCode =
+            apiAvailability.isGooglePlayServicesAvailable(applicationContext)
+        return connectionStatusCode == ConnectionResult.SUCCESS
+    }
+
+    private fun refreshResults() {
+        if (mCredential!!.selectedAccountName == null) {
+            chooseAccount()
+        } else if (!isDeviceOnline()) {
+            apiStatusText = "No network connection available"
+            Log.d(TAG, "api status: $apiStatusText")
         }
 
-        private fun isDeviceOnline(): Boolean {
-            val connectionManager =
-                this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectionManager.activeNetworkInfo
+        mProgress?.show()
+        ApiAsyncTask(this).execute()
+    }
 
-            return (networkInfo != null) && networkInfo.isConnected
-        }
+    private fun chooseAccount() {
+        startActivityForResult(
+            mCredential!!.newChooseAccountIntent(),
+            Constants.REQUEST_ACCOUNT_PICKER
+        )
+    }
 
-        fun clearResultsText() {
-            apiStatusText = "Retrieving data..."
-            apiResultsText = ""
+    private fun isDeviceOnline(): Boolean {
+        val connectionManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectionManager.activeNetworkInfo
+
+        return (networkInfo != null) && networkInfo.isConnected
+    }
+
+    fun clearResultsText() {
+        apiStatusText = "Retrieving data..."
+        apiResultsText = ""
+
+        Log.d(TAG, "api status: $apiStatusText")
+        Log.d(TAG, "api results: $apiResultsText")
+    }
+
+    fun updateResultsText(dataStrings: List<String?>?) {
+        if (dataStrings == null) {
+            apiStatusText = "Error Retrieving data!"
+        } else if (dataStrings.isEmpty()) {
+            apiStatusText = "No data found."
+        } else {
+            apiStatusText = "Data retrieved using the Google Calendar API:"
+            apiResultsText = TextUtils.join("\n\n", dataStrings)
 
             Log.d(TAG, "api status: $apiStatusText")
             Log.d(TAG, "api results: $apiResultsText")
         }
+    }
 
-        fun updateResultsText(dataStrings: List<String?>?) {
-            if (dataStrings == null) {
-                apiStatusText = "Error Retrieving data!"
-            } else if (dataStrings.isEmpty()) {
-                apiStatusText = "No data found."
-            } else {
-                apiStatusText = "Data retrieved using the Google Calendar API:"
-                apiResultsText = TextUtils.join("\n\n", dataStrings)
+    fun updateStatus(message: String) {
+        apiStatusText = message
+        Log.d(TAG, "api status: $apiStatusText")
+    }
 
-                Log.d(TAG, "api status: $apiStatusText")
-                Log.d(TAG, "api results: $apiResultsText")
-            }
-        }
-
-        fun updateStatus(message: String) {
-            apiStatusText = message
-            Log.d(TAG, "api status: $apiStatusText")
-        }
-
-        fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
-            val apiAvailability = GoogleApiAvailability.getInstance()
-            val dialog = apiAvailability.getErrorDialog(
-                this,
-                connectionStatusCode,
-                Constants.REQUEST_GOOGLE_PLAY_SERVICES
-            )
-            dialog?.show()
-        }
+    fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val dialog = apiAvailability.getErrorDialog(
+            this,
+            connectionStatusCode,
+            Constants.REQUEST_GOOGLE_PLAY_SERVICES
+        )
+        dialog?.show()
+    }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
         var correctedHour = hourOfDay
