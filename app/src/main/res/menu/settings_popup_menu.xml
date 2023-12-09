@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Group 1: Nest Settings -->
+    <item
+        android:id="@+id/nest_settings_title"
+        android:title="Nest Settings:              "
+        android:enabled="false"
+        android:alphabeticShortcut=" "
+        android:numericShortcut=" "
+        android:textStyle="bold" />
     <group android:id="@+id/group_nest_settings">
         <item
             android:id="@+id/menu_delete_nest"
@@ -11,6 +18,13 @@
     </group>
 
     <!-- Group 2: App Settings -->
+    <item
+        android:id="@+id/app_settings_title"
+        android:title="App Settings:              "
+        android:enabled="false"
+        android:alphabeticShortcut=" "
+        android:numericShortcut=" "
+        android:textStyle="bold" />
     <group android:id="@+id/group_app_settings">
         <item
             android:id="@+id/menu_app_settings"

@@ -12,8 +12,6 @@ class CreateNestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_nest)
 
-        Log.i(TAG, "Create Nest Activity Launched")
-
         val exit_btn: ImageButton = findViewById(R.id.btn_exit)
         exit_btn.setOnClickListener { finish() }
     }

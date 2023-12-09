@@ -20,7 +20,7 @@
             android:background="@null"
             android:minHeight="48dp"
             android:contentDescription="Exit button"
-            app:srcCompat="@drawable/vector" />
+            app:srcCompat="@drawable/exit_btn" />
 
         <TextView
             android:id="@+id/textViewTask"

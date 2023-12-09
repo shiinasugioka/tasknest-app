@@ -10,8 +10,6 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
-
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var time: EditText
     private lateinit var date: EditText
