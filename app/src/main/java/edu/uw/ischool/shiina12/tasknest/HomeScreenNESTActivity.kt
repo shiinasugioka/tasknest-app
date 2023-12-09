@@ -13,17 +13,20 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.preference.PreferenceManager
 
 class HomeScreenNESTActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
 
-//      Identify Elements
+        // Identify Elements
         val nest_dropdown: Spinner = findViewById(R.id.nest_drop_down)
         val view_day_button: Button = findViewById(R.id.view_day_button)
 
-//      Set Element values
+        // Set Element values
         val nest_dropdown_items =
             arrayOf<String?>("Sample Nest 1", "Sample Nest 2", "Sample Nest 3")
         val arrayAdapter =
@@ -51,7 +54,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         newTaskBtn.setOnClickListener { createNewTask() }
 
     }
-
     private fun createNest() {
         val createNestIntent = Intent(this, CreateNestActivity::class.java)
         startActivity(createNestIntent)

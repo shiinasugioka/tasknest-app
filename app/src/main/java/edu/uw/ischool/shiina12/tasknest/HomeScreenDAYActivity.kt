@@ -10,12 +10,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_day)
 
-//      Identify Elements
+        //  Identify Elements
         val view_nest_button: Button = findViewById(R.id.view_nest_button)
 
-//      Set Element values
-
-
+        // Set Element values
         view_nest_button.setOnClickListener {
             switchToViewByNest()
         }

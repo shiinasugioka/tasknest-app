@@ -3,7 +3,7 @@
 
     <!-- Notification Type Preferences -->
     <PreferenceCategory
-        android:title="Notification Type">
+        android:title="Notification Type:">
 
         <CheckBoxPreference
             android:key="notification_app"
@@ -40,7 +40,7 @@
 
     <!-- Notification Frequency Preferences -->
     <PreferenceCategory
-        android:title="Notification Frequency">
+        android:title="Notification Frequency:">
 
         <EditTextPreference
             android:key="notification_frequency"
