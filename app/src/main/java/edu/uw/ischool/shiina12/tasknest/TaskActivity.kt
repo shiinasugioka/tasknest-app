@@ -1,24 +1,17 @@
 package edu.uw.ischool.shiina12.tasknest
 
 import android.accounts.AccountManager
-import android.app.DatePickerDialog
-import android.app.Dialog
 import android.app.ProgressDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.TextUtils
-import android.text.format.DateFormat
 import android.util.Log
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -28,7 +21,6 @@ import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.util.Constants
 import com.google.api.services.calendar.Calendar as GoogleCalendar
-import java.util.Calendar as JavaCalendar
 
 const val TAG = "TaskActivity"
 
@@ -63,8 +55,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         date.setOnClickListener {
             datePickerFragment.show(supportFragmentManager, "datePicker")
         }
-
-
+        
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
         apiResultsText = ""
         apiStatusText = ""
@@ -240,58 +231,3 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 }
 
-interface TimePickerListener {
-    fun onTimeSet(hourOfDay: Int, minute: Int)
-}
-
-interface DatePickerListener {
-    fun onDateSet(year: Int, month: Int, day: Int)
-}
-
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-    private var listener: TimePickerListener? = null
-
-    fun setListener(listener: TimePickerListener) {
-        this.listener = listener
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current time as the default values for the picker.
-        val c = JavaCalendar.getInstance()
-        val hour = c.get(JavaCalendar.HOUR_OF_DAY)
-        val minute = c.get(JavaCalendar.MINUTE)
-
-        // Create a new instance of TimePickerDialog and return it.
-        return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
-    }
-
-    override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        // format time correctly
-        listener?.onTimeSet(hourOfDay, minute)
-    }
-}
-
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private var listener: DatePickerListener? = null
-
-    fun setListener(listener: DatePickerListener) {
-        this.listener = listener
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current date as the default date in the picker.
-        val c = JavaCalendar.getInstance()
-        val year = c.get(JavaCalendar.YEAR)
-        val month = c.get(JavaCalendar.MONTH)
-        val day = c.get(JavaCalendar.DAY_OF_MONTH)
-
-        // Create a new instance of DatePickerDialog and return it.
-        return DatePickerDialog(requireContext(), this, year, month, day)
-
-    }
-
-    override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        // Log.i("TaskActivity", "datepicker $month/$day/$year")
-        listener?.onDateSet(year, month, day)
-    }
-}
