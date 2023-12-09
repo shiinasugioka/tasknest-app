@@ -1,5 +1,9 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.widget.Button
+
+import android.app.AlertDialog
+import android.os.Bundle
 import android.accounts.AccountManager
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -8,13 +12,15 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.os.Bundle
 import android.text.TextUtils
 import android.text.format.DateFormat
 import android.util.Log
-import android.widget.Button
-import android.widget.DatePicker
+import android.view.LayoutInflater
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +41,11 @@ const val TAG = "TaskActivity"
 class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var time: EditText
     private lateinit var date: EditText
+    private lateinit var allDay: CheckBox
+    private lateinit var repeatingEvent: CheckBox
+    private lateinit var startsOn: EditText
+    private lateinit var endsOn: EditText
+    private lateinit var atTime: EditText
     private lateinit var addEventButton: Button
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
@@ -42,26 +53,20 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
     var mProgress: ProgressDialog? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this)
-
-        val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this)
-
         // https://developer.android.com/develop/ui/views/components/pickers
         time = findViewById(R.id.editTextTime)
         date = findViewById(R.id.editTextDate)
+        repeatingEvent = findViewById(R.id.checkboxRepeating)
+        allDay = findViewById(R.id.allDayCheckBox)
 
-        time.setOnClickListener {
-            timePickerFragment.show(supportFragmentManager, "timePicker")
-        }
-        date.setOnClickListener {
-            datePickerFragment.show(supportFragmentManager, "datePicker")
+        repeatingEvent.setOnClickListener {
+            if (repeatingEvent.isChecked) {
+                showCustomDialog()
+            }
         }
 
 
@@ -76,222 +81,249 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun showCustomDialog() {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
+        startsOn = dialogView.findViewById(R.id.startsOn)
+        endsOn = dialogView.findViewById(R.id.endsOn)
+        atTime = dialogView.findViewById(R.id.reminderTime)
 
-        when (requestCode) {
-            Constants.REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != RESULT_OK) {
-                isGooglePlayServicesAvailable()
+        val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.frequency_units_events,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+        //val editText = dialogView.findViewById<EditText>(R.id.editText)
+        val timePickerFragment = TimePickerFragment()
+        timePickerFragment.setListener(this, time)
+
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.setListener(this, date)
+
+        val startDateFragment = DatePickerFragment()
+        startDateFragment.setListener(this, startsOn)
+
+        val endDateFragment = DatePickerFragment()
+        endDateFragment.setListener(this, endsOn)
+
+        val atTimeFragment = TimePickerFragment()
+        atTimeFragment.setListener(this, atTime)
+
+
+        time.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                timePickerFragment.show(supportFragmentManager, "timePicker")
             }
+        }
+        date.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                datePickerFragment.show(supportFragmentManager, "datePicker")
+            }
+        }
 
-            Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
-                if (resultCode == RESULT_OK && data.extras != null) {
-                    val accountName: String? = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                    mCredential?.setSelectedAccountName(accountName)
-                    val settings = getPreferences(MODE_PRIVATE)
-                    val editor = settings.edit()
-                    editor.putString(Constants.PREF_ACCOUNT_NAME, accountName)
-                    editor.apply()
-                } else if (resultCode == RESULT_CANCELED) {
-                    apiStatusText = "Account upspecified."
+        startsOn.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                startDateFragment.show(supportFragmentManager, "datePicker")
+            }
+        }
+
+        endsOn.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                endDateFragment.show(supportFragmentManager, "datePicker")
+            }
+        }
+
+        atTime.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                atTimeFragment.show(supportFragmentManager, "timePicker")
+            }
+        }
+
+        builder.setView(dialogView)
+            .setTitle("Options")
+            .setPositiveButton("OK") { dialog, _ ->
+                // val enteredText = editText.text.toString()
+                // Do something with the entered text
+
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+
+            when (requestCode) {
+                Constants.REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != RESULT_OK) {
+                    isGooglePlayServicesAvailable()
+                }
+
+                Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
+                    if (resultCode == RESULT_OK && data.extras != null) {
+                        val accountName: String? =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                        mCredential?.setSelectedAccountName(accountName)
+                        val settings = getPreferences(MODE_PRIVATE)
+                        val editor = settings.edit()
+                        editor.putString(Constants.PREF_ACCOUNT_NAME, accountName)
+                        editor.apply()
+                    } else if (resultCode == RESULT_CANCELED) {
+                        apiStatusText = "Account upspecified."
+                    }
+                }
+
+                Constants.REQUEST_AUTHORIZATION -> if (resultCode != RESULT_OK) {
+                    chooseAccount()
                 }
             }
 
-            Constants.REQUEST_AUTHORIZATION -> if (resultCode != RESULT_OK) {
-                chooseAccount()
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
+        override fun onResume() {
+            super.onResume()
+
+            if (isGooglePlayServicesAvailable()) {
+                refreshResults()
+            } else {
+                apiStatusText =
+                    "Google Play Services required: after installing, close and relaunch this app."
+                Log.d(TAG, "api status: $apiStatusText")
             }
         }
 
-        super.onActivityResult(requestCode, resultCode, data)
-    }
+        // initialize credentials and user's Google account
+        private fun initCredentials() {
+            mCredential = GoogleAccountCredential.usingOAuth2(
+                applicationContext,
+                arrayListOf(CalendarScopes.CALENDAR)
+            )
+                .setBackOff(ExponentialBackOff())
 
-    override fun onResume() {
-        super.onResume()
-
-        if (isGooglePlayServicesAvailable()) {
-            refreshResults()
-        } else {
-            apiStatusText =
-                "Google Play Services required: after installing, close and relaunch this app."
-            Log.d(TAG, "api status: $apiStatusText")
-        }
-    }
-
-    // initialize credentials and user's Google account
-    private fun initCredentials() {
-        mCredential = GoogleAccountCredential.usingOAuth2(
-            applicationContext,
-            arrayListOf(CalendarScopes.CALENDAR)
-        )
-            .setBackOff(ExponentialBackOff())
-
-        initCalendarBuild(mCredential)
-    }
-
-    // initialize user's Google calendar
-    private fun initCalendarBuild(credential: GoogleAccountCredential?) {
-        val transport = AndroidHttp.newCompatibleTransport()
-        val jsonFactory = JacksonFactory.getDefaultInstance()
-
-        mService = GoogleCalendar.Builder(
-            transport, jsonFactory, credential
-        )
-            .setApplicationName(Constants.APPLICATION_NAME)
-            .build()
-    }
-
-    private fun addCalendarEvent() {
-        CreateEventTask(mService).execute()
-    }
-
-    private fun isGooglePlayServicesAvailable(): Boolean {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(applicationContext)
-        return connectionStatusCode == ConnectionResult.SUCCESS
-    }
-
-    private fun refreshResults() {
-        if (mCredential!!.selectedAccountName == null) {
-            chooseAccount()
-        } else if (!isDeviceOnline()) {
-            apiStatusText = "No network connection available"
-            Log.d(TAG, "api status: $apiStatusText")
+            initCalendarBuild(mCredential)
         }
 
-        mProgress?.show()
-        ApiAsyncTask(this).execute()
-    }
+        // initialize user's Google calendar
+        private fun initCalendarBuild(credential: GoogleAccountCredential?) {
+            val transport = AndroidHttp.newCompatibleTransport()
+            val jsonFactory = JacksonFactory.getDefaultInstance()
 
-    private fun chooseAccount() {
-        startActivityForResult(
-            mCredential!!.newChooseAccountIntent(),
-            Constants.REQUEST_ACCOUNT_PICKER
-        )
-    }
+            mService = GoogleCalendar.Builder(
+                transport, jsonFactory, credential
+            )
+                .setApplicationName(Constants.APPLICATION_NAME)
+                .build()
+        }
 
-    private fun isDeviceOnline(): Boolean {
-        val connectionManager =
-            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectionManager.activeNetworkInfo
+        private fun addCalendarEvent() {
+            CreateEventTask(mService).execute()
+        }
 
-        return (networkInfo != null) && networkInfo.isConnected
-    }
+        private fun isGooglePlayServicesAvailable(): Boolean {
+            val apiAvailability = GoogleApiAvailability.getInstance()
+            val connectionStatusCode =
+                apiAvailability.isGooglePlayServicesAvailable(applicationContext)
+            return connectionStatusCode == ConnectionResult.SUCCESS
+        }
 
-    fun clearResultsText() {
-        apiStatusText = "Retrieving data..."
-        apiResultsText = ""
+        private fun refreshResults() {
+            if (mCredential!!.selectedAccountName == null) {
+                chooseAccount()
+            } else if (!isDeviceOnline()) {
+                apiStatusText = "No network connection available"
+                Log.d(TAG, "api status: $apiStatusText")
+            }
 
-        Log.d(TAG, "api status: $apiStatusText")
-        Log.d(TAG, "api results: $apiResultsText")
-    }
+            mProgress?.show()
+            ApiAsyncTask(this).execute()
+        }
 
-    fun updateResultsText(dataStrings: List<String?>?) {
-        if (dataStrings == null) {
-            apiStatusText = "Error Retrieving data!"
-        } else if (dataStrings.isEmpty()) {
-            apiStatusText = "No data found."
-        } else {
-            apiStatusText = "Data retrieved using the Google Calendar API:"
-            apiResultsText = TextUtils.join("\n\n", dataStrings)
+        private fun chooseAccount() {
+            startActivityForResult(
+                mCredential!!.newChooseAccountIntent(),
+                Constants.REQUEST_ACCOUNT_PICKER
+            )
+        }
+
+        private fun isDeviceOnline(): Boolean {
+            val connectionManager =
+                this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectionManager.activeNetworkInfo
+
+            return (networkInfo != null) && networkInfo.isConnected
+        }
+
+        fun clearResultsText() {
+            apiStatusText = "Retrieving data..."
+            apiResultsText = ""
 
             Log.d(TAG, "api status: $apiStatusText")
             Log.d(TAG, "api results: $apiResultsText")
         }
-    }
 
-    fun updateStatus(message: String) {
-        apiStatusText = message
-        Log.d(TAG, "api status: $apiStatusText")
-    }
+        fun updateResultsText(dataStrings: List<String?>?) {
+            if (dataStrings == null) {
+                apiStatusText = "Error Retrieving data!"
+            } else if (dataStrings.isEmpty()) {
+                apiStatusText = "No data found."
+            } else {
+                apiStatusText = "Data retrieved using the Google Calendar API:"
+                apiResultsText = TextUtils.join("\n\n", dataStrings)
 
-    fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val dialog = apiAvailability.getErrorDialog(
-            this,
-            connectionStatusCode,
-            Constants.REQUEST_GOOGLE_PLAY_SERVICES
-        )
-        dialog?.show()
-    }
+                Log.d(TAG, "api status: $apiStatusText")
+                Log.d(TAG, "api results: $apiResultsText")
+            }
+        }
 
-    override fun onTimeSet(hourOfDay: Int, minute: Int) {
-        // TODO: fix time formatting with ints < 10
+        fun updateStatus(message: String) {
+            apiStatusText = message
+            Log.d(TAG, "api status: $apiStatusText")
+        }
+
+        fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
+            val apiAvailability = GoogleApiAvailability.getInstance()
+            val dialog = apiAvailability.getErrorDialog(
+                this,
+                connectionStatusCode,
+                Constants.REQUEST_GOOGLE_PLAY_SERVICES
+            )
+            dialog?.show()
+        }
+
+    override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
         var correctedHour = hourOfDay
         var isAm = true
         if (hourOfDay > 12) {
             correctedHour = hourOfDay - 12
             isAm = false
+        } else if (hourOfDay == 0) {
+            correctedHour = 12
         }
-        if (isAm) {
-            time.setText("$correctedHour:$minute AM", TextView.BufferType.EDITABLE)
 
+        var formattedTime: String = if (minute < 10) {
+            "$correctedHour:0$minute"
         } else {
-            time.setText("$correctedHour:$minute PM", TextView.BufferType.EDITABLE)
-
+            "$correctedHour:$minute"
         }
+
+        formattedTime += if (isAm) " AM" else " PM"
+        targetEditText?.setText(formattedTime, TextView.BufferType.EDITABLE)
     }
 
-    override fun onDateSet(year: Int, month: Int, day: Int) {
+    override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
         // Do something with the date the user picks.
         val correctedMonth: Int = month + 1
         Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
-        date.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
-    }
-}
-
-interface TimePickerListener {
-    fun onTimeSet(hourOfDay: Int, minute: Int)
-}
-
-interface DatePickerListener {
-    fun onDateSet(year: Int, month: Int, day: Int)
-}
-
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-    private var listener: TimePickerListener? = null
-
-    fun setListener(listener: TimePickerListener) {
-        this.listener = listener
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current time as the default values for the picker.
-        val c = JavaCalendar.getInstance()
-        val hour = c.get(JavaCalendar.HOUR_OF_DAY)
-        val minute = c.get(JavaCalendar.MINUTE)
-
-        // Create a new instance of TimePickerDialog and return it.
-        return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
-    }
-
-    override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        // format time correctly
-        listener?.onTimeSet(hourOfDay, minute)
-    }
-}
-
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private var listener: DatePickerListener? = null
-
-    fun setListener(listener: DatePickerListener) {
-        this.listener = listener
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current date as the default date in the picker.
-        val c = JavaCalendar.getInstance()
-        val year = c.get(JavaCalendar.YEAR)
-        val month = c.get(JavaCalendar.MONTH)
-        val day = c.get(JavaCalendar.DAY_OF_MONTH)
-
-        // Create a new instance of DatePickerDialog and return it.
-        return DatePickerDialog(requireContext(), this, year, month, day)
-
-    }
-
-    override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        // Log.i("TaskActivity", "datepicker $month/$day/$year")
-        listener?.onDateSet(year, month, day)
+        targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
     }
 }

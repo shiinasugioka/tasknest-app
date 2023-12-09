@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/repeatingEventOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Repeat Every"></TextView>
+
+            <EditText
+                android:id="@+id/timeInterval"
+                android:hint="##"
+                android:minHeight="48dp"
+                android:layout_width="52dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:inputType="number"
+                ></EditText>
+
+            <Spinner
+                android:id="@+id/intervalSpinner"
+                android:layout_width="154dp"
+                android:minHeight="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="88dp"
+                android:layout_marginTop="8dp"
+                android:text="at"></TextView>
+
+            <EditText
+                android:id="@+id/reminderTime"
+                android:hint="HH:MM"
+                android:layout_width="120dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"></EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="8dp"
+                android:text="Starts on"></TextView>
+
+            <EditText
+                android:id="@+id/startsOn"
+                android:hint="MM/DD/YYYY"
+                android:minHeight="48dp"
+                android:layout_width="164dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"></EditText>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="8dp"
+                android:text="Ends on"></TextView>
+
+            <EditText
+                android:id="@+id/endsOn"
+                android:hint="MM/DD/YYYY"
+                android:layout_width="164dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="12dp"
+                android:minHeight="48dp"
+                android:layout_marginTop="8dp"></EditText>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
