@@ -5,18 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 
 
 class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var time: EditText
     private lateinit var date: EditText
-    private lateinit var checkBox: CheckBox
+    private lateinit var allDay: CheckBox
     private lateinit var repeatingEvent: CheckBox
-    private lateinit var repeatingEventLayout: LinearLayout
     private lateinit var startsOn: EditText
     private lateinit var endsOn: EditText
     private lateinit var atTime: EditText
@@ -29,15 +30,34 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         time = findViewById(R.id.editTextTime)
         date = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
+        allDay= findViewById(R.id.allDayCheckBox)
 
+        repeatingEvent.setOnClickListener {
+            if (repeatingEvent.isChecked) {
+                showCustomDialog()
+            }
+        }
+    }
+
+    private fun showCustomDialog() {
+        val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
-        val dialogLayout = inflater.inflate(R.layout.repeating_dialog_layout, null)
+        val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
+        startsOn = dialogView.findViewById(R.id.startsOn)
+        endsOn = dialogView.findViewById(R.id.endsOn)
+        atTime = dialogView.findViewById(R.id.reminderTime)
 
-        // repeatingEventLayout = dialogLayout.findViewById(R.id.repeatingEventOptions)
-        startsOn = dialogLayout.findViewById(R.id.startsOn)
-        endsOn = dialogLayout.findViewById(R.id.endsOn)
-        atTime = dialogLayout.findViewById(R.id.reminderTime)
+        val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.frequency_units_events,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
 
+        //val editText = dialogView.findViewById<EditText>(R.id.editText)
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, time)
 
@@ -79,31 +99,16 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         atTime.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
-                atTimeFragment.setListener(this, atTime)
                 atTimeFragment.show(supportFragmentManager, "timePicker")
             }
         }
-
-        checkBox = findViewById(R.id.checkboxRepeating)
-        checkBox.setOnClickListener {
-            if (checkBox.isChecked) {
-                showCustomDialog()
-            }
-        }
-    }
-
-    private fun showCustomDialog() {
-        val builder = AlertDialog.Builder(this)
-        val inflater = LayoutInflater.from(this)
-        val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
-
-        //val editText = dialogView.findViewById<EditText>(R.id.editText)
 
         builder.setView(dialogView)
             .setTitle("Options")
             .setPositiveButton("OK") { dialog, _ ->
                 // val enteredText = editText.text.toString()
                 // Do something with the entered text
+
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->

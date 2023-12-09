@@ -19,7 +19,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
                 android:text="Repeat Every"></TextView>
 
             <EditText
@@ -38,7 +39,7 @@
                 android:layout_width="154dp"
                 android:minHeight="48dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp" />
         </LinearLayout>
 
@@ -49,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="110dp"
+                android:layout_marginStart="88dp"
                 android:layout_marginTop="8dp"
                 android:text="at"></TextView>
 
@@ -69,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="65dp"
+                android:layout_marginStart="42dp"
                 android:layout_marginTop="8dp"
                 android:text="Starts on"></TextView>
 
@@ -92,7 +93,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="72dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="8dp"
                 android:text="Ends on"></TextView>
 
