@@ -4,19 +4,23 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.widget.EditText
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import java.util.Calendar as JavaCalendar
 
 interface TimePickerListener {
-    fun onTimeSet(hourOfDay: Int, minute: Int)
+    fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?)
 }
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     private var listener: TimePickerListener? = null
+    private var targetEditText: EditText? = null
 
-    fun setListener(listener: TimePickerListener) {
+    fun setListener(listener: TimePickerListener, targetEditText: EditText) {
         this.listener = listener
+        this.targetEditText = targetEditText
+
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,6 +35,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
         // format time correctly
-        listener?.onTimeSet(hourOfDay, minute)
+        listener?.onTimeSet(hourOfDay, minute, targetEditText)
     }
+
 }
