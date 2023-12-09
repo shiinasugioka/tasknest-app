@@ -1,6 +1,10 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -13,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 
 class HomeScreenNESTActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +55,38 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
         newTaskBtn.setOnClickListener { createNewTask() }
 
+
+        // -- Notifications Code --
+        // Read preferences
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", true)
+        val smsNotificationsEnabled = sharedPreferences.getBoolean("notification_sms", true)
+        val emailNotificationsEnabled = sharedPreferences.getBoolean("notification_email", true)
+
+        // Create notification channels based on preferences
+        if (appNotificationsEnabled) {
+            createNotificationChannel("app_channel", "App Notifications", "Channel for app notifications")
+        }
+
+        if (smsNotificationsEnabled) {
+            createNotificationChannel("sms_channel", "SMS Notifications", "Channel for SMS notifications")
+        }
+
+        if (emailNotificationsEnabled) {
+            createNotificationChannel("email_channel", "Email Notifications", "Channel for email notifications")
+        }
+
+    }
+
+    private fun createNotificationChannel(channelId: String, name: String, description: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, name, importance).apply {
+            this.description = description
+        }
+
+        val notificationManager: NotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun createNest() {
@@ -77,11 +114,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             when (item.itemId) {
                 // Group 1: Nest Settings
                 R.id.menu_delete_nest -> {
-                    // Handle Delete Nest or other actions in this group
+                    // TODO Handle Delete Nest or other actions in this group
                     true
                 }
                 R.id.menu_rename_nest -> {
-                    // Handle Rename Nest action
+                    // TODO Handle Rename Nest action
                     true
                 }
 
@@ -93,7 +130,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     true
                 }
                 R.id.menu_google -> {
-                    // Handle Google action
+                    // TODO Handle Google action
                     true
                 }
                 else -> false
@@ -115,13 +152,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_sort_date_created -> {
-                    // Handle sorting by date created
-                    // Call a function to update the UI with sorted data
+                    // TODO Handle sorting by date created
                     true
                 }
                 R.id.menu_sort_due_date -> {
-                    // Handle sorting by due date
-                    // Call a function to update the UI with sorted data
+                    // TODO Handle sorting by due date
                     true
                 }
                 else -> false

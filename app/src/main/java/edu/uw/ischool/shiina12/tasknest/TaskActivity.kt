@@ -1,30 +1,22 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import android.widget.Button
-
-import android.app.AlertDialog
-import android.os.Bundle
 import android.accounts.AccountManager
-import android.app.DatePickerDialog
-import android.app.Dialog
+import android.app.AlertDialog
 import android.app.ProgressDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Bundle
 import android.text.TextUtils
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.extensions.android.http.AndroidHttp
@@ -34,7 +26,6 @@ import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.util.Constants
 import com.google.api.services.calendar.Calendar as GoogleCalendar
-import java.util.Calendar as JavaCalendar
 
 const val TAG = "TaskActivity"
 
@@ -114,7 +105,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
 
-
         time.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
@@ -158,6 +148,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             .show()
     }
 
+    @Deprecated("Deprecated in Java")
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -277,8 +268,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             apiStatusText = "No data found."
         } else {
             apiStatusText = "Data retrieved using the Google Calendar API:"
-            apiResultsText = TextUtils.join("\n\n", dataStrings)
-
+            apiResultsText = TextUtils.join("\n", dataStrings)
             Log.d(TAG, "api status: $apiStatusText")
             Log.d(TAG, "api results: $apiResultsText")
         }
