@@ -29,8 +29,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val view_day_button: Button = findViewById(R.id.view_day_button)
 
 //      Set Element values
-        val nest_dropdown_items =
-            arrayOf<String?>("Sample Nest 1", "Sample Nest 2", "Sample Nest 3")
+        /*val nest_dropdown_items =
+            arrayOf<String?>("Sample Nest 1", "Sample Nest 2", "Sample Nest 3")*/
+        
+        var todoRepo = InMemoryTodoRepository()
+        val nest_dropdown_items = todoRepo.getAllNestTitles()
         val arrayAdapter =
             ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
         nest_dropdown.adapter = arrayAdapter

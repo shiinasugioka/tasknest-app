@@ -38,6 +38,10 @@ class InMemoryTodoRepository : TodoRepository {
         return todoNests.find { it.title == nestTitle }
     }
 
+    override fun getAllNestTitles(): Array<String> {
+        return todoNests.map { it.title }.toTypedArray()
+    }
+
     fun getTasksForToday(): List<Task> {
         val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         return todoNests.flatMap { nest ->
@@ -61,10 +65,6 @@ class InMemoryTodoRepository : TodoRepository {
         // Log.d("WeekRange", "Start: $startOfWeek, End: $endOfWeek") // Uncomment if logging is needed
         return Pair(startOfWeek, endOfWeek)
     }
-
-
-
-
     override fun createTodoList(nestName: String): TodoNest {
         val newTodoNest = TodoNest(title = nestName)
         todoNests.add(newTodoNest)

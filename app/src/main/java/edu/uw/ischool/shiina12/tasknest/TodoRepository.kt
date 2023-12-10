@@ -15,6 +15,7 @@ interface TodoRepository {
     fun getNotificationsForTask(task: Task, notificationType: NotificationType)
     fun exportTasksToJson(nest: TodoNest): String
     fun getTodoNestByTitle(nestTitle: String): TodoNest?
+    fun getAllNestTitles(): Array<String>
 }
 
 data class TodoNest(
