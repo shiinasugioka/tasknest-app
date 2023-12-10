@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
@@ -93,6 +94,14 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setNewDropDownValues()
+        setCurrentNest()
+    }
+
+    private fun setCurrentNest() {
+        if (nest_dropdown.selectedItem != null) {
+            val selectedNest = nest_dropdown.selectedItem.toString()
+            todoRepo.setCurrNestName(selectedNest)
+        }
     }
 
     private fun setNewDropDownValues() {
@@ -138,12 +147,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             when (item.itemId) {
                 // Group 1: Nest Settings
                 R.id.menu_delete_nest -> {
-                    // TODO Handle Delete Nest or other actions in this group
+                    handleDeleteThisNest()
                     true
                 }
 
                 R.id.menu_rename_nest -> {
-                    // TODO Handle Rename Nest action
+                    handleRenameThisNest()
                     true
                 }
 
@@ -165,6 +174,19 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
 
         popupMenu.show()
+    }
+
+    private fun handleDeleteThisNest() {
+        Log.d(TAG, "handle delete nest called")
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            todoRepo.removeNest(nestName)
+        }
+        setNewDropDownValues()
+    }
+
+    private fun handleRenameThisNest() {
+        Log.d(TAG, "handle rename nest")
     }
 
     private fun showSortByPopupMenu(view: View) {
@@ -200,7 +222,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
         titleItem.title = titleString
     }
-
 
     override fun onPause() {
         super.onPause()

@@ -14,7 +14,7 @@ interface TodoRepository {
     fun exportTasksToJson(nest: TodoNest): String
     fun getTodoNestByTitle(nestTitle: String): TodoNest?
     fun getAllNestTitles(): Array<String>
-    fun getNest(): MutableList<TodoNest>
+    fun getNests(): MutableList<TodoNest>
 }
 
 data class TodoNest(
