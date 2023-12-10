@@ -1,5 +1,7 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.text.Editable
+
 interface TodoRepository {
     fun createTodoList(nestName: String): TodoNest
     fun addTaskToList(nest: TodoNest, task: Task)
