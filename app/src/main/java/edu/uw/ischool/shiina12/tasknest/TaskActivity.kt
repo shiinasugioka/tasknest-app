@@ -30,6 +30,7 @@ import com.google.api.services.calendar.Calendar as GoogleCalendar
 const val TAG = "TaskActivity"
 
 class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
+    private lateinit var eventTitleTextView: TextView
     private lateinit var time: EditText
     private lateinit var date: EditText
     private lateinit var allDay: CheckBox
@@ -50,6 +51,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         setContentView(R.layout.activity_task)
 
         // https://developer.android.com/develop/ui/views/components/pickers
+        eventTitleTextView = findViewById(R.id.editTextTask)
         time = findViewById(R.id.editTextTime)
         date = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
