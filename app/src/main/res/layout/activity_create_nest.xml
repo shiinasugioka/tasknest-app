@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="@font/poppins"
@@ -50,7 +50,7 @@
         android:hint="Nest Title"
         android:inputType="text"
         android:minHeight="48dp"
-        android:textColor="@color/secondary_text"
+        android:textColor="@color/primary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />

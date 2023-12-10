@@ -1,23 +1,20 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
+import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class CreateNestActivity : AppCompatActivity() {
 
     private lateinit var createNestButton: Button
     private lateinit var nestTitleEdit: EditText
-
-//    private val todoRepo: InMemoryTodoRepository = (application as App).todoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +32,11 @@ class CreateNestActivity : AppCompatActivity() {
         val nest_dropdown_items = todoRepo.getAllNestTitles()
 
         val arrayAdapter =
-            ArrayAdapter<Any?>(this@CreateNestActivity, R.layout.spinner_dropdown_text, nest_dropdown_items)
+            ArrayAdapter<Any?>(
+                this@CreateNestActivity,
+                R.layout.spinner_dropdown_text,
+                nest_dropdown_items
+            )
         nest_dropdown.adapter = arrayAdapter
 
         createNestButton.setOnClickListener {

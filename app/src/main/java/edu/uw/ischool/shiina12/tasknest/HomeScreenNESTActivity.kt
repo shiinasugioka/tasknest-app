@@ -21,8 +21,6 @@ import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
 
-//    private val todoRepo: InMemoryTodoRepository = (application as App).todoRepository
-
     private lateinit var nest_dropdown: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
