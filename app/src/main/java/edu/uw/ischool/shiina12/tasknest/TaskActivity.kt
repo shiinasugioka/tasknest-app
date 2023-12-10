@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
@@ -26,6 +28,9 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.util.Constants
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 
 const val TAG = "TaskActivity"
@@ -48,6 +53,8 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var eventTitleText: String
     private lateinit var eventStartTimeText: String
     private lateinit var eventStartDateText: String
+    private lateinit var finalDateTime: String
+    private lateinit var finalTitle: String
 
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
@@ -100,6 +107,12 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         apiStatusText = ""
 
         initCredentials()
+
+        eventTitleTextView.addTextChangedListener(textWatcher)
+        timeEditText.addTextChangedListener(textWatcher)
+        dateEditText.addTextChangedListener(textWatcher)
+
+        addEventButton.isEnabled = false
 
         addEventButton.setOnClickListener {
             setEventDetails()
@@ -233,7 +246,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 
     private fun addCalendarEvent() {
-        CreateEventTask(mService).execute()
+        CreateEventTask(mService, finalDateTime, finalTitle).execute()
     }
 
     private fun setEventDetails() {
@@ -241,9 +254,15 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         eventStartTimeText = timeEditText.text.toString()
         eventStartDateText = dateEditText.text.toString()
 
-        Log.i(TAG, "eventTitleText: $eventTitleText")
-        Log.i(TAG, "eventStartTimeText: $eventStartTimeText")
-        Log.i(TAG, "eventStartDateText: $eventStartDateText")
+        val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
+        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val LAZoneId = ZoneId.of("America/Los_Angeles")
+        val formattedDateTime = localDateTime.atZone(LAZoneId)
+        val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
+        finalDateTime = formattedDateTime.format(iso8601Formatter)
+        finalTitle = eventTitleText
     }
 
     private fun isGooglePlayServicesAvailable(): Boolean {
@@ -341,5 +360,21 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val correctedMonth: Int = month + 1
         Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
         targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+    }
+
+    private var textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (eventTitleTextView.text.isNotBlank() &&
+                timeEditText.text.isNotBlank() &&
+                dateEditText.text.isNotBlank()
+            ) {
+                addEventButton.isEnabled = true
+            }
+        }
+
     }
 }

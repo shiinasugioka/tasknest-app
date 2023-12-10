@@ -6,9 +6,18 @@ import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.EventDateTime
 import java.io.IOException
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-class CreateEventTask internal constructor(private var mService: Calendar?) :
+class CreateEventTask internal constructor(
+    private var mService: Calendar?,
+    finalDateTime: String,
+    finalTitle: String
+) :
     AsyncTask<Void?, Void?, Void?>() {
+
+    private val givenStartDateTime = finalDateTime
+    private val givenFinalTitle = finalTitle
 
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
@@ -18,18 +27,18 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
 
     private fun addCalendarEvent() {
         // TODO: Replace with user text field input
-        val eventTitle = "Shiina test time and date input"
+        val eventTitle = givenFinalTitle
 
-//        val eventStartDateTime = "2023-12-07T09:00:00-07:00"
-//        val eventEndDateTime = "2023-12-07T17:00:00-07:00"
+        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val formattedStart = ZonedDateTime.parse(givenStartDateTime, formatter)
+        val formattedEndTime = formattedStart.plusHours(1)
+        val givenEndDateTime = formattedEndTime.format(formatter)
 
-        val eventStartDateTime = "2023-12-09T09:00:00-08:00"
-        val eventEndDateTime = "2023-12-09T17:00:00-08:00"
+        val eventStartDateTime = givenStartDateTime
+        val eventEndDateTime = givenEndDateTime
 
         val event: Event = Event()
             .setSummary(eventTitle)
-//            .setLocation(eventLocation)
-//            .setDescription(eventDescription)
 
         val startDateTime = DateTime(eventStartDateTime)
         val start = EventDateTime()
