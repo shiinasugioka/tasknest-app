@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
@@ -26,13 +28,17 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.util.Constants
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 
 const val TAG = "TaskActivity"
 
 class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private lateinit var time: EditText
-    private lateinit var date: EditText
+    private lateinit var eventTitleTextView: TextView
+    private lateinit var timeEditText: EditText
+    private lateinit var dateEditText: EditText
     private lateinit var allDay: CheckBox
     private lateinit var repeatingEvent: CheckBox
     private lateinit var startsOn: EditText
@@ -43,16 +49,25 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var apiStatusText: String
     private lateinit var exitButton: ImageButton
 
+    // values to be sent to API
+    private lateinit var eventTitleText: String
+    private lateinit var eventStartTimeText: String
+    private lateinit var eventStartDateText: String
+    private lateinit var finalDateTime: String
+    private lateinit var finalTitle: String
+
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
     var mProgress: ProgressDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        // https://developer.android.com/develop/ui/views/components/pickers
-        time = findViewById(R.id.editTextTime)
-        date = findViewById(R.id.editTextDate)
+        // UI elements
+        eventTitleTextView = findViewById(R.id.editTextTask)
+        timeEditText = findViewById(R.id.editTextTime)
+        dateEditText = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
@@ -60,17 +75,17 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         //val editText = dialogView.findViewById<EditText>(R.id.editText)
         val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this, time)
+        timePickerFragment.setListener(this, timeEditText)
 
         val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this, date)
+        datePickerFragment.setListener(this, dateEditText)
 
-        time.setOnFocusChangeListener { view, hasFocus ->
+        timeEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
-        date.setOnFocusChangeListener { view, hasFocus ->
+        dateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
             }
@@ -86,13 +101,21 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             finish()
         }
 
+        // UI elements for API
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
         apiResultsText = ""
         apiStatusText = ""
 
         initCredentials()
 
+        eventTitleTextView.addTextChangedListener(textWatcher)
+        timeEditText.addTextChangedListener(textWatcher)
+        dateEditText.addTextChangedListener(textWatcher)
+
+        addEventButton.isEnabled = false
+
         addEventButton.setOnClickListener {
+            setEventDetails()
             addCalendarEvent()
         }
     }
@@ -114,7 +137,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
         }
-
 
         val startDateFragment = DatePickerFragment()
         startDateFragment.setListener(this, startsOn)
@@ -158,7 +180,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 
     @Deprecated("Deprecated in Java")
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -225,7 +246,23 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     }
 
     private fun addCalendarEvent() {
-        CreateEventTask(mService).execute()
+        CreateEventTask(mService, finalDateTime, finalTitle).execute()
+    }
+
+    private fun setEventDetails() {
+        eventTitleText = eventTitleTextView.text.toString()
+        eventStartTimeText = timeEditText.text.toString()
+        eventStartDateText = dateEditText.text.toString()
+
+        val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
+        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val LAZoneId = ZoneId.of("America/Los_Angeles")
+        val formattedDateTime = localDateTime.atZone(LAZoneId)
+        val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
+        finalDateTime = formattedDateTime.format(iso8601Formatter)
+        finalTitle = eventTitleText
     }
 
     private fun isGooglePlayServicesAvailable(): Boolean {
@@ -323,5 +360,21 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val correctedMonth: Int = month + 1
         Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
         targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+    }
+
+    private var textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (eventTitleTextView.text.isNotBlank() &&
+                timeEditText.text.isNotBlank() &&
+                dateEditText.text.isNotBlank()
+            ) {
+                addEventButton.isEnabled = true
+            }
+        }
+
     }
 }
