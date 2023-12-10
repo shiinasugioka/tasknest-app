@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var addEventButton: Button
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
+    private lateinit var exitButton: ImageButton
 
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
@@ -53,11 +55,35 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         date = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
+        exitButton = findViewById(R.id.imageButtonExit)
+        Log.i("TaskActivity", "found exit button")
+
+        //val editText = dialogView.findViewById<EditText>(R.id.editText)
+        val timePickerFragment = TimePickerFragment()
+        timePickerFragment.setListener(this, time)
+
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.setListener(this, date)
+
+        time.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                timePickerFragment.show(supportFragmentManager, "timePicker")
+            }
+        }
+        date.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                datePickerFragment.show(supportFragmentManager, "datePicker")
+            }
+        }
 
         repeatingEvent.setOnClickListener {
             if (repeatingEvent.isChecked) {
                 showCustomDialog()
             }
+        }
+
+        exitButton.setOnClickListener {
+            finish()
         }
 
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
@@ -89,12 +115,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             spinner.adapter = adapter
         }
 
-        //val editText = dialogView.findViewById<EditText>(R.id.editText)
-        val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this, time)
-
-        val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this, date)
 
         val startDateFragment = DatePickerFragment()
         startDateFragment.setListener(this, startsOn)
@@ -104,17 +124,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
-
-        time.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                timePickerFragment.show(supportFragmentManager, "timePicker")
-            }
-        }
-        date.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                datePickerFragment.show(supportFragmentManager, "datePicker")
-            }
-        }
 
         startsOn.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {

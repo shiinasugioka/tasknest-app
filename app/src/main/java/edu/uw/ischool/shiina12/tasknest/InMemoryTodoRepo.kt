@@ -17,7 +17,7 @@ val today = Calendar.getInstance().apply {
 }.timeInMillis // This is a Long value
 
 class InMemoryTodoRepository : TodoRepository {
-    private val todoNests: MutableList<TodoNest> = mutableListOf(
+    val todoNests: MutableList<TodoNest> = mutableListOf(
         TodoNest(
             title = "Personal",
             tasks = mutableListOf(
