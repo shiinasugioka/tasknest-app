@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Repeat Every"></TextView>
+                android:text="Repeat Every" />
 
             <EditText
                 android:id="@+id/timeInterval"
@@ -31,7 +31,7 @@
                 android:layout_marginTop="20dp"
                 android:hint="##"
                 android:inputType="number"
-                android:minHeight="48dp"></EditText>
+                android:minHeight="48dp" />
 
             <Spinner
                 android:id="@+id/intervalSpinner"
@@ -40,6 +40,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
                 android:minHeight="48dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="88dp"
                 android:layout_marginTop="8dp"
-                android:text="at"></TextView>
+                android:text="at" />
 
             <EditText
                 android:id="@+id/reminderTime"
@@ -59,7 +60,7 @@
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:hint="HH:MM"></EditText>
+                android:hint="HH:MM" />
         </LinearLayout>
 
         <LinearLayout
@@ -71,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="42dp"
                 android:layout_marginTop="8dp"
-                android:text="Starts on"></TextView>
+                android:text="Starts on" />
 
             <EditText
                 android:id="@+id/startsOn"
@@ -80,7 +81,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:hint="MM/DD/YYYY"
-                android:minHeight="48dp"></EditText>
+                android:minHeight="48dp" />
 
 
         </LinearLayout>
@@ -94,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="48dp"
                 android:layout_marginTop="8dp"
-                android:text="Ends on"></TextView>
+                android:text="Ends on" />
 
             <EditText
                 android:id="@+id/endsOn"
@@ -103,7 +104,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:hint="MM/DD/YYYY"
-                android:minHeight="48dp"></EditText>
+                android:minHeight="48dp" />
         </LinearLayout>
 
     </LinearLayout>
