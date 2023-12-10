@@ -79,10 +79,9 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/new_nest_button"
-            style="@style/new_nest_button"
-            android:text="@string/create_new_nest"
+        <View
+            android:layout_width="135dp"
+            android:layout_height="35dp"
             app:layout_constraintBottom_toTopOf="@+id/horizontal_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view_day_button"
