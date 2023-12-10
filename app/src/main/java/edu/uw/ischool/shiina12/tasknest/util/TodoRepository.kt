@@ -19,14 +19,15 @@ interface TodoRepository {
 
 data class TodoNest(
     val title: String,
-    val tasks: MutableList<Task> = mutableListOf()
+    val tasks: MutableList<Task> = mutableListOf(),
 )
 
 data class Task(
     var title: String,
     var description: String,
     var deadline: Long? = null,
-    var isFinished: Boolean = false
+    var isFinished: Boolean = false,
+    val dateCreated: Long = today
 )
 
 enum class SortingMethod {
