@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.util
 
 import android.Manifest
 import android.app.AlarmManager
@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
+import edu.uw.ischool.shiina12.tasknest.R
 import java.util.Calendar
 
 class NotificationScheduler {

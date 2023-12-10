@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.util
 
 import android.graphics.Color
 import android.graphics.Paint
@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import edu.uw.ischool.shiina12.tasknest.R
 
 
 class TodoAdapter(
@@ -20,8 +21,6 @@ class TodoAdapter(
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
         val textView: TextView = view.findViewById(R.id.todoTextView)
     }
-
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
