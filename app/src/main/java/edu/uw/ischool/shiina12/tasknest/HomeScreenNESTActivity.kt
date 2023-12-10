@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
@@ -18,8 +17,12 @@ import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
 
 class HomeScreenNESTActivity : AppCompatActivity() {
+
+    private lateinit var todoRepo: InMemoryTodoRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
@@ -30,7 +33,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
 //      Set Element values
 
-        var todoRepo = InMemoryTodoRepository()
+        todoRepo = (application as App).todoRepository
         val nest_dropdown_items = todoRepo.getAllNestTitles()
         val arrayAdapter =
             ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
@@ -72,15 +75,27 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         // Create notification channels based on preferences
         if (appNotificationsEnabled) {
-            createNotificationChannel("app_channel", "App Notifications", "Channel for app notifications")
+            createNotificationChannel(
+                "app_channel",
+                "App Notifications",
+                "Channel for app notifications"
+            )
         }
 
         if (smsNotificationsEnabled) {
-            createNotificationChannel("sms_channel", "SMS Notifications", "Channel for SMS notifications")
+            createNotificationChannel(
+                "sms_channel",
+                "SMS Notifications",
+                "Channel for SMS notifications"
+            )
         }
 
         if (emailNotificationsEnabled) {
-            createNotificationChannel("email_channel", "Email Notifications", "Channel for email notifications")
+            createNotificationChannel(
+                "email_channel",
+                "Email Notifications",
+                "Channel for email notifications"
+            )
         }
 
     }
@@ -124,6 +139,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     // TODO Handle Delete Nest or other actions in this group
                     true
                 }
+
                 R.id.menu_rename_nest -> {
                     // TODO Handle Rename Nest action
                     true
@@ -136,10 +152,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 R.id.menu_google -> {
                     // TODO Handle Google action
                     true
                 }
+
                 else -> false
             }
         }
@@ -162,10 +180,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     // TODO Handle sorting by date created
                     true
                 }
+
                 R.id.menu_sort_due_date -> {
                     // TODO Handle sorting by due date
                     true
                 }
+
                 else -> false
             }
         }

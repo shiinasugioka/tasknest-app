@@ -18,10 +18,15 @@ class CreateNestActivity : AppCompatActivity() {
     private val TAG = "CreateNestActivity"
     private lateinit var createNestButton: Button
     private lateinit var nestTitleEdit: EditText
-    private val todoRepo = InMemoryTodoRepository()
+
+    private lateinit var todoRepo: InMemoryTodoRepository
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_nest)
+
+        todoRepo = (application as App).todoRepository
 
         val exit_btn: ImageButton = findViewById(R.id.btn_exit)
         exit_btn.setOnClickListener { finish() }
