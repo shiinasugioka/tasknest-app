@@ -1,5 +1,5 @@
 // InMemoryTodoRepository.kt
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.util
 
 import java.time.DayOfWeek
 import java.time.LocalDate

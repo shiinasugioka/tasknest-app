@@ -5,8 +5,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
+import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

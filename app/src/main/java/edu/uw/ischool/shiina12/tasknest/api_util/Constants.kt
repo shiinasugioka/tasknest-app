@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest.util
+package edu.uw.ischool.shiina12.tasknest.api_util
 
 object Constants {
     const val REQUEST_ACCOUNT_PICKER = 1000

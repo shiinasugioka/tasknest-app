@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.util
 
 import android.app.Dialog
 import android.app.TimePickerDialog

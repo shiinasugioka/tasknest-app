@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.api_util
 
 import android.os.AsyncTask
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
@@ -6,7 +6,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.Events
-import edu.uw.ischool.shiina12.tasknest.util.Constants
+import edu.uw.ischool.shiina12.tasknest.TaskActivity
 
 class ApiAsyncTask internal constructor(private val mActivity: TaskActivity) :
     AsyncTask<Void?, Void?, Void?>() {

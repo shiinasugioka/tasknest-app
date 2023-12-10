@@ -28,8 +28,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="172dp"
             android:layout_marginTop="40dp"
+            android:fontFamily="@font/poppins"
             android:minHeight="48dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="0dp"
             android:text="Task Details"
+            android:textColor="@color/primary_text"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -50,9 +54,11 @@
             android:layout_width="224dp"
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins"
+            android:hint="Task Title"
             android:inputType="text"
             android:minHeight="48dp"
-            android:text="Task Title" />
+            android:paddingBottom="0dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -74,8 +80,10 @@
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins"
             android:hint="Enter date"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:paddingBottom="0dp" />
 
     </LinearLayout>
 
@@ -97,9 +105,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
-            android:text="All Day" />
+            android:fontFamily="@font/poppins"
+            android:paddingTop="5dp"
+            android:paddingBottom="0dp"
+            android:text="All Day"
+            android:textColor="@color/primary_text" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -110,8 +123,10 @@
             android:layout_height="41dp"
             android:layout_marginStart="108dp"
             android:layout_marginTop="4dp"
+            android:fontFamily="@font/poppins"
             android:hint="Enter time"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:paddingBottom="0dp" />
 
     </LinearLayout>
 
@@ -133,6 +148,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="6dp"
+            android:fontFamily="@font/poppins"
+            android:paddingTop="5dp"
+            android:paddingBottom="0dp"
             android:text="Repeating Event"
             android:textSize="18sp" />
 
@@ -149,10 +167,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/button"
-            android:text="Add to Google Calendar" />
+            android:fontFamily="@font/poppins"
+            android:paddingTop="13dp"
+            android:text="Add to Google Calendar"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -163,8 +186,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins"
+            android:paddingBottom="0dp"
             android:text="Notes"
-            android:textSize="18sp"/>
+            android:textColor="@color/primary_text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -183,8 +209,10 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="300dp"
                 android:layout_height="120dp"
+                android:fontFamily="@font/poppins"
                 android:gravity="top|start"
-                android:hint="Enter notes here" />
+                android:hint="Enter notes here"
+                android:paddingBottom="0dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
@@ -199,6 +227,8 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:paddingBottom="0dp"
             android:text="Save" />
 
     </LinearLayout>

@@ -1,4 +1,4 @@
-package edu.uw.ischool.shiina12.tasknest
+package edu.uw.ischool.shiina12.tasknest.api_util
 
 import android.os.AsyncTask
 import com.google.api.client.util.DateTime
@@ -6,9 +6,18 @@ import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.EventDateTime
 import java.io.IOException
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-class CreateEventTask internal constructor(private var mService: Calendar?) :
+class CreateEventTask internal constructor(
+    private var mService: Calendar?,
+    finalDateTime: String,
+    finalTitle: String
+) :
     AsyncTask<Void?, Void?, Void?>() {
+
+    private val givenStartDateTime = finalDateTime
+    private val givenFinalTitle = finalTitle
 
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
@@ -17,18 +26,17 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
     }
 
     private fun addCalendarEvent() {
-        // TODO: Replace with user text field input
-        val eventTitle = "Annie New Event"
-        val eventLocation = "1410 NE Campus Pkwy, Seattle, WA 98195"
-        val eventDescription = "This is a sample event to make sure the app works"
+        val eventTitle = givenFinalTitle
 
-        val eventStartDateTime = "2023-12-07T09:00:00-07:00"
-        val eventEndDateTime = "2023-12-07T17:00:00-07:00"
+        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val formattedStart = ZonedDateTime.parse(givenStartDateTime, formatter)
+        val formattedEndTime = formattedStart.plusHours(1)
+        val givenEndDateTime = formattedEndTime.format(formatter)
+
+        val eventStartDateTime = givenStartDateTime
 
         val event: Event = Event()
             .setSummary(eventTitle)
-            .setLocation(eventLocation)
-            .setDescription(eventDescription)
 
         val startDateTime = DateTime(eventStartDateTime)
         val start = EventDateTime()
@@ -36,7 +44,7 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
             .setTimeZone("America/Los_Angeles")
         event.setStart(start)
 
-        val endDateTime = DateTime(eventEndDateTime)
+        val endDateTime = DateTime(givenEndDateTime)
         val end = EventDateTime()
             .setDateTime(endDateTime)
             .setTimeZone("America/Los_Angeles")
