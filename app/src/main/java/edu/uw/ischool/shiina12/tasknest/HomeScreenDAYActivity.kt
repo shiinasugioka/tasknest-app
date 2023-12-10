@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -20,12 +21,14 @@ import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenDAYActivity : AppCompatActivity() {
 
+    private lateinit var nestButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_day)
 
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
-
+        nestButton = findViewById(R.id.view_nest_button)
         // Get today's date in millis to compare with task deadlines
         val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
@@ -87,8 +90,14 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     }
                     this.adapter = adapter
                 }
+
                 linearLayoutContainer.addView(recyclerView)
             }
+        }
+
+        nestButton.setOnClickListener {
+            val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+            startActivity(nestScreenIntent)
         }
     }
 
