@@ -18,17 +18,18 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
 
     private fun addCalendarEvent() {
         // TODO: Replace with user text field input
-        val eventTitle = "Sample New Event"
-        val eventLocation = "1410 NE Campus Pkwy, Seattle, WA 98195"
-        val eventDescription = "This is a sample event to make sure the app works"
+        val eventTitle = "Shiina test time and date input"
 
-        val eventStartDateTime = "2023-12-07T09:00:00-07:00"
-        val eventEndDateTime = "2023-12-07T17:00:00-07:00"
+//        val eventStartDateTime = "2023-12-07T09:00:00-07:00"
+//        val eventEndDateTime = "2023-12-07T17:00:00-07:00"
+
+        val eventStartDateTime = "2023-12-09T09:00:00-08:00"
+        val eventEndDateTime = "2023-12-09T17:00:00-08:00"
 
         val event: Event = Event()
             .setSummary(eventTitle)
-            .setLocation(eventLocation)
-            .setDescription(eventDescription)
+//            .setLocation(eventLocation)
+//            .setDescription(eventDescription)
 
         val startDateTime = DateTime(eventStartDateTime)
         val start = EventDateTime()
