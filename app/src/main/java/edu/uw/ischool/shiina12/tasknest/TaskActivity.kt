@@ -31,8 +31,8 @@ const val TAG = "TaskActivity"
 
 class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var eventTitleTextView: TextView
-    private lateinit var time: EditText
-    private lateinit var date: EditText
+    private lateinit var timeEditText: EditText
+    private lateinit var dateEditText: EditText
     private lateinit var allDay: CheckBox
     private lateinit var repeatingEvent: CheckBox
     private lateinit var startsOn: EditText
@@ -42,6 +42,11 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
 
+    // values to be sent to API
+    private lateinit var eventTitleText: String
+    private lateinit var eventStartTimeText: String
+    private lateinit var eventStartDateText: String
+
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
     var mProgress: ProgressDialog? = null
@@ -50,10 +55,10 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-        // https://developer.android.com/develop/ui/views/components/pickers
+        // UI elements
         eventTitleTextView = findViewById(R.id.editTextTask)
-        time = findViewById(R.id.editTextTime)
-        date = findViewById(R.id.editTextDate)
+        timeEditText = findViewById(R.id.editTextTime)
+        dateEditText = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
 
@@ -63,6 +68,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             }
         }
 
+        // UI elements for API
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
         apiResultsText = ""
         apiStatusText = ""
@@ -70,6 +76,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         initCredentials()
 
         addEventButton.setOnClickListener {
+            setEventDetails()
             addCalendarEvent()
         }
     }
@@ -94,10 +101,10 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         //val editText = dialogView.findViewById<EditText>(R.id.editText)
         val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this, time)
+        timePickerFragment.setListener(this, timeEditText)
 
         val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this, date)
+        datePickerFragment.setListener(this, dateEditText)
 
         val startDateFragment = DatePickerFragment()
         startDateFragment.setListener(this, startsOn)
@@ -108,12 +115,12 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
 
-        time.setOnFocusChangeListener { view, hasFocus ->
+        timeEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
-        date.setOnFocusChangeListener { view, hasFocus ->
+        dateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
             }
@@ -153,7 +160,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
 
     @Deprecated("Deprecated in Java")
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -221,6 +227,16 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
     private fun addCalendarEvent() {
         CreateEventTask(mService).execute()
+    }
+
+    private fun setEventDetails() {
+        eventTitleText = eventTitleTextView.text.toString()
+        eventStartTimeText = timeEditText.text.toString()
+        eventStartDateText = dateEditText.text.toString()
+
+        Log.i(TAG, "eventTitleText: $eventTitleText")
+        Log.i(TAG, "eventStartTimeText: $eventStartTimeText")
+        Log.i(TAG, "eventStartDateText: $eventStartDateText")
     }
 
     private fun isGooglePlayServicesAvailable(): Boolean {
