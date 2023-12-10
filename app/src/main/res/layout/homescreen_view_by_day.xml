@@ -127,6 +127,8 @@
         android:id="@+id/day_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="470dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins"
@@ -143,24 +145,29 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/poppins"
-        android:text="School TODO List"
+        android:text="November 23, 2023"
         android:textColor="@color/primary_text"
+        app:layout_constraintBottom_toTopOf="@+id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
         android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/day_title" />
+        android:textStyle="bold" />
+
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/linearLayoutContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="428dp"
+        app:layout_constraintBottom_toTopOf="@id/footer_items"
         android:layout_marginStart="30dp"
         android:layout_marginTop="16dp"
         android:divider="@drawable/empty_checkbox_divider"
         android:orientation="vertical"
         android:showDividers="middle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sample_date_text">
+        app:layout_constraintTop_toBottomOf="@+id/day_title">
 
         <CheckBox
             android:id="@+id/sample_checkbox_1"

@@ -10,6 +10,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_main)
+
         setContentView(R.layout.activity_main)
 
 
@@ -34,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
         startActivity(nestScreenIntent)
     }
+
+    private fun goToSingleDayToDoList() {
+        val singleDayIntent = Intent(this, SingleDayHomescreenActivity::class.java)
+
+        // Start the activity
+        startActivity(singleDayIntent)
 
     private fun goToTaskViewPage() {
         val taskIntent = Intent(this, TaskActivity::class.java)
