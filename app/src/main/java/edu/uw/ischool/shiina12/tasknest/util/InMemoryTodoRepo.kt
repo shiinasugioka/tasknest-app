@@ -58,6 +58,10 @@ object InMemoryTodoRepository : TodoRepository {
         todoNests.remove(getTodoNestByTitle(nestName))
     }
 
+    fun renameNest(oldName: String, newName: String) {
+        getTodoNestByTitle(oldName)?.title = newName
+    }
+
     private fun getWeekRange(): Pair<Long, Long> {
         val today = LocalDate.now()
         val startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
