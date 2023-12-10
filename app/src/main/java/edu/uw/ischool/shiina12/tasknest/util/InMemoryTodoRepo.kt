@@ -16,26 +16,19 @@ val today = Calendar.getInstance().apply {
     set(Calendar.MILLISECOND, 0)
 }.timeInMillis // This is a Long value
 
-class InMemoryTodoRepository : TodoRepository {
-    val todoNests: MutableList<TodoNest> = mutableListOf(
-        TodoNest(
-            title = "Personal",
-            tasks = mutableListOf(
-                Task(title = "Buy groceries", description = "Milk, eggs, bread", deadline = today),
-                Task(title = "Exercise", description = "Go for a run", deadline = today)
-            )
-        ),
-        TodoNest(
-            title = "Work",
-            tasks = mutableListOf(
-                Task(title = "Finish report", description = "Due by end of the day"),
-                Task(title = "Meeting with team", description = "Discuss project updates")
-            )
-        )
-    )
+object InMemoryTodoRepository : TodoRepository {
+    val todoNests: MutableList<TodoNest> = mutableListOf()
+
+    override fun getNest(): MutableList<TodoNest> {
+        return todoNests
+    }
 
     override fun getTodoNestByTitle(nestTitle: String): TodoNest? {
         return todoNests.find { it.title == nestTitle }
+    }
+
+    override fun getAllNestTitles(): Array<String> {
+        return todoNests.map { it.title }.toTypedArray()
     }
 
     fun getTasksForToday(): List<Task> {
@@ -57,13 +50,11 @@ class InMemoryTodoRepository : TodoRepository {
         val startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
             .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-            .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() + 86400000 - 1 // End of Sunday
+            .atStartOfDay(ZoneId.systemDefault()).toInstant()
+            .toEpochMilli() + 86400000 - 1 // End of Sunday
         // Log.d("WeekRange", "Start: $startOfWeek, End: $endOfWeek") // Uncomment if logging is needed
         return Pair(startOfWeek, endOfWeek)
     }
-
-
-
 
     override fun createTodoList(nestName: String): TodoNest {
         val newTodoNest = TodoNest(title = nestName)

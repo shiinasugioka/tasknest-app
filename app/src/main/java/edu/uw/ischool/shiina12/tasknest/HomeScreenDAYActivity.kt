@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,23 +13,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenDAYActivity : AppCompatActivity() {
 
-    private lateinit var repository: InMemoryTodoRepository
+    private lateinit var nestButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_day)
 
-        repository = (application as App).todoRepository
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
-
+        nestButton = findViewById(R.id.view_nest_button)
         // Get today's date in millis to compare with task deadlines
         val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
@@ -41,9 +41,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         dateTextView.text = formattedDate
 
         // Iterate through each TodoNest
-        repository.createMultipleTodoLists().forEach { todoNest ->
+        todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
-            val tasksForToday = todoNest.tasks.filter { it.deadline != null && it.deadline!! == today }
+            val tasksForToday =
+                todoNest.tasks.filter { it.deadline != null && it.deadline!! == today }
 
             // If there are tasks for today, show the nest title and tasks
             if (tasksForToday.isNotEmpty()) {
@@ -53,10 +54,17 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     textSize = 13f // Set text size
                     setTypeface(null, Typeface.BOLD) // Set text style to bold
                     typeface = ResourcesCompat.getFont(context, R.font.poppins) // Set font family
-                    setTextColor(ContextCompat.getColor(context, R.color.primary_text)) // Set text color
+                    setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.primary_text
+                        )
+                    ) // Set text color
 
-                    val leftPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
-                    val topPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+                    val leftPaddingInPixels =
+                        (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+                    val topPaddingInPixels =
+                        (16 * resources.displayMetrics.density).toInt() // Example for 16dp
                     setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
                 }
 
@@ -66,20 +74,30 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 val recyclerView = RecyclerView(this).apply {
                     layoutManager = LinearLayoutManager(this@HomeScreenDAYActivity)
 
-                    val adapter = TodoAdapter(tasksForToday)  { task, _, viewHolder ->
+                    val adapter = TodoAdapter(tasksForToday) { task, _, viewHolder ->
                         task.isFinished = true // Mark task as finished
-                        repository.modifyTask(todoNest, task.title, task) // Update the task in the repository
+                        todoRepo.modifyTask(
+                            todoNest,
+                            task.title,
+                            task
+                        ) // Update the task in the todoRepo
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                            repository.deleteTask(todoNest, task.title)
-                            val updatedTasks = repository.getTasksForToday()
+                            todoRepo.deleteTask(todoNest, task.title)
+                            val updatedTasks = todoRepo.getTasksForToday()
                             (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
                         }, 300) // Delay to match the fade-out duration
                     }
                     this.adapter = adapter
                 }
+
                 linearLayoutContainer.addView(recyclerView)
             }
+        }
+
+        nestButton.setOnClickListener {
+            val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+            startActivity(nestScreenIntent)
         }
     }
 

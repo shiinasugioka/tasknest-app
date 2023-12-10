@@ -1,35 +1,49 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class CreateNestActivity : AppCompatActivity() {
 
-    private val TAG = "CreateNestActivity"
     private lateinit var createNestButton: Button
     private lateinit var nestTitleEdit: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_nest)
 
-        val exit_btn: ImageButton = findViewById(R.id.btn_exit)
-        exit_btn.setOnClickListener { finish() }
+        val exitBtn: ImageButton = findViewById(R.id.btn_exit)
+        exitBtn.setOnClickListener { finish() }
 
         createNestButton = findViewById(R.id.btn_create_nest)
         nestTitleEdit = findViewById(R.id.edit_nest_title)
 
+        val inflater = LayoutInflater.from(this)
+        val nest = inflater.inflate(R.layout.homescreen_view_by_nest, null)
+        val nest_dropdown: Spinner = nest.findViewById(R.id.nest_drop_down)
+        val nest_dropdown_items = todoRepo.getAllNestTitles()
+
+        val arrayAdapter =
+            ArrayAdapter<Any?>(
+                this@CreateNestActivity,
+                R.layout.spinner_dropdown_text,
+                nest_dropdown_items
+            )
+        nest_dropdown.adapter = arrayAdapter
+
         createNestButton.setOnClickListener {
-            var testing = nestTitleEdit.text
-            Log.i(TAG, "$testing")
-            var nestTitle = TodoNest(nestTitleEdit.text.toString(), mutableListOf())
-            var todoRepo = InMemoryTodoRepository()
-            todoRepo.todoNests.add(nestTitle)
+            val newNest = TodoNest(nestTitleEdit.text.toString(), mutableListOf())
+            todoRepo.todoNests.add(newNest)
+
+            finish()
         }
     }
 }
