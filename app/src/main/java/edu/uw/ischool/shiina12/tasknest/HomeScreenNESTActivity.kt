@@ -1,5 +1,6 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -7,15 +8,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -177,16 +179,48 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     }
 
     private fun handleDeleteThisNest() {
-        Log.d(TAG, "handle delete nest called")
         val nestName = todoRepo.getCurrNestName()
         if (nestName.isNotBlank()) {
             todoRepo.removeNest(nestName)
+            Toast.makeText(this, "Nest Removed.", Toast.LENGTH_SHORT).show()
         }
         setNewDropDownValues()
     }
 
     private fun handleRenameThisNest() {
-        Log.d(TAG, "handle rename nest")
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            showRenamePopUp()
+        }
+    }
+
+    private fun showRenamePopUp() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Rename your Nest.")
+
+        val oldNestName = todoRepo.getCurrNestName()
+
+        val input = EditText(this)
+        input.hint = oldNestName
+        builder.setView(input)
+
+        builder.setPositiveButton("Save") { _, _ ->
+            val newNestName = input.text.toString()
+            todoRepo.renameNest(oldNestName, newNestName)
+            setNewDropDownValues()
+            Toast.makeText(
+                this,
+                "Title '$newNestName' saved!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
     private fun showSortByPopupMenu(view: View) {

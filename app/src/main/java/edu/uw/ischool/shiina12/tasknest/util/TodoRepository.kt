@@ -18,7 +18,7 @@ interface TodoRepository {
 }
 
 data class TodoNest(
-    val title: String,
+    var title: String,
     val tasks: MutableList<Task> = mutableListOf()
 )
 
