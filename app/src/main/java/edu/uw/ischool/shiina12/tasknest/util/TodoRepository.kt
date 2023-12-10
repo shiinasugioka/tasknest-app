@@ -24,7 +24,7 @@ data class TodoNest(
 
 data class Task(
     var title: String,
-    var description: String,
+    var description: String? = "",
     var deadline: Long? = null,
     var isFinished: Boolean = false
 )
