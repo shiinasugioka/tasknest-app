@@ -126,30 +126,16 @@
         android:id="@+id/day_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="210dp"
-        android:layout_marginBottom="470dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="210dp"
+        android:layout_marginBottom="470dp"
         android:fontFamily="@font/poppins"
         android:text="November 23, 2023"
         android:textColor="@color/primary_text"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
-
-    <TextView
-        android:id="@+id/sample_date_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/poppins"
-        android:text="November 23, 2023"
-        android:textColor="@color/primary_text"
-        app:layout_constraintBottom_toTopOf="@+id/footer_items"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="13sp"
-        android:textStyle="bold" />
 
     <!--TODO Fix the Margins of This -->
     <LinearLayout
