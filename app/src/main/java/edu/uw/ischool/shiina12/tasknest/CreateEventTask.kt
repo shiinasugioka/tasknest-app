@@ -34,7 +34,6 @@ class CreateEventTask internal constructor(
         val givenEndDateTime = formattedEndTime.format(formatter)
 
         val eventStartDateTime = givenStartDateTime
-        val eventEndDateTime = givenEndDateTime
 
         val event: Event = Event()
             .setSummary(eventTitle)
@@ -45,7 +44,7 @@ class CreateEventTask internal constructor(
             .setTimeZone("America/Los_Angeles")
         event.setStart(start)
 
-        val endDateTime = DateTime(eventEndDateTime)
+        val endDateTime = DateTime(givenEndDateTime)
         val end = EventDateTime()
             .setDateTime(endDateTime)
             .setTimeZone("America/Los_Angeles")
