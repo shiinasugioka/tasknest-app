@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var addEventButton: Button
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
+    private lateinit var exitButton: ImageButton
 
     // values to be sent to API
     private lateinit var eventTitleText: String
@@ -61,11 +63,35 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         dateEditText = findViewById(R.id.editTextDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
+        exitButton = findViewById(R.id.imageButtonExit)
+        Log.i("TaskActivity", "found exit button")
+
+        //val editText = dialogView.findViewById<EditText>(R.id.editText)
+        val timePickerFragment = TimePickerFragment()
+        timePickerFragment.setListener(this, timeEditText)
+
+        val datePickerFragment = DatePickerFragment()
+        datePickerFragment.setListener(this, dateEditText)
+
+        timeEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                timePickerFragment.show(supportFragmentManager, "timePicker")
+            }
+        }
+        dateEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                datePickerFragment.show(supportFragmentManager, "datePicker")
+            }
+        }
 
         repeatingEvent.setOnClickListener {
             if (repeatingEvent.isChecked) {
                 showCustomDialog()
             }
+        }
+
+        exitButton.setOnClickListener {
+            finish()
         }
 
         // UI elements for API
@@ -99,13 +125,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             spinner.adapter = adapter
         }
 
-        //val editText = dialogView.findViewById<EditText>(R.id.editText)
-        val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this, timeEditText)
-
-        val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this, dateEditText)
-
         val startDateFragment = DatePickerFragment()
         startDateFragment.setListener(this, startsOn)
 
@@ -114,17 +133,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
-
-        timeEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                timePickerFragment.show(supportFragmentManager, "timePicker")
-            }
-        }
-        dateEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                datePickerFragment.show(supportFragmentManager, "datePicker")
-            }
-        }
 
         startsOn.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
@@ -157,7 +165,6 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             }
             .show()
     }
-
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -288,9 +295,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             apiStatusText = "No data found."
         } else {
             apiStatusText = "Data retrieved using the Google Calendar API:"
-
             apiResultsText = TextUtils.join("\n", dataStrings)
-
             Log.d(TAG, "api status: $apiStatusText")
             Log.d(TAG, "api results: $apiResultsText")
         }

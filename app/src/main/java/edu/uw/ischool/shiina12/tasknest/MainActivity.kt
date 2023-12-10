@@ -13,12 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        setContentView(R.layout.activity_main)
-
-
-        val intent = Intent(this, TaskActivity::class.java)
-        startActivity(intent)
-        /*
         Log.i(TAG, "MainActivity Launched")
         val nestButton: Button = findViewById(R.id.homescreen_button)
         val calButton: Button = findViewById(R.id.GoogleCalScreen_button)
@@ -43,10 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         // Start the activity
         startActivity(singleDayIntent)
+    }
 
     private fun goToTaskViewPage() {
         val taskIntent = Intent(this, TaskActivity::class.java)
         startActivity(taskIntent)
-    }*/
     }
 }
