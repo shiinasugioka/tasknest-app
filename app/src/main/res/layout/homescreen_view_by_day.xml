@@ -153,41 +153,50 @@
         android:textStyle="bold" />
 
 
+    <CheckBox
+        android:id="@+id/sample_checkbox_1"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="164dp"
+        android:background="@color/faded_green"
+        android:fontFamily="@font/poppins"
+        android:text="Sample todo list task 1"
+        android:textColor="@color/primary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_title" />
+
+    <CheckBox
+        android:id="@+id/sample_checkbox_2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/faded_pink"
+        android:fontFamily="@font/poppins"
+        android:text="Sample todo list task 2"
+        android:textColor="@color/primary_text"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sample_checkbox_1" />
+
     <LinearLayout
         android:id="@+id/linearLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="428dp"
-        app:layout_constraintBottom_toTopOf="@id/footer_items"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="168dp"
+        android:layout_marginBottom="428dp"
         android:divider="@drawable/empty_checkbox_divider"
         android:orientation="vertical"
         android:showDividers="middle"
+        app:layout_constraintBottom_toTopOf="@id/footer_items"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/day_title">
-
-        <CheckBox
-            android:id="@+id/sample_checkbox_1"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:background="@color/faded_green"
-            android:fontFamily="@font/poppins"
-            android:text="Sample todo list task 1"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
-
-        <CheckBox
-            android:id="@+id/sample_checkbox_2"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:background="@color/faded_pink"
-            android:fontFamily="@font/poppins"
-            android:text="Sample todo list task 2"
-            android:textColor="@color/primary_text"
-            android:textSize="13sp" />
+        app:layout_constraintTop_toBottomOf="@+id/day_title"
+        app:layout_constraintVertical_bias="0.61">
 
     </LinearLayout>
 
