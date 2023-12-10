@@ -26,7 +26,6 @@ class CreateEventTask internal constructor(
     }
 
     private fun addCalendarEvent() {
-        // TODO: Replace with user text field input
         val eventTitle = givenFinalTitle
 
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
