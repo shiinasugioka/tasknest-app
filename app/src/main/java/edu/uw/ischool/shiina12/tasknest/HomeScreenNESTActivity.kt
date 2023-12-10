@@ -35,12 +35,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         setNewDropDownValues()
 
-        /*nest_dropdown.setOnClickListener {
-            val arrayAdapter =
-                ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
-            nest_dropdown.adapter = arrayAdapter
-        }*/
-
         view_day_button.setOnClickListener {
             switchToViewByDay()
         }
