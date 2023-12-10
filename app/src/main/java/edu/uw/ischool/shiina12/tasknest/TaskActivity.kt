@@ -44,6 +44,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
     var mProgress: ProgressDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
