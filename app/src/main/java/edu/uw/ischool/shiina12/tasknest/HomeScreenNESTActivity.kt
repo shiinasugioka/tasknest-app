@@ -17,27 +17,25 @@ import android.widget.PopupMenu
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
 
-    private lateinit var todoRepo: InMemoryTodoRepository
+//    private val todoRepo: InMemoryTodoRepository = (application as App).todoRepository
+
+    private lateinit var nest_dropdown: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
 
 //      Identify Elements
-        val nest_dropdown: Spinner = findViewById(R.id.nest_drop_down)
+        nest_dropdown = findViewById(R.id.nest_drop_down)
         val view_day_button: Button = findViewById(R.id.view_day_button)
 
 //      Set Element values
 
-        todoRepo = (application as App).todoRepository
-        val nest_dropdown_items = todoRepo.getAllNestTitles()
-        val arrayAdapter =
-            ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
-        nest_dropdown.adapter = arrayAdapter
+        setNewDropDownValues()
 
         /*nest_dropdown.setOnClickListener {
             val arrayAdapter =
@@ -98,6 +96,18 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             )
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setNewDropDownValues()
+    }
+
+    private fun setNewDropDownValues() {
+        val nest_dropdown_items = todoRepo.getAllNestTitles()
+        val arrayAdapter =
+            ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
+        nest_dropdown.adapter = arrayAdapter
     }
 
     private fun createNotificationChannel(channelId: String, name: String, description: String) {

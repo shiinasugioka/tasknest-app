@@ -1,6 +1,5 @@
 package edu.uw.ischool.shiina12.tasknest
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,26 +9,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 
 class CreateNestActivity : AppCompatActivity() {
 
-    private val TAG = "CreateNestActivity"
     private lateinit var createNestButton: Button
     private lateinit var nestTitleEdit: EditText
 
-    private lateinit var todoRepo: InMemoryTodoRepository
-
+//    private val todoRepo: InMemoryTodoRepository = (application as App).todoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_nest)
 
-        todoRepo = (application as App).todoRepository
-
-        val exit_btn: ImageButton = findViewById(R.id.btn_exit)
-        exit_btn.setOnClickListener { finish() }
+        val exitBtn: ImageButton = findViewById(R.id.btn_exit)
+        exitBtn.setOnClickListener { finish() }
 
         createNestButton = findViewById(R.id.btn_create_nest)
         nestTitleEdit = findViewById(R.id.edit_nest_title)
@@ -46,9 +41,9 @@ class CreateNestActivity : AppCompatActivity() {
         createNestButton.setOnClickListener {
             val newNest = TodoNest(nestTitleEdit.text.toString(), mutableListOf())
             todoRepo.todoNests.add(newNest)
-            val updatedNestDropdownItems = todoRepo.getAllNestTitles()
-            val itemJustAdded = updatedNestDropdownItems[updatedNestDropdownItems.size - 1]
-            Log.i(TAG, "just added $itemJustAdded")
+//            val updatedNestDropdownItems = todoRepo.getAllNestTitles()
+//            val itemJustAdded = updatedNestDropdownItems[updatedNestDropdownItems.size - 1]
+//            Log.i(TAG, "just added $itemJustAdded")
 
             finish()
         }

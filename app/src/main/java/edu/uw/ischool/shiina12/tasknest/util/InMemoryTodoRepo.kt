@@ -16,11 +16,9 @@ val today = Calendar.getInstance().apply {
     set(Calendar.MILLISECOND, 0)
 }.timeInMillis // This is a Long value
 
-class InMemoryTodoRepository : TodoRepository {
+object InMemoryTodoRepository : TodoRepository {
 
-
-
-    val todoNests: MutableList<TodoNest> = mutableListOf(
+    val todoNests: MutableList<TodoNest> = mutableListOf()
 //        TodoNest(
 //            title = "Personal",
 //            tasks = mutableListOf(
@@ -35,7 +33,7 @@ class InMemoryTodoRepository : TodoRepository {
 //                Task(title = "Meeting with team", description = "Discuss project updates")
 //            )
 //        )
-    )
+//    )
 
     override fun getNest(): MutableList<TodoNest> {
         return todoNests
@@ -68,10 +66,12 @@ class InMemoryTodoRepository : TodoRepository {
         val startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
             .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-            .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() + 86400000 - 1 // End of Sunday
+            .atStartOfDay(ZoneId.systemDefault()).toInstant()
+            .toEpochMilli() + 86400000 - 1 // End of Sunday
         // Log.d("WeekRange", "Start: $startOfWeek, End: $endOfWeek") // Uncomment if logging is needed
         return Pair(startOfWeek, endOfWeek)
     }
+
     override fun createTodoList(nestName: String): TodoNest {
         val newTodoNest = TodoNest(title = nestName)
         todoNests.add(newTodoNest)

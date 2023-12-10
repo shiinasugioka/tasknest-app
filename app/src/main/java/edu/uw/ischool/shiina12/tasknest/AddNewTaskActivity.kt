@@ -99,6 +99,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             spinner.adapter = adapter
         }
     }
+
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
         var correctedHour = hourOfDay
         var isAm = true
