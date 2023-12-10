@@ -42,9 +42,6 @@ class CreateNestActivity : AppCompatActivity() {
         createNestButton.setOnClickListener {
             val newNest = TodoNest(nestTitleEdit.text.toString(), mutableListOf())
             todoRepo.todoNests.add(newNest)
-//            val updatedNestDropdownItems = todoRepo.getAllNestTitles()
-//            val itemJustAdded = updatedNestDropdownItems[updatedNestDropdownItems.size - 1]
-//            Log.i(TAG, "just added $itemJustAdded")
 
             finish()
         }
