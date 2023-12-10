@@ -18,7 +18,7 @@ class CreateEventTask internal constructor(private var mService: Calendar?) :
 
     private fun addCalendarEvent() {
         // TODO: Replace with user text field input
-        val eventTitle = "Sample New Event"
+        val eventTitle = "Annie New Event"
         val eventLocation = "1410 NE Campus Pkwy, Seattle, WA 98195"
         val eventDescription = "This is a sample event to make sure the app works"
 

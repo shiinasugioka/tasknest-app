@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        setContentView(R.layout.activity_main)
-
         Log.i(TAG, "MainActivity Launched")
         val nestButton: Button = findViewById(R.id.homescreen_button)
         val calButton: Button = findViewById(R.id.GoogleCalScreen_button)
