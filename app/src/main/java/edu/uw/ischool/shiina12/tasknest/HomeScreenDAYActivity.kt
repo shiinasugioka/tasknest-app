@@ -47,7 +47,6 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val dateTextView = findViewById<TextView>(R.id.day_title)
         dateTextView.text = formattedDate
 
-
         // Iterate through each TodoNest
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
@@ -77,7 +76,6 @@ class HomeScreenDAYActivity : AppCompatActivity() {
 
                 linearLayoutContainer.addView(titleTextView)
                 nestHeaderMap[todoNest] = titleTextView
-
 
                 // Create and add the RecyclerView for tasks
                 val recyclerView = RecyclerView(this).apply {
