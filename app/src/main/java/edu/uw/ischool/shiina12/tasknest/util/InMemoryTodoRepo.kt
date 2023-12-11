@@ -21,6 +21,22 @@ object InMemoryTodoRepository : TodoRepository {
     val todoNests: MutableList<TodoNest> = mutableListOf()
     var currNest = ""
 
+    init {
+        val defaultTask = Task(
+            title = "Sample Task",
+            description = "This is a sample task",
+            deadline = today, // or any other default deadline
+            isFinished = false
+        )
+
+        val defaultTodoNest = TodoNest(
+            title = "Default Nest",
+            tasks = mutableListOf(defaultTask) // Add the default task to the default nest
+        )
+
+        todoNests.add(defaultTodoNest)
+    }
+
     override fun getNests(): MutableList<TodoNest> {
         return todoNests
     }
@@ -31,6 +47,10 @@ object InMemoryTodoRepository : TodoRepository {
 
     override fun getAllNestTitles(): Array<String> {
         return todoNests.map { it.title }.toTypedArray()
+    }
+
+    fun getTasksFromNest(todoNest: TodoNest): List<Task> {
+        return todoNest.tasks
     }
 
     fun getTasksForToday(): List<Task> {
