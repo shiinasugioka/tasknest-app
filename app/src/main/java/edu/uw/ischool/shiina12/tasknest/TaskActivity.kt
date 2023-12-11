@@ -68,7 +68,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_task)
+        setContentView(R.layout.activity_view_task)
 
         // UI elements
         eventTitleTextView = findViewById(R.id.editTextTask)
