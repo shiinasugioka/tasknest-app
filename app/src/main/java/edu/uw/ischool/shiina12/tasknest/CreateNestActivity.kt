@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -40,9 +41,10 @@ class CreateNestActivity : AppCompatActivity() {
         nest_dropdown.adapter = arrayAdapter
 
         createNestButton.setOnClickListener {
-            val newNest = TodoNest(nestTitleEdit.text.toString(), mutableListOf())
+            val nestName = nestTitleEdit.text.toString()
+            val newNest = TodoNest(nestName, mutableListOf())
             todoRepo.todoNests.add(newNest)
-
+            Toast.makeText(this, "New Nest '$nestName' created.", Toast.LENGTH_SHORT).show()
             finish()
         }
     }

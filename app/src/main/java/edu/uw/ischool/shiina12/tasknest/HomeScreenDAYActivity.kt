@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
+import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -22,10 +24,15 @@ import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 class HomeScreenDAYActivity : AppCompatActivity() {
 
     private lateinit var nestButton: Button
+    private val nestHeaderMap = mutableMapOf<TodoNest, TextView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_day)
+
+        // New Task Button
+        val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
+        newTaskBtn.setOnClickListener { createNewTask() }
 
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
         nestButton = findViewById(R.id.view_nest_button)
@@ -40,6 +47,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val dateTextView = findViewById<TextView>(R.id.day_title)
         dateTextView.text = formattedDate
 
+
         // Iterate through each TodoNest
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
@@ -53,7 +61,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     text = todoNest.title
                     textSize = 13f // Set text size
                     setTypeface(null, Typeface.BOLD) // Set text style to bold
-                    typeface = ResourcesCompat.getFont(context, R.font.poppins) // Set font family
+                    //typeface = ResourcesCompat.getFont(context, R.font.poppins) // Causing Errors
                     setTextColor(
                         ContextCompat.getColor(
                             context,
@@ -64,11 +72,13 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     val leftPaddingInPixels =
                         (16 * resources.displayMetrics.density).toInt() // Example for 16dp
                     val topPaddingInPixels =
-                        (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+                        (1 * resources.displayMetrics.density).toInt() // Example for 3dp
                     setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
                 }
 
                 linearLayoutContainer.addView(titleTextView)
+                nestHeaderMap[todoNest] = titleTextView
+
 
                 // Create and add the RecyclerView for tasks
                 val recyclerView = RecyclerView(this).apply {
@@ -99,6 +109,11 @@ class HomeScreenDAYActivity : AppCompatActivity() {
             val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
             startActivity(nestScreenIntent)
         }
+    }
+
+    private fun createNewTask() {
+        val createNewTaskIntent = Intent(this, AddNewTaskActivity::class.java)
+        startActivity(createNewTaskIntent)
     }
 
 

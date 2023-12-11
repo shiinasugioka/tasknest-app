@@ -17,18 +17,10 @@ val today = Calendar.getInstance().apply {
 }.timeInMillis // This is a Long value
 
 object InMemoryTodoRepository : TodoRepository {
-    val todoNests: MutableList<TodoNest> = mutableListOf(
-        TodoNest(
-            title = "ToDo Nest",
-            tasks = mutableListOf(
-                Task(title = "Finish HW", description = "tasknest project", deadline = today),
-                Task(title = "Chores", description = "clean my room", deadline = today),
-                Task(title = "Grocery shopping", description = "cherries, pasta, soy sauce", deadline = today)
-            )
-        )
-    )
 
-    override fun getNest(): MutableList<TodoNest> {
+    val todoNests: MutableList<TodoNest> = mutableListOf()
+    var currNest = ""
+    override fun getNests(): MutableList<TodoNest> {
         return todoNests
     }
 
@@ -52,6 +44,22 @@ object InMemoryTodoRepository : TodoRepository {
         return todoNests.flatMap { nest ->
             nest.tasks.filter { it.deadline != null && it.deadline!! >= startOfWeek && it.deadline!! <= endOfWeek }
         }
+    }
+
+    fun setCurrNestName(nestName: String) {
+        this.currNest = nestName
+    }
+
+    fun getCurrNestName(): String {
+        return currNest
+    }
+
+    fun removeNest(nestName: String) {
+        todoNests.remove(getTodoNestByTitle(nestName))
+    }
+
+    fun renameNest(oldName: String, newName: String) {
+        getTodoNestByTitle(oldName)?.title = newName
     }
 
     private fun getWeekRange(): Pair<Long, Long> {

@@ -1,9 +1,11 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -12,8 +14,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
+
 
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var time: EditText
@@ -23,6 +32,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var startsOn: EditText
     private lateinit var endsOn: EditText
     private lateinit var atTime: EditText
+    private lateinit var currNest: TodoNest
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +47,21 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         startsOn = findViewById(R.id.startsOn)
         endsOn = findViewById(R.id.endsOn)
         atTime = findViewById(R.id.reminderTime)
+
+        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
+
+        // Log the details of currNest
+        Log.d("AddNewTaskActivity", "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}")
+
+
+
+
+
+        val createTaskButton = findViewById<Button>(R.id.button2)
+        createTaskButton.setOnClickListener {
+            Log.i("Savebtn Test", "Working")
+            addTask()
+        }
 
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, time)
@@ -99,6 +125,36 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             spinner.adapter = adapter
         }
     }
+
+    private fun addTask() {
+        val taskTitle = findViewById<EditText>(R.id.editTextTask).text.toString()
+        val taskDeadline = formatDeadline()
+
+        val task = Task(title = taskTitle, deadline = taskDeadline)
+        todoRepo.addTaskToList(currNest, task)
+
+        navigateToHomeScreenDayActivity()
+    }
+
+
+    private fun formatDeadline(): Long {
+        val dateString = findViewById<EditText>(R.id.editTextDate).text.toString()
+
+        // Assuming the date format is MM/dd/yyyy
+        val formatter = DateTimeFormatter.ofPattern("MM/d/yyyy")
+        val localDate = LocalDate.parse(dateString, formatter)
+
+        return localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    }
+
+    private fun navigateToHomeScreenDayActivity() {
+        val intent = Intent(this, HomeScreenDAYActivity::class.java)
+        startActivity(intent)
+    }
+
+
+
+
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
         var correctedHour = hourOfDay

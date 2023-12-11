@@ -1,5 +1,6 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -12,9 +13,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -34,12 +37,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 //      Set Element values
 
         setNewDropDownValues()
-
-        /*nest_dropdown.setOnClickListener {
-            val arrayAdapter =
-                ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
-            nest_dropdown.adapter = arrayAdapter
-        }*/
 
         view_day_button.setOnClickListener {
             switchToViewByDay()
@@ -99,6 +96,14 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setNewDropDownValues()
+        setCurrentNest()
+    }
+
+    private fun setCurrentNest() {
+        if (nest_dropdown.selectedItem != null) {
+            val selectedNest = nest_dropdown.selectedItem.toString()
+            todoRepo.setCurrNestName(selectedNest)
+        }
     }
 
     private fun setNewDropDownValues() {
@@ -144,12 +149,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             when (item.itemId) {
                 // Group 1: Nest Settings
                 R.id.menu_delete_nest -> {
-                    // TODO Handle Delete Nest or other actions in this group
+                    handleDeleteThisNest()
                     true
                 }
 
                 R.id.menu_rename_nest -> {
-                    // TODO Handle Rename Nest action
+                    handleRenameThisNest()
                     true
                 }
 
@@ -171,6 +176,51 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
 
         popupMenu.show()
+    }
+
+    private fun handleDeleteThisNest() {
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            todoRepo.removeNest(nestName)
+            Toast.makeText(this, "Nest Removed.", Toast.LENGTH_SHORT).show()
+        }
+        setNewDropDownValues()
+    }
+
+    private fun handleRenameThisNest() {
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            showRenamePopUp()
+        }
+    }
+
+    private fun showRenamePopUp() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Rename your Nest.")
+
+        val oldNestName = todoRepo.getCurrNestName()
+
+        val input = EditText(this)
+        input.hint = oldNestName
+        builder.setView(input)
+
+        builder.setPositiveButton("Save") { _, _ ->
+            val newNestName = input.text.toString()
+            todoRepo.renameNest(oldNestName, newNestName)
+            setNewDropDownValues()
+            Toast.makeText(
+                this,
+                "Title '$newNestName' saved!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
     private fun showSortByPopupMenu(view: View) {
@@ -211,7 +261,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
         titleItem.title = titleString
     }
-
 
     override fun onPause() {
         super.onPause()
