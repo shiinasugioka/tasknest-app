@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.time.LocalDate
@@ -93,8 +94,8 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                             (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
                         }, 300) // Delay to match the fade-out duration
                     }, object : TodoAdapter.OnItemClickListener {
-                        override fun onTaskTextClicked(position: Int) {
-                            onTaskTextClickedCalled(position)
+                        override fun onTaskTextClicked(currentTask: Task?) {
+                            onTaskTextClickedCalled(currentTask)
                         }
                     })
                     this.adapter = adapter
@@ -127,7 +128,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun onTaskTextClickedCalled(position: Int) {
+    private fun onTaskTextClickedCalled(currentTask: Task?) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
         Log.d(TAG, "task text clicked!")

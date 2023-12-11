@@ -72,9 +72,9 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         setContentView(R.layout.activity_view_task)
 
         // UI elements
-        eventTitleTextView = findViewById(R.id.editTextTask)
-        timeEditText = findViewById(R.id.editTextTime)
-        dateEditText = findViewById(R.id.editTextDate)
+        eventTitleTextView = findViewById(R.id.editTaskTitle)
+        timeEditText = findViewById(R.id.editTaskStartTime)
+        dateEditText = findViewById(R.id.editTaskStartDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
@@ -139,8 +139,8 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
         val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
-        startsOn = dialogView.findViewById(R.id.startsOn)
-        endsOn = dialogView.findViewById(R.id.endsOn)
+        startsOn = dialogView.findViewById(R.id.repeatingStartDate)
+        endsOn = dialogView.findViewById(R.id.repeatingEndDate)
         atTime = dialogView.findViewById(R.id.reminderTime)
 
         val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)

@@ -26,38 +26,44 @@ import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private lateinit var time: EditText
-    private lateinit var date: EditText
-    private lateinit var repeatingEvent: CheckBox
+    private lateinit var eventTitleTextView: TextView
+    private lateinit var timeEditText: EditText
+    private lateinit var dateEditText: EditText
+    private lateinit var repeatingEventCheckBox: CheckBox
     private lateinit var repeatingEventLayout: LinearLayout
-    private lateinit var startsOn: EditText
-    private lateinit var endsOn: EditText
-    private lateinit var atTime: EditText
+    private lateinit var repeatingStartDateEditText: EditText
+    private lateinit var repeatingEndDateEditText: EditText
+    private lateinit var atTimeEditText: EditText
+
     private lateinit var currNest: TodoNest
     private lateinit var exitButton: ImageButton
     private lateinit var taskEditText: EditText
     private lateinit var allDay: CheckBox
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_task)
 
-        // https://developer.android.com/develop/ui/views/components/pickers
-        time = findViewById(R.id.editTextTime)
-        date = findViewById(R.id.editTextDate)
-        repeatingEvent = findViewById(R.id.checkboxRepeating)
+        eventTitleTextView = findViewById(R.id.editTaskTitle)
+        timeEditText = findViewById(R.id.editTaskStartTime)
+        dateEditText = findViewById(R.id.editTaskStartDate)
+
+        repeatingEventCheckBox = findViewById(R.id.checkboxRepeating)
         repeatingEventLayout = findViewById(R.id.repeatingEventOptions)
-        startsOn = findViewById(R.id.startsOn)
-        endsOn = findViewById(R.id.endsOn)
-        atTime = findViewById(R.id.reminderTime)
-        exitButton = findViewById(R.id.imageButtonExit)
+        repeatingStartDateEditText = findViewById(R.id.repeatingStartDate)
+        repeatingEndDateEditText = findViewById(R.id.repeatingEndDate)
+        atTimeEditText = findViewById(R.id.reminderTime)
         allDay = findViewById(R.id.allDayCheckBox)
+
+        exitButton = findViewById(R.id.imageButtonExit)
 
         currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
 
         // Log the details of currNest
-        Log.d("AddNewTaskActivity", "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}")
+        Log.d(
+            "AddNewTaskActivity",
+            "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}"
+        )
 
         exitButton.setOnClickListener {
             finish()
@@ -70,50 +76,50 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         }
 
         val timePickerFragment = TimePickerFragment()
-        timePickerFragment.setListener(this, time)
+        timePickerFragment.setListener(this, timeEditText)
 
         val datePickerFragment = DatePickerFragment()
-        datePickerFragment.setListener(this, date)
+        datePickerFragment.setListener(this, dateEditText)
 
         val startDateFragment = DatePickerFragment()
-        startDateFragment.setListener(this, startsOn)
+        startDateFragment.setListener(this, repeatingStartDateEditText)
 
         val endDateFragment = DatePickerFragment()
-        endDateFragment.setListener(this, endsOn)
+        endDateFragment.setListener(this, repeatingEndDateEditText)
 
         val atTimeFragment = TimePickerFragment()
-        atTimeFragment.setListener(this, atTime)
+        atTimeFragment.setListener(this, atTimeEditText)
 
-        time.setOnFocusChangeListener { view, hasFocus ->
+        timeEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
-        date.setOnFocusChangeListener { view, hasFocus ->
+        dateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        startsOn.setOnFocusChangeListener { view, hasFocus ->
+        repeatingStartDateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 startDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        endsOn.setOnFocusChangeListener { view, hasFocus ->
+        repeatingEndDateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 endDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        atTime.setOnFocusChangeListener { view, hasFocus ->
+        atTimeEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 atTimeFragment.show(supportFragmentManager, "timePicker")
             }
         }
 
-        repeatingEvent.setOnCheckedChangeListener { buttonView, isChecked ->
+        repeatingEventCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 repeatingEventLayout.visibility = View.VISIBLE
             } else {
@@ -123,9 +129,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         allDay.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {
-                time.visibility = View.VISIBLE
+                timeEditText.visibility = View.VISIBLE
             } else {
-                time.visibility = View.GONE
+                timeEditText.visibility = View.GONE
             }
         }
 
@@ -141,19 +147,19 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     }
 
     private fun addTask() {
-        taskEditText = findViewById(R.id.editTextTask)
-        val taskTitle = taskEditText.text.toString()
-        val taskDeadline = formatDeadline()
+        val taskTitle = eventTitleTextView.text.toString()
+//        val eventStartTime = formatStartDate()
+        val eventStartTime = ""
+        val eventEndTime = ""
 
-        val task = Task(title = taskTitle, deadline = taskDeadline, parentNest = currNest.title)
+        val task = Task(title = taskTitle, deadline = eventStartTime)
         todoRepo.addTaskToList(currNest, task)
 
         navigateToHomeScreenDayActivity()
     }
 
-
-    private fun formatDeadline(): Long {
-        val dateString = date.text.toString()
+    private fun formatStartDate(): Long {
+        val dateString = dateEditText.text.toString()
 
         // Assuming the date format is MM/dd/yyyy
         val formatter = DateTimeFormatter.ofPattern("MM/d/yyyy")
