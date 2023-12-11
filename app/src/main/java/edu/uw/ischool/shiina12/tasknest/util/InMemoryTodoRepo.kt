@@ -17,9 +17,9 @@ val today = Calendar.getInstance().apply {
 }.timeInMillis // This is a Long value
 
 object InMemoryTodoRepository : TodoRepository {
+
     val todoNests: MutableList<TodoNest> = mutableListOf()
     var currNest = ""
-
     override fun getNests(): MutableList<TodoNest> {
         return todoNests
     }

@@ -26,7 +26,8 @@ data class Task(
     var description: String? = "",
     var deadline: Long? = null,
     var isFinished: Boolean = false,
-    var parentNest: String? = ""
+    var parentNest: String? = "",
+    val dateCreated: Long = today
 )
 
 enum class SortingMethod {

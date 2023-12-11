@@ -222,12 +222,17 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
         applyTitleUnderline(titleItem)
 
-
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_sort_date_created -> {
                     // TODO Handle sorting by date created
+                    // depends on how the task list is populated. (start from beginning of task array)
+                    // could reorganize into a new array
+                    // todoRepo.todoNests.sortBy { it.dateCreated }
+                    // sort tasks by date created
+
                     true
+
                 }
 
                 R.id.menu_sort_due_date -> {

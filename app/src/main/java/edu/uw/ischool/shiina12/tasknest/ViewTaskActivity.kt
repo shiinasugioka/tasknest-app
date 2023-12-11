@@ -12,6 +12,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
@@ -100,6 +101,14 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         repeatingEvent.setOnClickListener {
             if (repeatingEvent.isChecked) {
                 showCustomDialog()
+            }
+        }
+
+        allDay.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!isChecked) {
+                timeEditText.visibility = View.VISIBLE
+            } else {
+                timeEditText.visibility = View.GONE
             }
         }
 
