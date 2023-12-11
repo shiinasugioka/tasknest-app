@@ -19,6 +19,26 @@ val today = Calendar.getInstance().apply {
 object InMemoryTodoRepository : TodoRepository {
     val todoNests: MutableList<TodoNest> = mutableListOf()
 
+    //intial values
+    private val defaultTask = Task(
+        title = "Sample Task",
+        description = "This is a sample task",
+        deadline = today, // or any other default deadline
+        isFinished = false
+    )
+
+    private val defaultTodoNest = TodoNest(
+        title = "Default Nest",
+        tasks = mutableListOf(defaultTask) // Add the default task to the default nest
+    )
+
+    init{
+        todoNests.add(defaultTodoNest)
+    }
+
+
+
+
     override fun getNest(): MutableList<TodoNest> {
         return todoNests
     }
@@ -29,6 +49,10 @@ object InMemoryTodoRepository : TodoRepository {
 
     override fun getAllNestTitles(): Array<String> {
         return todoNests.map { it.title }.toTypedArray()
+    }
+
+    fun getTasksFromNest(todoNest: TodoNest): List<Task> {
+        return todoNest.tasks
     }
 
     fun getTasksForToday(): List<Task> {

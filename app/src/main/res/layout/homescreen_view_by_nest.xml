@@ -151,11 +151,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="148dp"
         android:divider="@drawable/empty_checkbox_divider"
         android:orientation="vertical"
         android:showDividers="middle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sample_date_text">
 
@@ -178,6 +179,23 @@
             android:textSize="13sp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/nest_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="500dp"
+        android:divider="@drawable/empty_checkbox_divider"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        app:layout_constraintBottom_toTopOf="@id/footer_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sample_date_text"
+        app:layout_constraintVertical_bias="0.0"></LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
