@@ -32,13 +32,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(nestScreenIntent)
     }
 
-    private fun goToSingleDayToDoList() {
-        val singleDayIntent = Intent(this, SingleDayHomescreenActivity::class.java)
-
-        // Start the activity
-        startActivity(singleDayIntent)
-    }
-
     private fun goToTaskViewPage() {
         val taskIntent = Intent(this, ViewTaskActivity::class.java)
         startActivity(taskIntent)

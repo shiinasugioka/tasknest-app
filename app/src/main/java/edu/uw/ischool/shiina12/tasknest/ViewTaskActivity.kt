@@ -33,6 +33,7 @@ import edu.uw.ischool.shiina12.tasknest.api_util.Constants
 import edu.uw.ischool.shiina12.tasknest.api_util.CreateEventTask
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import java.time.LocalDateTime
@@ -43,7 +44,9 @@ import com.google.api.services.calendar.Calendar as GoogleCalendar
 const val TAG = "ViewTaskActivity"
 
 class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private lateinit var eventTitleTextView: TextView
+    private val currentTask: Task = intent.getSerializableExtra("currentTask") as Task
+
+    private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
     private lateinit var allDay: CheckBox
@@ -55,6 +58,11 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
     private lateinit var exitButton: ImageButton
+
+    // values from currentTask object
+    private lateinit var currentTaskTitle: String
+    private lateinit var currentTaskStartDate: String
+    private lateinit var currentTaskStartTime: String
 
     // values to be sent to API
     private lateinit var eventTitleText: String
@@ -71,6 +79,14 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_task)
 
+        findAndInitializeUIElements()
+
+        setListeners()
+        initCredentials()
+
+    }
+
+    private fun findAndInitializeUIElements() {
         // UI elements
         eventTitleTextView = findViewById(R.id.editTaskTitle)
         timeEditText = findViewById(R.id.editTaskStartTime)
@@ -78,9 +94,25 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
-        Log.i("ViewTaskActivity", "found exit button")
 
-        //val editText = dialogView.findViewById<EditText>(R.id.editText)
+        // UI elements for API
+        addEventButton = findViewById(R.id.buttonGoogleCalendar)
+        apiResultsText = ""
+        apiStatusText = ""
+
+        // data from current task
+        currentTaskTitle = currentTask.title
+        currentTaskStartDate = currentTask.displayableStartDate
+        currentTaskStartTime = currentTask.displayableStartTime
+
+        eventTitleTextView.setText(currentTaskTitle)
+        timeEditText.setText(currentTaskStartTime)
+        dateEditText.setText(currentTaskStartDate)
+
+        addEventButton.isEnabled = false
+    }
+
+    private fun setListeners() {
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, timeEditText)
 
@@ -116,18 +148,9 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             finish()
         }
 
-        // UI elements for API
-        addEventButton = findViewById(R.id.buttonGoogleCalendar)
-        apiResultsText = ""
-        apiStatusText = ""
-
-        initCredentials()
-
         eventTitleTextView.addTextChangedListener(textWatcher)
         timeEditText.addTextChangedListener(textWatcher)
         dateEditText.addTextChangedListener(textWatcher)
-
-        addEventButton.isEnabled = false
 
         addEventButton.setOnClickListener {
             setEventDetails()

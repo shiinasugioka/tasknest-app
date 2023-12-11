@@ -17,9 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenDAYActivity : AppCompatActivity() {
@@ -37,12 +41,12 @@ class HomeScreenDAYActivity : AppCompatActivity() {
 
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
         nestButton = findViewById(R.id.view_nest_button)
-        // Get today's date in millis to compare with task deadlines
-        val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
-        val todayBuilder = LocalDate.now()
+        // Get today's date in ISO to compare with task deadlines
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+        val today = dateFormat.format(Date())
 
-        val formattedDate = todayBuilder.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
+        val formattedDate = reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "MMMM d, yyyy")
 
         // Set the formatted date to the TextView
         val dateTextView = findViewById<TextView>(R.id.day_title)
@@ -52,7 +56,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
             val tasksForToday =
-                todoNest.tasks.filter { it.deadline != null && it.deadline!! == today }
+                todoNest.tasks.filter { it.apiDateTime == today }
 
             // If there are tasks for today, show the nest title and tasks
             if (tasksForToday.isNotEmpty()) {
@@ -111,6 +115,19 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         }
     }
 
+    private fun reformatDate(
+        inputDate: String,
+        inputPattern: String,
+        outputPattern: String
+    ): String {
+        val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
+        val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate) ?: Date()
+
+        return outputFormat.format(date)
+    }
+
     private fun createNewTask() {
         val createNewTaskIntent = Intent(this, AddNewTaskActivity::class.java)
         startActivity(createNewTaskIntent)
@@ -131,6 +148,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
     private fun onTaskTextClickedCalled(currentTask: Task?) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
+        intent.putExtra("currentTask", currentTask)
         Log.d(TAG, "task text clicked!")
         startActivity(viewTaskIntent)
     }

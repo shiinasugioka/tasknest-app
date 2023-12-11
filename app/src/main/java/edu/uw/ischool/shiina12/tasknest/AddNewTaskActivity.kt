@@ -2,6 +2,8 @@ package edu.uw.ischool.shiina12.tasknest
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -19,7 +21,7 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -39,6 +41,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var exitButton: ImageButton
     private lateinit var taskEditText: EditText
     private lateinit var allDay: CheckBox
+    private lateinit var createNewTaskButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +59,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         allDay = findViewById(R.id.allDayCheckBox)
 
         exitButton = findViewById(R.id.imageButtonExit)
+        createNewTaskButton = findViewById(R.id.createNewTaskButton)
 
         currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
 
@@ -69,8 +73,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             finish()
         }
 
-        val createTaskButton = findViewById<Button>(R.id.button2)
-        createTaskButton.setOnClickListener {
+        createNewTaskButton.setOnClickListener {
             Log.i("Savebtn Test", "Working")
             addTask()
         }
@@ -135,6 +138,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             }
         }
 
+        eventTitleTextView.addTextChangedListener(textWatcher)
+        timeEditText.addTextChangedListener(textWatcher)
+        dateEditText.addTextChangedListener(textWatcher)
+
         val spinner: Spinner = findViewById(R.id.intervalSpinner)
         ArrayAdapter.createFromResource(
             this,
@@ -148,24 +155,31 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
     private fun addTask() {
         val taskTitle = eventTitleTextView.text.toString()
-//        val eventStartTime = formatStartDate()
-        val eventStartTime = ""
-        val eventEndTime = ""
+        val eventStartTime = timeEditText.text.toString()
+        val eventStartDate = dateEditText.text.toString()
 
-        val task = Task(title = taskTitle, deadline = eventStartTime)
+        val finalDateTime = formatTimeDate(eventStartDate, eventStartTime)
+
+        val task = Task(
+            title = taskTitle,
+            apiDateTime = finalDateTime,
+            displayableStartDate = eventStartDate,
+            displayableStartTime = eventStartTime
+        )
+
         todoRepo.addTaskToList(currNest, task)
-
         navigateToHomeScreenDayActivity()
     }
 
-    private fun formatStartDate(): Long {
-        val dateString = dateEditText.text.toString()
+    private fun formatTimeDate(eventStartDate: String, eventStartTime: String): String {
+        val combinedDateTimeString = "$eventStartDate $eventStartTime"
+        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val LAZoneId = ZoneId.of("America/Los_Angeles")
+        val formattedDateTime = localDateTime.atZone(LAZoneId)
+        val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-        // Assuming the date format is MM/dd/yyyy
-        val formatter = DateTimeFormatter.ofPattern("MM/d/yyyy")
-        val localDate = LocalDate.parse(dateString, formatter)
-
-        return localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return formattedDateTime.format(iso8601Formatter)
     }
 
     private fun navigateToHomeScreenDayActivity() {
@@ -199,6 +213,22 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val correctedMonth: Int = month + 1
         Log.i("ViewTaskActivity", "in main $correctedMonth/$day/$year")
         targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+    }
+
+    private var textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (eventTitleTextView.text.isNotBlank() &&
+                timeEditText.text.isNotBlank() &&
+                dateEditText.text.isNotBlank()
+            ) {
+                createNewTaskButton.isEnabled = true
+            }
+        }
+
     }
 
 }
