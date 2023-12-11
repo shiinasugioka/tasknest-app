@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -33,6 +34,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var endsOn: EditText
     private lateinit var atTime: EditText
     private lateinit var currNest: TodoNest
+    private lateinit var exitButton: ImageButton
+    private lateinit var taskEditText: EditText
+    private lateinit var allDay: CheckBox
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,15 +51,17 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         startsOn = findViewById(R.id.startsOn)
         endsOn = findViewById(R.id.endsOn)
         atTime = findViewById(R.id.reminderTime)
+        exitButton = findViewById(R.id.imageButtonExit)
+        allDay = findViewById(R.id.allDayCheckBox)
 
         currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
 
         // Log the details of currNest
         Log.d("AddNewTaskActivity", "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}")
 
-
-
-
+        exitButton.setOnClickListener {
+            finish()
+        }
 
         val createTaskButton = findViewById<Button>(R.id.button2)
         createTaskButton.setOnClickListener {
@@ -115,6 +121,14 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             }
         }
 
+        allDay.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!isChecked) {
+                time.visibility = View.VISIBLE
+            } else {
+                time.visibility = View.GONE
+            }
+        }
+
         val spinner: Spinner = findViewById(R.id.intervalSpinner)
         ArrayAdapter.createFromResource(
             this,
@@ -127,7 +141,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     }
 
     private fun addTask() {
-        val taskTitle = findViewById<EditText>(R.id.editTextTask).text.toString()
+        taskEditText = findViewById(R.id.editTextTask)
+        val taskTitle = taskEditText.text.toString()
         val taskDeadline = formatDeadline()
 
         val task = Task(title = taskTitle, deadline = taskDeadline)
@@ -138,7 +153,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
 
     private fun formatDeadline(): Long {
-        val dateString = findViewById<EditText>(R.id.editTextDate).text.toString()
+        val dateString = date.text.toString()
 
         // Assuming the date format is MM/dd/yyyy
         val formatter = DateTimeFormatter.ofPattern("MM/d/yyyy")
@@ -151,10 +166,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val intent = Intent(this, HomeScreenDAYActivity::class.java)
         startActivity(intent)
     }
-
-
-
-
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
         var correctedHour = hourOfDay
