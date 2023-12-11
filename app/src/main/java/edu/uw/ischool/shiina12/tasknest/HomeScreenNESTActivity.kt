@@ -83,15 +83,15 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         )
     }
 
-//    private fun testNotif() {
-//
-//        // Simulate an event time (e.g., current time + 10 seconds)
-//        val eventTimeInMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2) + TimeUnit.SECONDS.toMillis(10)
-//
-//
-//        // Immediately show a test notification
-//        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
-//    }
+    private fun testNotif() {
+
+        // Simulate an event time (e.g., current time + 10 seconds)
+        val eventTimeInMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1) + TimeUnit.SECONDS.toMillis(10)
+
+
+        // Immediately show a test notification
+        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
+    }
 
     override fun onStart() {
         super.onStart()

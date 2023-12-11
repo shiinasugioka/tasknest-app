@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
+import edu.uw.ischool.shiina12.tasknest.HomeScreenNESTActivity
 import edu.uw.ischool.shiina12.tasknest.R
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -92,6 +93,11 @@ class NotificationReceiver : BroadcastReceiver() {
         val smsNotificationsEnabled = sharedPreferences.getBoolean("notification_sms", false)
         val emailNotificationsEnabled = sharedPreferences.getBoolean("notification_email", false)
 
+        // Create an intent to launch the HomeScreen activity
+        val intent = Intent(context, HomeScreenNESTActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
         // Customize the notification based on the enabled channels
         val builder = NotificationCompat.Builder(context, "app_channel")
             .setSmallIcon(R.drawable.ic_notification)
@@ -99,6 +105,7 @@ class NotificationReceiver : BroadcastReceiver() {
             // TODO: Maybe add event title
             .setContentText("Your event is about to start!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
 
         // Check preferences and add channels accordingly
         if (appNotificationsEnabled) {
