@@ -69,25 +69,19 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         // Create notification channels based on preferences
         if (appNotificationsEnabled) {
             createNotificationChannel(
-                "app_channel",
-                "App Notifications",
-                "Channel for app notifications"
+                "app_channel", "App Notifications", "Channel for app notifications"
             )
         }
 
         if (smsNotificationsEnabled) {
             createNotificationChannel(
-                "sms_channel",
-                "SMS Notifications",
-                "Channel for SMS notifications"
+                "sms_channel", "SMS Notifications", "Channel for SMS notifications"
             )
         }
 
         if (emailNotificationsEnabled) {
             createNotificationChannel(
-                "email_channel",
-                "Email Notifications",
-                "Channel for email notifications"
+                "email_channel", "Email Notifications", "Channel for email notifications"
             )
         }
 
@@ -209,11 +203,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             todoRepo.renameNest(oldNestName, newNestName)
             setNewDropDownValues()
             Toast.makeText(
-                this,
-                "Title '$newNestName' saved!",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+                this, "Title '$newNestName' saved!", Toast.LENGTH_SHORT
+            ).show()
         }
 
         builder.setNegativeButton("Cancel") { dialog, _ ->

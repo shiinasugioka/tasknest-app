@@ -14,14 +14,22 @@ import edu.uw.ischool.shiina12.tasknest.R
 
 class TodoAdapter(
     private var items: List<Task>,
-    private val onItemChecked: (Task, Int, ViewHolder) -> Unit // Add a callback for when an item is checked
+    private val onItemChecked: (Task, Int, ViewHolder) -> Unit, // Add a callback for when an item is checked
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onTaskTextClicked(position: Int)
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
         val textView: TextView = view.findViewById(R.id.todoTextView)
     }
 
+    private fun onTaskTextClicked(position: Int) {
+        listener.onTaskTextClicked(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -44,11 +52,16 @@ class TodoAdapter(
 
         }
 
+        holder.textView.setOnClickListener {
+
+            val position = holder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                onTaskTextClicked(position)
+            }
+        }
+
         if (task.isFinished) {
-            holder.itemView.animate()
-                .alpha(0f)
-                .setDuration(300)
-                .withEndAction {
+            holder.itemView.animate().alpha(0f).setDuration(300).withEndAction {
                     // Remove the item after fade-out completes
                     items = items.filter { it != task }
                     notifyItemRemoved(position)
@@ -76,5 +89,7 @@ class TodoAdapter(
         notifyDataSetChanged()
     }
 }
+
+
 
 

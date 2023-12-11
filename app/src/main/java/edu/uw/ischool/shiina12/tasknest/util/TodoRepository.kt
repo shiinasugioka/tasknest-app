@@ -18,24 +18,21 @@ interface TodoRepository {
 }
 
 data class TodoNest(
-    var title: String,
-    val tasks: MutableList<Task> = mutableListOf()
+    var title: String, val tasks: MutableList<Task> = mutableListOf()
 )
 
 data class Task(
     var title: String,
     var description: String? = "",
     var deadline: Long? = null,
-    var isFinished: Boolean = false
+    var isFinished: Boolean = false,
+    var parentNest: String? = ""
 )
 
 enum class SortingMethod {
-    BY_DEADLINE,
-    BY_CREATION_TIME
+    BY_DEADLINE, BY_CREATION_TIME
 }
 
 enum class NotificationType {
-    APP,
-    SMS,
-    EMAIL
+    APP, SMS, EMAIL
 }

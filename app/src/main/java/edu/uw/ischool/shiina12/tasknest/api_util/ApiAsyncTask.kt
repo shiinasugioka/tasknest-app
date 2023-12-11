@@ -6,9 +6,9 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.Events
-import edu.uw.ischool.shiina12.tasknest.TaskActivity
+import edu.uw.ischool.shiina12.tasknest.ViewTaskActivity
 
-class ApiAsyncTask internal constructor(private val mActivity: TaskActivity) :
+class ApiAsyncTask internal constructor(private val mActivity: ViewTaskActivity) :
     AsyncTask<Void?, Void?, Void?>() {
 
     @Deprecated("Deprecated in Java")

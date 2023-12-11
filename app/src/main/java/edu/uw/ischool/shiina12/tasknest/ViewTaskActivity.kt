@@ -39,9 +39,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 
-const val TAG = "TaskActivity"
+const val TAG = "ViewTaskActivity"
 
-class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
+class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var eventTitleTextView: TextView
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
@@ -77,7 +77,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
-        Log.i("TaskActivity", "found exit button")
+        Log.i("ViewTaskActivity", "found exit button")
 
         //val editText = dialogView.findViewById<EditText>(R.id.editText)
         val timePickerFragment = TimePickerFragment()
@@ -364,7 +364,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
         // Do something with the date the user picks.
         val correctedMonth: Int = month + 1
-        Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
+        Log.i("ViewTaskActivity", "in main $correctedMonth/$day/$year")
         targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
     }
 

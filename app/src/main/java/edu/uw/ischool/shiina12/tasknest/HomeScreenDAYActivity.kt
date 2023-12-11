@@ -5,13 +5,13 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
@@ -64,8 +64,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     //typeface = ResourcesCompat.getFont(context, R.font.poppins) // Causing Errors
                     setTextColor(
                         ContextCompat.getColor(
-                            context,
-                            R.color.primary_text
+                            context, R.color.primary_text
                         )
                     ) // Set text color
 
@@ -84,12 +83,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 val recyclerView = RecyclerView(this).apply {
                     layoutManager = LinearLayoutManager(this@HomeScreenDAYActivity)
 
-                    val adapter = TodoAdapter(tasksForToday) { task, _, viewHolder ->
+                    val adapter = TodoAdapter(tasksForToday, { task, _, _ ->
                         task.isFinished = true // Mark task as finished
                         todoRepo.modifyTask(
-                            todoNest,
-                            task.title,
-                            task
+                            todoNest, task.title, task
                         ) // Update the task in the todoRepo
 
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -97,7 +94,11 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                             val updatedTasks = todoRepo.getTasksForToday()
                             (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
                         }, 300) // Delay to match the fade-out duration
-                    }
+                    }, object : TodoAdapter.OnItemClickListener {
+                        override fun onTaskTextClicked(position: Int) {
+                            onTaskTextClickedCalled(position)
+                        }
+                    })
                     this.adapter = adapter
                 }
 
@@ -127,4 +128,12 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         startActivity(nestScreenIntent)
         overridePendingTransition(0, 0)
     }
+
+    private fun onTaskTextClickedCalled(position: Int) {
+        val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
+        // add intents for task details
+        Log.d(TAG, "task text clicked!")
+        startActivity(viewTaskIntent)
+    }
+
 }

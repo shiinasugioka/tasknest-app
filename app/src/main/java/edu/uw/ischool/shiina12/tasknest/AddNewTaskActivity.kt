@@ -53,10 +53,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         // Log the details of currNest
         Log.d("AddNewTaskActivity", "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}")
 
-
-
-
-
         val createTaskButton = findViewById<Button>(R.id.button2)
         createTaskButton.setOnClickListener {
             Log.i("Savebtn Test", "Working")
@@ -130,7 +126,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val taskTitle = findViewById<EditText>(R.id.editTextTask).text.toString()
         val taskDeadline = formatDeadline()
 
-        val task = Task(title = taskTitle, deadline = taskDeadline)
+        val task = Task(title = taskTitle, deadline = taskDeadline, parentNest = currNest.title)
         todoRepo.addTaskToList(currNest, task)
 
         navigateToHomeScreenDayActivity()
@@ -180,7 +176,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
         // Do something with the date the user picks.
         val correctedMonth: Int = month + 1
-        Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
+        Log.i("ViewTaskActivity", "in main $correctedMonth/$day/$year")
         targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
     }
 
