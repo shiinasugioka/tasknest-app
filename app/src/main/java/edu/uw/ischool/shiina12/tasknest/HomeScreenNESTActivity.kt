@@ -1,5 +1,6 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -12,13 +13,16 @@ import android.text.style.UnderlineSpan
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -62,33 +66,20 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             "Default Nest"
         }
 
-        val selectedNest = spinnerSelectedNest?.let { todoRepo.getTodoNestByTitle(it) }
+        setNewDropDownValues()
 
-        selectedNest?.let { nest ->
-            val tasksGroupedByDeadline = nest.tasks.groupBy { it.deadline }
+        nest_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedNestName = parent.getItemAtPosition(position).toString()
+                loadTasksForSelectedNest(selectedNestName)
+            }
 
-            tasksGroupedByDeadline.forEach { (deadline, tasks) ->
-                if (tasks.isNotEmpty()) {
-                    // Create and add the deadline TextView
-                    val deadlineTextView = TextView(this).apply {
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        text = deadline?.let { formatDate(it) } // Set the formatted date text
-                        setTextColor(ContextCompat.getColor(context, R.color.primary_text)) // Set text color
-                        textSize = 13f // Set text size
-
-                        // Additional styling if needed
-                    }
-                    todoNestItemContainer.addView(deadlineTextView)
-
-                    // Create and add the tasks view (RecyclerView or individual views)
-                    val recyclerView = createRecyclerViewForTasks(tasks,selectedNest)
-                    todoNestItemContainer.addView(recyclerView)
-                }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Optional: Handle the case when nothing is selected
             }
         }
+
+
 
 
 
@@ -155,6 +146,50 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setNewDropDownValues()
+        setCurrentNest()
+    }
+
+    private fun setCurrentNest() {
+        if (nest_dropdown.selectedItem != null) {
+            val selectedNest = nest_dropdown.selectedItem.toString()
+            todoRepo.setCurrNestName(selectedNest)
+        }
+    }
+
+    private fun loadTasksForSelectedNest(nestName:String){
+        val todoNestItemContainer: LinearLayout = findViewById(R.id.nest_layout_container)
+        todoNestItemContainer.removeAllViews()
+
+        val selectedNest = todoRepo.getTodoNestByTitle(nestName)
+            selectedNest?.let { nest ->
+                val tasksGroupedByDeadline = nest.tasks.groupBy { it.deadline }
+                tasksGroupedByDeadline.forEach { (deadline, tasks) ->
+                    if (tasks.isNotEmpty()) {
+                        // Create and add the deadline TextView
+                        val deadlineTextView = TextView(this).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+                            text = deadline?.let { formatDate(it) } // Set the formatted date text
+                            setTextColor(
+                                ContextCompat.getColor(
+                                    context,
+                                    R.color.primary_text
+                                )
+                            ) // Set text color
+                            textSize = 13f // Set text size
+
+                            // Additional styling if needed
+                        }
+                        todoNestItemContainer.addView(deadlineTextView)
+
+                        // Create and add the tasks view (RecyclerView or individual views)
+                        val recyclerView = createRecyclerViewForTasks(tasks, selectedNest)
+                        todoNestItemContainer.addView(recyclerView)
+                    }
+                }
+            }
     }
 
     private fun setNewDropDownValues() {
@@ -200,12 +235,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             when (item.itemId) {
                 // Group 1: Nest Settings
                 R.id.menu_delete_nest -> {
-                    // TODO Handle Delete Nest or other actions in this group
+                    handleDeleteThisNest()
                     true
                 }
 
                 R.id.menu_rename_nest -> {
-                    // TODO Handle Rename Nest action
+                    handleRenameThisNest()
                     true
                 }
 
@@ -229,6 +264,51 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
+    private fun handleDeleteThisNest() {
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            todoRepo.removeNest(nestName)
+            Toast.makeText(this, "Nest Removed.", Toast.LENGTH_SHORT).show()
+        }
+        setNewDropDownValues()
+    }
+
+    private fun handleRenameThisNest() {
+        val nestName = todoRepo.getCurrNestName()
+        if (nestName.isNotBlank()) {
+            showRenamePopUp()
+        }
+    }
+
+    private fun showRenamePopUp() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Rename your Nest.")
+
+        val oldNestName = todoRepo.getCurrNestName()
+
+        val input = EditText(this)
+        input.hint = oldNestName
+        builder.setView(input)
+
+        builder.setPositiveButton("Save") { _, _ ->
+            val newNestName = input.text.toString()
+            todoRepo.renameNest(oldNestName, newNestName)
+            setNewDropDownValues()
+            Toast.makeText(
+                this,
+                "Title '$newNestName' saved!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
     private fun showSortByPopupMenu(view: View) {
         val contextWrapper = ContextThemeWrapper(this, R.style.PopupSortByMenuStyle)
         val popupMenu = PopupMenu(contextWrapper, view)
@@ -237,12 +317,17 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
         applyTitleUnderline(titleItem)
 
-
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_sort_date_created -> {
                     // TODO Handle sorting by date created
+                    // depends on how the task list is populated. (start from beginning of task array)
+                    // could reorganize into a new array
+                    // todoRepo.todoNests.sortBy { it.dateCreated }
+                    // sort tasks by date created
+
                     true
+
                 }
 
                 R.id.menu_sort_due_date -> {
@@ -262,7 +347,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
         titleItem.title = titleString
     }
-
 
     override fun onPause() {
         super.onPause()

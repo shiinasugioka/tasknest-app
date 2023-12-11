@@ -14,19 +14,20 @@ interface TodoRepository {
     fun exportTasksToJson(nest: TodoNest): String
     fun getTodoNestByTitle(nestTitle: String): TodoNest?
     fun getAllNestTitles(): Array<String>
-    fun getNest(): MutableList<TodoNest>
+    fun getNests(): MutableList<TodoNest>
 }
 
 data class TodoNest(
-    val title: String,
-    val tasks: MutableList<Task> = mutableListOf()
+    var title: String,
+    val tasks: MutableList<Task> = mutableListOf(),
 )
 
 data class Task(
     var title: String,
     var description: String? = "",
     var deadline: Long? = null,
-    var isFinished: Boolean = false
+    var isFinished: Boolean = false,
+    val dateCreated: Long = today
 )
 
 enum class SortingMethod {

@@ -17,29 +17,28 @@ val today = Calendar.getInstance().apply {
 }.timeInMillis // This is a Long value
 
 object InMemoryTodoRepository : TodoRepository {
+
     val todoNests: MutableList<TodoNest> = mutableListOf()
-
-    //intial values
-    private val defaultTask = Task(
-        title = "Sample Task",
-        description = "This is a sample task",
-        deadline = today, // or any other default deadline
-        isFinished = false
-    )
-
-    private val defaultTodoNest = TodoNest(
-        title = "Default Nest",
-        tasks = mutableListOf(defaultTask) // Add the default task to the default nest
-    )
+    var currNest = ""
 
     init{
+         val defaultTask = Task(
+            title = "Sample Task",
+            description = "This is a sample task",
+            deadline = today, // or any other default deadline
+            isFinished = false
+        )
+
+         val defaultTodoNest = TodoNest(
+            title = "Default Nest",
+            tasks = mutableListOf(defaultTask) // Add the default task to the default nest
+        )
+
         todoNests.add(defaultTodoNest)
     }
 
 
-
-
-    override fun getNest(): MutableList<TodoNest> {
+    override fun getNests(): MutableList<TodoNest> {
         return todoNests
     }
 
@@ -67,6 +66,22 @@ object InMemoryTodoRepository : TodoRepository {
         return todoNests.flatMap { nest ->
             nest.tasks.filter { it.deadline != null && it.deadline!! >= startOfWeek && it.deadline!! <= endOfWeek }
         }
+    }
+
+    fun setCurrNestName(nestName: String) {
+        this.currNest = nestName
+    }
+
+    fun getCurrNestName(): String {
+        return currNest
+    }
+
+    fun removeNest(nestName: String) {
+        todoNests.remove(getTodoNestByTitle(nestName))
+    }
+
+    fun renameNest(oldName: String, newName: String) {
+        getTodoNestByTitle(oldName)?.title = newName
     }
 
     private fun getWeekRange(): Pair<Long, Long> {
