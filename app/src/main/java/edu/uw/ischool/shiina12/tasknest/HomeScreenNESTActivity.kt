@@ -20,6 +20,8 @@ import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
+import java.util.concurrent.TimeUnit
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
@@ -80,6 +82,16 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             "Channel for email notifications"
         )
     }
+
+//    private fun testNotif() {
+//
+//        // Simulate an event time (e.g., current time + 10 seconds)
+//        val eventTimeInMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(2) + TimeUnit.SECONDS.toMillis(10)
+//
+//
+//        // Immediately show a test notification
+//        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
+//    }
 
     override fun onStart() {
         super.onStart()

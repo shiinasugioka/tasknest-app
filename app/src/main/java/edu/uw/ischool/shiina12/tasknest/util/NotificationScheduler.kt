@@ -8,12 +8,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import edu.uw.ischool.shiina12.tasknest.R
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class NotificationScheduler {
 
@@ -27,15 +29,24 @@ class NotificationScheduler {
         // Immediately show a test notification
         NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
      */
+
+    private val tag = "NotificationScheduler"
+
     fun scheduleNotification(context: Context, eventTimeInMillis: Long) {
         // Read preferences to get notification time before the event
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val notificationTimeBeforeEvent = sharedPreferences.getString("notification_frequency", "1")
             ?.toInt()
-        val frequencyUnit = sharedPreferences.getString("frequency_unit", "hour")
+        val frequencyUnit = sharedPreferences.getString("frequency_unit", "minutes")
+
+        Log.i(tag, "Preference Frequency $notificationTimeBeforeEvent ")
+        Log.i(tag, "Preference Frequency Unit $frequencyUnit ")
+
 
         // Calculate the notification time based on preferences
         val notificationTimeInMillis = calculateNotificationTime(eventTimeInMillis, notificationTimeBeforeEvent, frequencyUnit)
+        Log.i(tag, "TotalNotifTime $notificationTimeInMillis ")
+
 
         // Schedule an alarm to trigger the notification
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -52,18 +63,16 @@ class NotificationScheduler {
     }
 
     private fun calculateNotificationTime(eventTimeInMillis: Long, timeBeforeEvent: Int?, frequencyUnit: String?): Long {
-        // Perform calculations based on the frequency unit (e.g., hour, minute, day)
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = eventTimeInMillis
+        // Convert timeBeforeEvent to milliseconds based on the specified frequency unit
+        val timeBeforeEventInMillis = when (frequencyUnit) {
+            "hours" -> TimeUnit.HOURS.toMillis(timeBeforeEvent!!.toLong())
+            "minutes" -> TimeUnit.MINUTES.toMillis(timeBeforeEvent!!.toLong())
+            "days" -> TimeUnit.DAYS.toMillis(timeBeforeEvent!!.toLong())
+            else -> 0 // Default to 0 if an unsupported unit is provided
         }
 
-        when (frequencyUnit) {
-            "hour" -> calendar.add(Calendar.HOUR_OF_DAY, -timeBeforeEvent!!)
-            "minute" -> calendar.add(Calendar.MINUTE, -timeBeforeEvent!!)
-            "day" -> calendar.add(Calendar.DAY_OF_YEAR, -timeBeforeEvent!!)
-        }
-
-        return calendar.timeInMillis
+        // Calculate the notification time by subtracting timeBeforeEventInMillis from eventTimeInMillis
+        return eventTimeInMillis - timeBeforeEventInMillis
     }
 }
 

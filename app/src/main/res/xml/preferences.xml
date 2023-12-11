@@ -50,8 +50,7 @@
             android:title="Frequency"
             android:summary="Enter notification frequency"
             android:inputType="number"
-            android:defaultValue="2"
-            android:numeric="integer"/>
+            android:defaultValue="1"/>
 
 
         <ListPreference
@@ -61,7 +60,7 @@
             android:dialogTitle="Select Frequency Unit"
             android:entries="@array/frequency_units"
             android:entryValues="@array/frequency_units_values"
-            android:defaultValue="days"/>
+            android:defaultValue="minutes"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
