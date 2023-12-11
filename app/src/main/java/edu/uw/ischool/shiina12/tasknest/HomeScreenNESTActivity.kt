@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
@@ -19,7 +20,6 @@ import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         nest_dropdown = findViewById(R.id.nest_drop_down)
         val view_day_button: Button = findViewById(R.id.view_day_button)
 
-//      Set Element values
+        // Set Element values
 
         setNewDropDownValues()
 
@@ -60,37 +60,25 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
 
         // -- Notifications Code --
-        // Read preferences
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", true)
-        val smsNotificationsEnabled = sharedPreferences.getBoolean("notification_sms", true)
-        val emailNotificationsEnabled = sharedPreferences.getBoolean("notification_email", true)
+        // Create channels for notifications
+        createNotificationChannel(
+            "app_channel",
+            "App Notifications",
+            "Channel for app notifications"
+        )
 
-        // Create notification channels based on preferences
-        if (appNotificationsEnabled) {
-            createNotificationChannel(
-                "app_channel",
-                "App Notifications",
-                "Channel for app notifications"
-            )
-        }
 
-        if (smsNotificationsEnabled) {
-            createNotificationChannel(
-                "sms_channel",
-                "SMS Notifications",
-                "Channel for SMS notifications"
-            )
-        }
+        createNotificationChannel(
+            "sms_channel",
+            "SMS Notifications",
+            "Channel for SMS notifications"
+        )
 
-        if (emailNotificationsEnabled) {
-            createNotificationChannel(
-                "email_channel",
-                "Email Notifications",
-                "Channel for email notifications"
-            )
-        }
-
+        createNotificationChannel(
+            "email_channel",
+            "Email Notifications",
+            "Channel for email notifications"
+        )
     }
 
     override fun onStart() {
@@ -139,12 +127,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val popupMenu = PopupMenu(contextWrapper, view)
         popupMenu.inflate(R.menu.settings_popup_menu)
 
-        val titleItem1 = popupMenu.menu.findItem(R.id.app_settings_title)
-        applyTitleUnderline(titleItem1)
-
-        val titleItem2 = popupMenu.menu.findItem(R.id.nest_settings_title)
-        applyTitleUnderline(titleItem2)
-
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 // Group 1: Nest Settings
@@ -163,11 +145,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     // Handle Settings or other actions in this group
                     val intent = Intent(this, PreferencesActivity::class.java)
                     startActivity(intent)
-                    true
-                }
-
-                R.id.menu_google -> {
-                    // TODO Handle Google action
                     true
                 }
 

@@ -18,10 +18,20 @@ import java.util.Calendar
 class NotificationScheduler {
 
     // TODO: Call MyNotificationScheduler.scheduleNotification when adding a new task to the nest
+
+    /* Sample code
+
+        // Simulate an event time (e.g., current time + 10 seconds)
+        val eventTimeInMillis = System.currentTimeMillis() + 10000
+
+        // Immediately show a test notification
+        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
+     */
     fun scheduleNotification(context: Context, eventTimeInMillis: Long) {
         // Read preferences to get notification time before the event
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val notificationTimeBeforeEvent = sharedPreferences.getInt("notification_frequency", 2)
+        val notificationTimeBeforeEvent = sharedPreferences.getString("notification_frequency", "1")
+            ?.toInt()
         val frequencyUnit = sharedPreferences.getString("frequency_unit", "hour")
 
         // Calculate the notification time based on preferences
@@ -41,16 +51,16 @@ class NotificationScheduler {
         )
     }
 
-    private fun calculateNotificationTime(eventTimeInMillis: Long, timeBeforeEvent: Int, frequencyUnit: String?): Long {
+    private fun calculateNotificationTime(eventTimeInMillis: Long, timeBeforeEvent: Int?, frequencyUnit: String?): Long {
         // Perform calculations based on the frequency unit (e.g., hour, minute, day)
         val calendar = Calendar.getInstance().apply {
             timeInMillis = eventTimeInMillis
         }
 
         when (frequencyUnit) {
-            "hour" -> calendar.add(Calendar.HOUR_OF_DAY, -timeBeforeEvent)
-            "minute" -> calendar.add(Calendar.MINUTE, -timeBeforeEvent)
-            "day" -> calendar.add(Calendar.DAY_OF_YEAR, -timeBeforeEvent)
+            "hour" -> calendar.add(Calendar.HOUR_OF_DAY, -timeBeforeEvent!!)
+            "minute" -> calendar.add(Calendar.MINUTE, -timeBeforeEvent!!)
+            "day" -> calendar.add(Calendar.DAY_OF_YEAR, -timeBeforeEvent!!)
         }
 
         return calendar.timeInMillis

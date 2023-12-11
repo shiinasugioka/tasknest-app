@@ -50,7 +50,9 @@
             android:title="Frequency"
             android:summary="Enter notification frequency"
             android:inputType="number"
-            android:defaultValue="2"/>
+            android:defaultValue="2"
+            android:numeric="integer"/>
+
 
         <ListPreference
             android:key="frequency_unit"
