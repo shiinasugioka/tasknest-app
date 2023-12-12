@@ -2,13 +2,10 @@ package edu.uw.ischool.shiina12.tasknest
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.ContextThemeWrapper
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -18,11 +15,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import edu.uw.ischool.shiina12.tasknest.util.ColorPickerListener
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.Task
@@ -32,7 +27,7 @@ import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
-class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener, ColorPickerListener {
+class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
@@ -61,6 +56,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var selectedColor: TextView
 
     private lateinit var colorView: View
+    private lateinit var textHex: String
 
     private var TAG: String = "AddNewTaskActivity"
 
@@ -129,38 +125,46 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             Log.i(TAG, "red clicked=")
             selectedColorResId = R.drawable.red
             selectedColor.text = "red selected"
+            textHex = "BD1E1E"
         }
         buttonOrange.setOnClickListener {
             selectedColorResId = R.drawable.orange
             selectedColor.text = "orange selected"
+            textHex = "EF8354"
         }
         buttonYellow.setOnClickListener {
             selectedColorResId = R.drawable.yellow
             selectedColor.text = "yellow selected"
+            textHex = "EFEB94"
         }
 
         buttonGreen.setOnClickListener {
             selectedColorResId = R.drawable.green
             selectedColor.text = "green selected"
+            textHex = "50754F"
         }
 
         buttonBlue.setOnClickListener {
             selectedColorResId = R.drawable.blue
             selectedColor.text = "blue selected"
+            textHex = "92B8C8"
         }
 
         buttonGray.setOnClickListener {
             selectedColorResId = R.drawable.gray
             selectedColor.text = "gray selected"
+            textHex = "4F5D75"
         }
 
         buttonPurple.setOnClickListener {
             selectedColorResId = R.drawable.purple
             selectedColor.text = "purple selected"
+            textHex = "9A53A0"
         }
         buttonPink.setOnClickListener {
             selectedColorResId = R.drawable.pink
             selectedColor.text = "pink selected"
+            textHex = "F2AFE7"
         }
 
         colorPalette.setOnClickListener {
@@ -172,13 +176,11 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private fun showColorPickerDialog(colorView: View) {
         val builder = AlertDialog.Builder(this)
 
-        val dialogLayout = layoutInflater.inflate(R.layout.color_picker, null)
-
         builder.setView(colorView).setTitle("Color options").setPositiveButton("OK") { dialog, _ ->
             // Apply the selected color if available
             selectedColorResId?.let {
                 Log.i(TAG, "setting colors")
-                // Notify the activity about the selected color
+                // Update the image resource
                 colorPalette.setImageResource(it)
             }
             // Reset the selected color for the next click
@@ -190,13 +192,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             dialog.dismiss()
         }.show()
     }
-    override fun onColorSelected(colorResId: Int) {
-        // Update the colorPalette in the original view
-        colorPalette.setImageResource(colorResId)
-    }
 
     private fun setListeners() {
         exitButton.setOnClickListener {
+            intent.putExtra("textHex", textHex)
             finish()
         }
 
