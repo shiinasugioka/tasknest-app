@@ -38,21 +38,21 @@ import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 class HomeScreenNESTActivity : AppCompatActivity() {
 
-    private lateinit var nest_dropdown: Spinner
+    private lateinit var nestDropdown: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
 
-        nest_dropdown = findViewById(R.id.nest_drop_down)
+        nestDropdown = findViewById(R.id.nest_drop_down)
 
         setNewDropDownValues()
 
-        val view_day_button: Button = findViewById(R.id.view_day_button)
+        val viewDayButton: Button = findViewById(R.id.view_day_button)
 
         val todoNestItemContainer: LinearLayout = findViewById(R.id.nest_layout_container)
-        val spinnerSelectedNest: String? = if (nest_dropdown.adapter.count > 0) {
-            nest_dropdown.selectedItem?.toString()
+        val spinnerSelectedNest: String? = if (nestDropdown.adapter.count > 0) {
+            nestDropdown.selectedItem?.toString()
         } else {
             // Fallback behavior if the spinner is empty
             // You can return a default value or handle the situation accordingly
@@ -61,7 +61,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         setNewDropDownValues()
 
-        nest_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        nestDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>, view: View, position: Int, id: Long
             ) {
@@ -76,7 +76,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         setNewDropDownValues()
 
-        view_day_button.setOnClickListener {
+        viewDayButton.setOnClickListener {
             switchToViewByDay()
         }
 
@@ -101,7 +101,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         createNotificationChannel(
             "app_channel", "App Notifications", "Channel for app notifications"
         )
-
 
         createNotificationChannel(
             "sms_channel", "SMS Notifications", "Channel for SMS notifications"
@@ -132,8 +131,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     }
 
     private fun setCurrentNest() {
-        if (nest_dropdown.selectedItem != null) {
-            val selectedNest = nest_dropdown.selectedItem.toString()
+        if (nestDropdown.selectedItem != null) {
+            val selectedNest = nestDropdown.selectedItem.toString()
             todoRepo.setCurrNestName(selectedNest)
         }
     }
@@ -178,10 +177,10 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     }
 
     private fun setNewDropDownValues() {
-        val nest_dropdown_items = todoRepo.getAllNestTitles()
+        val nestDropdownItems = todoRepo.getAllNestTitles()
         val arrayAdapter =
-            ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nest_dropdown_items)
-        nest_dropdown.adapter = arrayAdapter
+            ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nestDropdownItems)
+        nestDropdown.adapter = arrayAdapter
     }
 
     private fun createNotificationChannel(channelId: String, name: String, description: String) {
@@ -349,14 +348,16 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                 }, 300) // Delay to match the fade-out duration
             }, object : TodoAdapter.OnItemClickListener {
                 override fun onTaskTextClicked(currentTask: Task?) {
-                    onTaskTextClickedCalled(currentTask)
+                    if (currentTask != null) {
+                        onTaskTextClickedCalled(currentTask)
+                    }
                 }
             })
         }
         return recyclerView
     }
 
-    private fun onTaskTextClickedCalled(currentTask: Task?) {
+    private fun onTaskTextClickedCalled(currentTask: Task) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
         intent.putExtra("currentTask", currentTask)

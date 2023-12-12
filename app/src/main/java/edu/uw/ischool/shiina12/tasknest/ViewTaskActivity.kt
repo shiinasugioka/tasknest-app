@@ -40,6 +40,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 const val TAG = "ViewTaskActivity"
 
@@ -282,13 +283,18 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
-        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-        val LAZoneId = ZoneId.of("America/Los_Angeles")
-        val formattedDateTime = localDateTime.atZone(LAZoneId)
+//        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+//        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+//        val LAZoneId = ZoneId.of("America/Los_Angeles")
+//        val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
+        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        Log.i(TAG, "formatted: $formattedDateTime")
+        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
 
-        finalDateTime = formattedDateTime.format(iso8601Formatter)
+        finalDateTime = formattedDateTime
+//            .format(iso8601Formatter)
         finalTitle = eventTitleText
     }
 
@@ -359,31 +365,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
-        var correctedHour = hourOfDay
-        var isAm = true
-        if (hourOfDay > 12) {
-            correctedHour = hourOfDay - 12
-            isAm = false
-        } else if (hourOfDay == 0) {
-            correctedHour = 12
-        }
-
-        var formattedTime: String = if (minute < 10) {
-            "$correctedHour:0$minute"
-        } else {
-            "$correctedHour:$minute"
-        }
-
-        formattedTime += if (isAm) " AM" else " PM"
+        val formattedTime = Functions.getFormattedTimeOnTimeSet(hourOfDay, minute)
         targetEditText?.setText(formattedTime, TextView.BufferType.EDITABLE)
     }
 
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
-        // Do something with the date the user picks.
-        val correctedMonth: Int = month + 1
-        val dateTimeText = "$correctedMonth/$day/$year"
-        Log.i(TAG, "in main $dateTimeText")
-        targetEditText?.setText(dateTimeText, TextView.BufferType.EDITABLE)
+        val formattedDate = Functions.getFormattedDateOnDateSet(year, month, day)
+        targetEditText?.setText(formattedDate, TextView.BufferType.EDITABLE)
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {

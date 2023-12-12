@@ -29,21 +29,22 @@ class CreateNestActivity : AppCompatActivity() {
 
         val inflater = LayoutInflater.from(this)
         val nest = inflater.inflate(R.layout.homescreen_view_by_nest, null)
-        val nest_dropdown: Spinner = nest.findViewById(R.id.nest_drop_down)
-        val nest_dropdown_items = todoRepo.getAllNestTitles()
+        val nestDropdown: Spinner = nest.findViewById(R.id.nest_drop_down)
+        val nestDropdownItems = todoRepo.getAllNestTitles()
 
         val arrayAdapter =
             ArrayAdapter<Any?>(
                 this@CreateNestActivity,
                 R.layout.spinner_dropdown_text,
-                nest_dropdown_items
+                nestDropdownItems
             )
-        nest_dropdown.adapter = arrayAdapter
+        nestDropdown.adapter = arrayAdapter
 
         createNestButton.setOnClickListener {
             val nestName = nestTitleEdit.text.toString()
             val newNest = TodoNest(nestName, mutableListOf())
-            todoRepo.todoNests.add(newNest)
+            todoRepo.todoNests.add(0, newNest)
+
             Toast.makeText(this, "New Nest '$nestName' created.", Toast.LENGTH_SHORT).show()
             finish()
         }
