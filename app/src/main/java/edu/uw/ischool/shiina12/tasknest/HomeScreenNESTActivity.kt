@@ -360,7 +360,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
         intent.putExtra("currentTask", currentTask)
-        Log.d(TAG, "task text clicked!")
+        Log.d("HomeScreen", "task text clicked!")
         startActivity(viewTaskIntent)
     }
 

@@ -45,17 +45,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
-    private lateinit var buttonRed: ImageButton
-    private lateinit var buttonOrange: ImageButton
-    private lateinit var buttonYellow: ImageButton
-    private lateinit var buttonGreen: ImageButton
-    private lateinit var buttonBlue: ImageButton
-    private lateinit var buttonGray: ImageButton
-    private lateinit var buttonPurple: ImageButton
-    private lateinit var buttonPink: ImageButton
     private lateinit var selectedColor: TextView
-
-    private lateinit var colorView: View
+    /*private val colorView: View by lazy {
+        LayoutInflater.from(this).inflate(R.layout.color_picker, null)
+    }*/
     private lateinit var textHex: String
 
     private var TAG: String = "AddNewTaskActivity"
@@ -108,18 +101,29 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         colorPalette = findViewById(R.id.colorPalette)
 
-        val inflater = LayoutInflater.from(this)
-        colorView = inflater.inflate(R.layout.color_picker, null)
+        colorPalette.setOnClickListener {
+            Log.i(TAG, "palette clicked")
+            showColorPickerDialog()
+        }
 
-        buttonRed = colorView.findViewById(R.id.buttonRed)
-        buttonOrange = colorView.findViewById(R.id.buttonOrange)
-        buttonYellow = colorView.findViewById(R.id.buttonYellow)
-        buttonGreen = colorView.findViewById(R.id.buttonGreen)
-        buttonBlue = colorView.findViewById(R.id.buttonBlue)
-        buttonGray = colorView.findViewById(R.id.buttonGray)
-        buttonPurple = colorView.findViewById(R.id.buttonPurple)
-        buttonPink = colorView.findViewById(R.id.buttonPink)
+
+    }
+
+    private fun showColorPickerDialog() {
+        val builder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val colorView = inflater.inflate(R.layout.color_picker, null)
+
+        val buttonRed: ImageButton = colorView.findViewById(R.id.buttonRed)
+        val buttonOrange: ImageButton = colorView.findViewById(R.id.buttonOrange)
+        val buttonYellow: ImageButton = colorView.findViewById(R.id.buttonYellow)
+        val buttonGreen: ImageButton = colorView.findViewById(R.id.buttonGreen)
+        val buttonBlue: ImageButton = colorView.findViewById(R.id.buttonBlue)
+        val buttonGray: ImageButton = colorView.findViewById(R.id.buttonGray)
+        val buttonPurple: ImageButton = colorView.findViewById(R.id.buttonPurple)
+        val buttonPink: ImageButton = colorView.findViewById(R.id.buttonPink)
         selectedColor = colorView.findViewById(R.id.selectedColor)
+        // val buttonNoColor: ImageButton = colorView.findViewById(R.id.buttonNoColor)
 
         buttonRed.setOnClickListener {
             Log.i(TAG, "red clicked=")
@@ -167,21 +171,18 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             textHex = "F2AFE7"
         }
 
-        colorPalette.setOnClickListener {
-            Log.i(TAG, "palette clicked")
-            showColorPickerDialog(colorView)
-        }
-    }
-
-    private fun showColorPickerDialog(colorView: View) {
-        val builder = AlertDialog.Builder(this)
+        /*buttonNoColor.setOnClickListener {
+            selectedColorResId = R.drawable.nocolor
+            selectedColor.text = "no color selected"
+            textHex = "FFFFFF"
+        }*/
 
         builder.setView(colorView).setTitle("Color options").setPositiveButton("OK") { dialog, _ ->
             // Apply the selected color if available
             selectedColorResId?.let {
                 Log.i(TAG, "setting colors")
                 // Update the image resource
-                colorPalette.setImageResource(it)
+                colorPalette?.setImageResource(it)
             }
             // Reset the selected color for the next click
             selectedColorResId = null
@@ -195,7 +196,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
     private fun setListeners() {
         exitButton.setOnClickListener {
-            intent.putExtra("textHex", textHex)
             finish()
         }
 
@@ -285,6 +285,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             displayableStartDate = eventStartDate,
             displayableStartTime = eventStartTime
         )
+        //intent.putExtra("textHex", textHex)
+        Log.i(TAG, "text hex: $textHex")
 
         todoRepo.addTaskToList(currNest, task)
         navigateToHomeScreenDayActivity()
