@@ -202,13 +202,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         }
 
         builder.setView(dialogView).setTitle("Options").setPositiveButton("OK") { dialog, _ ->
-                // val enteredText = editText.text.toString()
-                // Do something with the entered text
+            // val enteredText = editText.text.toString()
+            // Do something with the entered text
 
-                dialog.dismiss()
-            }.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+            dialog.dismiss()
+        }.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }.show()
     }
 
     @Deprecated("Deprecated in Java")
@@ -381,8 +381,9 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
         // Do something with the date the user picks.
         val correctedMonth: Int = month + 1
-        Log.i("ViewTaskActivity", "in main $correctedMonth/$day/$year")
-        targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+        val dateTimeText = "$correctedMonth/$day/$year"
+        Log.i(TAG, "in main $dateTimeText")
+        targetEditText?.setText(dateTimeText, TextView.BufferType.EDITABLE)
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {
