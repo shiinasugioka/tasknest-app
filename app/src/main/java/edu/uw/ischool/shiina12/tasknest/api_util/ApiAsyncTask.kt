@@ -8,9 +8,16 @@ import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.Events
 import edu.uw.ischool.shiina12.tasknest.ViewTaskActivity
 
+/**
+ * This class interacts with the Google Calendar API.
+ * It is designed to perform asynchronous tasks in the background
+ * for tasks that involve network operations.
+ */
 class ApiAsyncTask internal constructor(private val mActivity: ViewTaskActivity) :
     AsyncTask<Void?, Void?, Void?>() {
 
+    // Handles exceptions in case the API call fails.
+    // Look at Log output for API status and results for more details.
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
         try {
@@ -40,6 +47,8 @@ class ApiAsyncTask internal constructor(private val mActivity: ViewTaskActivity)
         return null
     }
 
+    // Retrieves a list of strings representing event summaries and start times
+    // from the user's primary Google Calendar.
     private val dataFromApi: List<String>
         get() {
             // list 10 events from the primary calendar
