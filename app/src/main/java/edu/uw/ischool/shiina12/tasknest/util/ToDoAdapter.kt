@@ -45,19 +45,18 @@ class TodoAdapter(
         holder.checkBox.setOnClickListener {
             onItemChecked(task, position, holder) // Call the passed in callback function
             updateTextAppearance(holder.textView, task.isFinished)
-
         }
 
         holder.textView.setOnClickListener {
-            val currentNestName: String = todoRepo.getCurrNestName()
-            val currentNest: TodoNest? = todoRepo.getTodoNestByTitle(currentNestName)
+            val currentNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
             val currentTask: Task? = currentNest?.tasks?.find {
                 it.title == holder.textView.text
             }
 
-            val position = holder.adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                onTaskTextClicked(currentTask)
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                if (currentTask != null) {
+                    onTaskTextClicked(currentTask)
+                }
             }
         }
 
@@ -90,7 +89,7 @@ class TodoAdapter(
         notifyDataSetChanged()
     }
 
-    private fun onTaskTextClicked(currentTask: Task?) {
+    private fun onTaskTextClicked(currentTask: Task) {
         listener.onTaskTextClicked(currentTask)
     }
 }
