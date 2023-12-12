@@ -1,16 +1,20 @@
 package edu.uw.ischool.shiina12.tasknest
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -39,6 +43,18 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var exitButton: ImageButton
     private lateinit var allDay: CheckBox
     private lateinit var createNewTaskButton: Button
+
+    private lateinit var colorPalette: ImageView
+    private var selectedColorResId: Int? = null
+    private lateinit var buttonRed: ImageButton
+    private lateinit var buttonOrange: ImageButton
+    private lateinit var buttonYellow: ImageButton
+    private lateinit var buttonGreen: ImageButton
+    private lateinit var buttonBlue: ImageButton
+    private lateinit var buttonGray: ImageButton
+    private lateinit var buttonPurple: ImageButton
+    private lateinit var buttonPink: ImageButton
+    private lateinit var selectedColor: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +91,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
 
+        findAndSetColorButtons()
+
         ArrayAdapter.createFromResource(
             this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
         ).also { adapter ->
@@ -83,6 +101,81 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         }
     }
 
+    private fun findAndSetColorButtons() {
+        Log.i("AddNewTaskActivity", "setting colors")
+
+        colorPalette = findViewById(R.id.colorPalette)
+
+        val inflater = LayoutInflater.from(this)
+        val colorView = inflater.inflate(R.layout.color_picker, null)
+        buttonRed = colorView.findViewById(R.id.buttonRed)
+        buttonOrange = colorView.findViewById(R.id.buttonOrange)
+        buttonYellow = colorView.findViewById(R.id.buttonYellow)
+        buttonGreen = colorView.findViewById(R.id.buttonGreen)
+        buttonBlue = colorView.findViewById(R.id.buttonBlue)
+        buttonGray = colorView.findViewById(R.id.buttonGray)
+        buttonPurple = colorView.findViewById(R.id.buttonPurple)
+        buttonPink = colorView.findViewById(R.id.buttonPink)
+        selectedColor = colorView.findViewById(R.id.selectedColor)
+
+        buttonRed.setOnClickListener {
+            selectedColorResId = R.drawable.red
+            selectedColor.text = "red selected"
+        }
+        buttonOrange.setOnClickListener {
+            selectedColorResId = R.drawable.orange
+            selectedColor.text = "orange selected"
+        }
+        buttonYellow.setOnClickListener {
+            selectedColorResId = R.drawable.yellow
+            selectedColor.text = "yellow selected"
+        }
+
+        buttonGreen.setOnClickListener {
+            selectedColorResId = R.drawable.green
+            selectedColor.text = "green selected"
+        }
+
+        buttonBlue.setOnClickListener {
+            selectedColorResId = R.drawable.blue
+            selectedColor.text = "blue selected"
+        }
+
+        buttonGray.setOnClickListener {
+            selectedColorResId = R.drawable.gray
+            selectedColor.text = "gray selected"
+        }
+
+        buttonPurple.setOnClickListener {
+            selectedColorResId = R.drawable.purple
+            selectedColor.text = "purple selected"
+        }
+        buttonPink.setOnClickListener {
+            selectedColorResId = R.drawable.pink
+            selectedColor.text = "pink selected"
+        }
+        colorPalette.setOnClickListener {
+            showColorPickerDialog(colorView)
+        }
+    }
+
+    private fun showColorPickerDialog(colorView: View) {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setView(colorView).setTitle("Color options").setPositiveButton("OK") { dialog, _ ->
+            // Apply the selected color if available
+            selectedColorResId?.let {
+                colorPalette.setImageResource(it)
+            }
+            // Reset the selected color for the next click
+            selectedColorResId = null
+            dialog.dismiss()
+        }.setNegativeButton("Cancel") { dialog, _ ->
+            // Reset the selected color if canceled
+            selectedColorResId = null
+            dialog.dismiss()
+        }.show()
+    }
     private fun setListeners() {
         exitButton.setOnClickListener {
             finish()
