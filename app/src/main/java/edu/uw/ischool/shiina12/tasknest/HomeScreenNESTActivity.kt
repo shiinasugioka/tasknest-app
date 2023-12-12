@@ -25,19 +25,16 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
-import java.util.concurrent.TimeUnit
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.concurrent.TimeUnit
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 class HomeScreenNESTActivity : AppCompatActivity() {
 
@@ -47,7 +44,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
 
-//      Identify Elements
         nest_dropdown = findViewById(R.id.nest_drop_down)
 
         setNewDropDownValues()
@@ -103,16 +99,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         // -- Notifications Code --
         // Create channels for notifications
         createNotificationChannel(
-            "app_channel",
-            "App Notifications",
-            "Channel for app notifications"
+            "app_channel", "App Notifications", "Channel for app notifications"
         )
 
 
         createNotificationChannel(
-            "sms_channel",
-            "SMS Notifications",
-            "Channel for SMS notifications"
+            "sms_channel", "SMS Notifications", "Channel for SMS notifications"
         )
 //
 //        createNotificationChannel(
@@ -125,7 +117,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     private fun testNotif() {
 
         // Simulate an event time (e.g., current time + 10 seconds)
-        val eventTimeInMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1) + TimeUnit.SECONDS.toMillis(10)
+        val eventTimeInMillis =
+            System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1) + TimeUnit.SECONDS.toMillis(10)
 
 
         // Immediately show a test notification
@@ -155,7 +148,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             tasksGroupedByDeadline.forEach { (deadline, tasks) ->
 
                 val formattedDate =
-                    reformatDate(deadline, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
+                    Functions.reformatDate(deadline, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
 
                 if (tasks.isNotEmpty()) {
                     // Create and add the deadline TextView
@@ -361,17 +354,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             })
         }
         return recyclerView
-    }
-
-    private fun reformatDate(
-        inputDate: String, inputPattern: String, outputPattern: String
-    ): String {
-        val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
-        val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
-
-        val date = inputFormat.parse(inputDate) ?: Date()
-
-        return outputFormat.format(date)
     }
 
     private fun onTaskTextClickedCalled(currentTask: Task?) {

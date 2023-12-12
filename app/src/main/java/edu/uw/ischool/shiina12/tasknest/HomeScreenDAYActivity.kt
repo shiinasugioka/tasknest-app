@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 class HomeScreenDAYActivity : AppCompatActivity() {
 
@@ -42,7 +43,8 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
         val today = dateFormat.format(Date())
 
-        val formattedDate = reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "MMMM d, yyyy")
+        val formattedDate =
+            Functions.reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "MMMM d, yyyy")
 
         // Set the formatted date to the TextView
         val dateTextView = findViewById<TextView>(R.id.day_title)
@@ -108,17 +110,6 @@ class HomeScreenDAYActivity : AppCompatActivity() {
             val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
             startActivity(nestScreenIntent)
         }
-    }
-
-    private fun reformatDate(
-        inputDate: String, inputPattern: String, outputPattern: String
-    ): String {
-        val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
-        val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
-
-        val date = inputFormat.parse(inputDate) ?: Date()
-
-        return outputFormat.format(date)
     }
 
     private fun createNewTask() {

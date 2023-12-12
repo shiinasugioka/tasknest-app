@@ -9,6 +9,13 @@ import java.io.IOException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * This class contains the actual data that is passed into the API.
+ * Given user input, the API will add an event to the user's Google
+ * calendar account.
+ *
+ * If there are problems with the API it probably isn't this file.
+ **/
 class CreateEventTask internal constructor(
     private var mService: Calendar?, finalDateTime: String, finalTitle: String
 ) : AsyncTask<Void?, Void?, Void?>() {

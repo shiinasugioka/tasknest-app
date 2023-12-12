@@ -25,11 +25,8 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
-
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var eventTitleTextView: EditText
@@ -258,7 +255,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val eventStartTime = timeEditText.text.toString()
         val eventStartDate = dateEditText.text.toString()
 
-        val finalDateTime = formatTimeDate(eventStartDate, eventStartTime)
+        val startTimeDate = "$eventStartDate $eventStartTime"
+        val finalDateTime =
+            Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
         val task = Task(
             title = taskTitle,
@@ -269,17 +268,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         todoRepo.addTaskToList(currNest, task)
         navigateToHomeScreenDayActivity()
-    }
-
-    private fun formatTimeDate(eventStartDate: String, eventStartTime: String): String {
-        val combinedDateTimeString = "$eventStartDate $eventStartTime"
-        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-        val LAZoneId = ZoneId.of("America/Los_Angeles")
-        val formattedDateTime = localDateTime.atZone(LAZoneId)
-        val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-
-        return formattedDateTime.format(iso8601Formatter)
     }
 
     private fun navigateToHomeScreenDayActivity() {
