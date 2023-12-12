@@ -12,12 +12,12 @@
             android:icon="@drawable/app_notification"
             android:defaultValue="false"/>
 
-        <CheckBoxPreference
-            android:key="notification_email"
-            android:title="Email Notifications"
-            android:summary="Enable email notifications"
-            android:icon="@drawable/email_notification"
-            android:defaultValue="false"/>
+<!--        <CheckBoxPreference-->
+<!--            android:key="notification_email"-->
+<!--            android:title="Email Notifications"-->
+<!--            android:summary="Enable email notifications"-->
+<!--            android:icon="@drawable/email_notification"-->
+<!--            android:defaultValue="false"/>-->
 
         <CheckBoxPreference
             android:key="notification_sms"
@@ -26,12 +26,12 @@
             android:icon="@drawable/sms_notification"
             android:defaultValue="false"/>
 
-        <EditTextPreference
-            android:key="email_address"
-            android:title="Email Address"
-            android:summary="Enter your email address"
-            android:inputType="textEmailAddress"
-            android:dependency="notification_email"/>
+<!--        <EditTextPreference-->
+<!--            android:key="email_address"-->
+<!--            android:title="Email Address"-->
+<!--            android:summary="Enter your email address"-->
+<!--            android:inputType="textEmailAddress"-->
+<!--            android:dependency="notification_email"/>-->
 
         <EditTextPreference
             android:key="sms_number"

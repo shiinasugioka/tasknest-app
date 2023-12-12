@@ -75,12 +75,12 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             "SMS Notifications",
             "Channel for SMS notifications"
         )
-
-        createNotificationChannel(
-            "email_channel",
-            "Email Notifications",
-            "Channel for email notifications"
-        )
+//
+//        createNotificationChannel(
+//            "email_channel",
+//            "Email Notifications",
+//            "Channel for email notifications"
+//        )
     }
 
     private fun testNotif() {
