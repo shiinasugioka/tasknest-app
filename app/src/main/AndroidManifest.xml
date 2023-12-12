@@ -32,7 +32,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".TaskActivity"
+            android:name=".ViewTaskActivity"
             android:exported="false" />
 
         <activity

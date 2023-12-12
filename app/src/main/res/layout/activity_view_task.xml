@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TaskActivity">
+    tools:context=".ViewTaskActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             app:srcCompat="@drawable/pencil_edit_1" />
 
         <EditText
-            android:id="@+id/editTextTask"
+            android:id="@+id/editTaskTitle"
             android:layout_width="224dp"
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
@@ -75,7 +75,7 @@
 
 
         <EditText
-            android:id="@+id/editTextDate"
+            android:id="@+id/editTaskStartDate"
             android:layout_width="224dp"
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
@@ -118,7 +118,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/editTextTime"
+            android:id="@+id/editTaskStartTime"
             android:layout_width="224dp"
             android:layout_height="41dp"
             android:layout_marginStart="108dp"
@@ -224,7 +224,7 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/createNewTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
