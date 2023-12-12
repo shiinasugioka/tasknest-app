@@ -119,12 +119,12 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         val datePickerFragment = DatePickerFragment()
         datePickerFragment.setListener(this, dateEditText)
 
-        timeEditText.setOnFocusChangeListener { view, hasFocus ->
+        timeEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
-        dateEditText.setOnFocusChangeListener { view, hasFocus ->
+        dateEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
             }
@@ -136,7 +136,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             }
         }
 
-        allDay.setOnCheckedChangeListener { buttonView, isChecked ->
+        allDay.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
                 timeEditText.visibility = View.VISIBLE
             } else {
@@ -183,19 +183,19 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
 
-        startsOn.setOnFocusChangeListener { view, hasFocus ->
+        startsOn.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 startDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        endsOn.setOnFocusChangeListener { view, hasFocus ->
+        endsOn.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 endDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        atTime.setOnFocusChangeListener { view, hasFocus ->
+        atTime.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 atTimeFragment.show(supportFragmentManager, "timePicker")
             }
