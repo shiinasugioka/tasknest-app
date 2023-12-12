@@ -20,7 +20,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     fun setListener(listener: TimePickerListener, targetEditText: EditText) {
         this.listener = listener
         this.targetEditText = targetEditText
-
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

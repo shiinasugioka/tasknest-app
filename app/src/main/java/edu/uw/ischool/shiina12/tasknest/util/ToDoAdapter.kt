@@ -10,18 +10,22 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.uw.ischool.shiina12.tasknest.R
-
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class TodoAdapter(
     private var items: List<Task>,
-    private val onItemChecked: (Task, Int, ViewHolder) -> Unit // Add a callback for when an item is checked
+    private val onItemChecked: (Task, Int, ViewHolder) -> Unit, // Add a callback for when an item is checked
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onTaskTextClicked(currentTask: Task?)
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
         val textView: TextView = view.findViewById(R.id.todoTextView)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -44,15 +48,25 @@ class TodoAdapter(
 
         }
 
+        holder.textView.setOnClickListener {
+            val currentNestName: String = todoRepo.getCurrNestName()
+            val currentNest: TodoNest? = todoRepo.getTodoNestByTitle(currentNestName)
+            val currentTask: Task? = currentNest?.tasks?.find {
+                it.title == holder.textView.text
+            }
+
+            val position = holder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                onTaskTextClicked(currentTask)
+            }
+        }
+
         if (task.isFinished) {
-            holder.itemView.animate()
-                .alpha(0f)
-                .setDuration(300)
-                .withEndAction {
-                    // Remove the item after fade-out completes
-                    items = items.filter { it != task }
-                    notifyItemRemoved(position)
-                }
+            holder.itemView.animate().alpha(0f).setDuration(300).withEndAction {
+                // Remove the item after fade-out completes
+                items = items.filter { it != task }
+                notifyItemRemoved(position)
+            }
         } else {
             holder.itemView.alpha = 1f // Ensure full opacity if not finished
         }
@@ -75,6 +89,12 @@ class TodoAdapter(
         items = newItems
         notifyDataSetChanged()
     }
+
+    private fun onTaskTextClicked(currentTask: Task?) {
+        listener.onTaskTextClicked(currentTask)
+    }
 }
+
+
 
 

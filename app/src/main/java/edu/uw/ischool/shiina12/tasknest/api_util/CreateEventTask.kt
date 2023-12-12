@@ -10,11 +10,8 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CreateEventTask internal constructor(
-    private var mService: Calendar?,
-    finalDateTime: String,
-    finalTitle: String
-) :
-    AsyncTask<Void?, Void?, Void?>() {
+    private var mService: Calendar?, finalDateTime: String, finalTitle: String
+) : AsyncTask<Void?, Void?, Void?>() {
 
     private val givenStartDateTime = finalDateTime
     private val givenFinalTitle = finalTitle
@@ -35,19 +32,14 @@ class CreateEventTask internal constructor(
 
         val eventStartDateTime = givenStartDateTime
 
-        val event: Event = Event()
-            .setSummary(eventTitle)
+        val event: Event = Event().setSummary(eventTitle)
 
         val startDateTime = DateTime(eventStartDateTime)
-        val start = EventDateTime()
-            .setDateTime(startDateTime)
-            .setTimeZone("America/Los_Angeles")
+        val start = EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles")
         event.setStart(start)
 
         val endDateTime = DateTime(givenEndDateTime)
-        val end = EventDateTime()
-            .setDateTime(endDateTime)
-            .setTimeZone("America/Los_Angeles")
+        val end = EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles")
         event.setEnd(end)
 
         val calendarId = "primary"

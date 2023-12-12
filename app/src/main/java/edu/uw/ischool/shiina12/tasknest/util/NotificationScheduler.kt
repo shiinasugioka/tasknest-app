@@ -25,23 +25,25 @@ class NotificationScheduler {
         val frequencyUnit = sharedPreferences.getString("frequency_unit", "hour")
 
         // Calculate the notification time based on preferences
-        val notificationTimeInMillis = calculateNotificationTime(eventTimeInMillis, notificationTimeBeforeEvent, frequencyUnit)
+        val notificationTimeInMillis =
+            calculateNotificationTime(eventTimeInMillis, notificationTimeBeforeEvent, frequencyUnit)
 
         // Schedule an alarm to trigger the notification
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
 
         // Set the alarm based on the calculated notification time
         alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            notificationTimeInMillis,
-            pendingIntent
+            AlarmManager.RTC_WAKEUP, notificationTimeInMillis, pendingIntent
         )
     }
 
-    private fun calculateNotificationTime(eventTimeInMillis: Long, timeBeforeEvent: Int, frequencyUnit: String?): Long {
+    private fun calculateNotificationTime(
+        eventTimeInMillis: Long, timeBeforeEvent: Int, frequencyUnit: String?
+    ): Long {
         // Perform calculations based on the frequency unit (e.g., hour, minute, day)
         val calendar = Calendar.getInstance().apply {
             timeInMillis = eventTimeInMillis
@@ -75,8 +77,7 @@ class NotificationReceiver : BroadcastReceiver() {
 
         // Customize the notification based on the enabled channels
         val builder = NotificationCompat.Builder(context, "app_channel")
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Event Notification")
+            .setSmallIcon(R.drawable.ic_notification).setContentTitle("Event Notification")
             // TODO: Maybe add event title
             .setContentText("Your event is about to start!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -103,8 +104,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val notificationManager = NotificationManagerCompat.from(context)
 
             if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.FOREGROUND_SERVICE
+                    context, Manifest.permission.FOREGROUND_SERVICE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 // TODO: Handle the case where the permission is not granted.
