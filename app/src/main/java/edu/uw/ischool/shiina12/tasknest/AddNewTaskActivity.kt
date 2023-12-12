@@ -63,7 +63,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         findAndSetUIElements()
         setListeners()
 
-        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
+//        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
+
+        currNest = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())!!
 
         // Log the details of currNest
         Log.d(
@@ -267,40 +269,18 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         )
 
         todoRepo.addTaskToList(currNest, task)
-        navigateToHomeScreenDayActivity()
-    }
-
-    private fun navigateToHomeScreenDayActivity() {
-        val intent = Intent(this, HomeScreenDAYActivity::class.java)
-        startActivity(intent)
+        Log.i(TAG, "result: $task")
+        finish()
     }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
-        var correctedHour = hourOfDay
-        var isAm = true
-        if (hourOfDay > 12) {
-            Log.i("AddNewTaskActivity", hourOfDay.toString())
-            correctedHour = hourOfDay - 12
-            isAm = false
-        } else if (hourOfDay == 0) {
-            correctedHour = 12
-        }
-
-        var formattedTime: String = if (minute < 10) {
-            "$correctedHour:0$minute"
-        } else {
-            "$correctedHour:$minute"
-        }
-
-        formattedTime += if (isAm) " AM" else " PM"
+        val formattedTime = Functions.getFormattedTimeOnTimeSet(hourOfDay, minute)
         targetEditText?.setText(formattedTime, TextView.BufferType.EDITABLE)
     }
 
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
-        // Do something with the date the user picks.
-        val correctedMonth: Int = month + 1
-        Log.i("ViewTaskActivity", "in main $correctedMonth/$day/$year")
-        targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+        val formattedDate = Functions.getFormattedDateOnDateSet(year, month, day)
+        targetEditText?.setText(formattedDate, TextView.BufferType.EDITABLE)
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {
