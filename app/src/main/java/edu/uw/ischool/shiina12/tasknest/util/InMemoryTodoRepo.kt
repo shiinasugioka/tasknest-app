@@ -1,28 +1,15 @@
-// InMemoryTodoRepository.kt
 package edu.uw.ischool.shiina12.tasknest.util
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
-import java.time.Instant
-import java.time.ZonedDateTime
-
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-
-// Obtain today's date at midnight as a Long
-//val today = Calendar.getInstance().apply {
-//    set(Calendar.HOUR_OF_DAY, 0)
-//    set(Calendar.MINUTE, 0)
-//    set(Calendar.SECOND, 0)
-//    set(Calendar.MILLISECOND, 0)
-//}.timeInMillis // This is a Long value
 
 object InMemoryTodoRepository : TodoRepository {
 
@@ -36,11 +23,8 @@ object InMemoryTodoRepository : TodoRepository {
         currentDate = dateFormat.format(Date()).toString()
 
         val defaultTask = Task(
-            title = "Sample Task",
-            apiDateTime = currentDate, // or any other default deadline
-            isFinished = false,
-            displayableStartTime = "",
-            displayableStartDate = ""
+            title = "Sample Task", apiDateTime = currentDate, // or any other default deadline
+            isFinished = false, displayableStartTime = "", displayableStartDate = ""
         )
 
         val defaultTodoNest = TodoNest(
@@ -68,18 +52,15 @@ object InMemoryTodoRepository : TodoRepository {
     }
 
     fun getTasksForToday(): List<Task> {
-//        val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-//        return todoNests.flatMap { nest ->
-//            nest.tasks.filter { it.apiDateTime >= currentDate && it.apiDateTime!! < (currentDate as Long) + 86400000 }
-//        }
-
         val todayInstant = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(currentDate))
         val todayDate = ZonedDateTime.ofInstant(todayInstant, ZoneId.systemDefault()).toLocalDate()
 
         return todoNests.flatMap { nest ->
             nest.tasks.filter { task ->
-                val taskInstant = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(task.apiDateTime))
-                val taskDate = ZonedDateTime.ofInstant(taskInstant, ZoneId.systemDefault()).toLocalDate()
+                val taskInstant =
+                    Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(task.apiDateTime))
+                val taskDate =
+                    ZonedDateTime.ofInstant(taskInstant, ZoneId.systemDefault()).toLocalDate()
                 taskDate.isEqual(todayDate)
             }
         }

@@ -33,8 +33,7 @@ data class Task(
     var displayableStartDate: String,
     var isFinished: Boolean = false,
     val dateCreated: String = SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
-        Locale.getDefault()
+        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()
     ).format(
         Date()
     ).toString()

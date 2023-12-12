@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 
 class TaskApp : Application() {
-    private val TAG : String = "TaskApp"
+    private val TAG: String = "TaskApp"
 
     override fun onCreate() {
         super.onCreate()

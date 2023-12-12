@@ -376,28 +376,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         return outputFormat.format(date)
     }
 
-//    fun formatDate(timestamp: Long): String {
-//        val deadlineDate = Date(timestamp)
-//        val currentDate = Calendar.getInstance().time
-//
-//        // Pattern for date formatting
-//        val dateFormatPattern = "EEEE, MM/dd"
-//        val simpleDateFormat = SimpleDateFormat(dateFormatPattern, Locale.getDefault())
-//
-//        val formattedDeadline = simpleDateFormat.format(deadlineDate)
-//
-//        return if (SimpleDateFormat(
-//                "yyyyMMdd", Locale.getDefault()
-//            ).format(deadlineDate) == SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(
-//                currentDate
-//            )
-//        ) {
-//            "Today, ${simpleDateFormat.format(deadlineDate)}"
-//        } else {
-//            formattedDeadline
-//        }
-//    }
-
     private fun onTaskTextClickedCalled(currentTask: Task?) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details

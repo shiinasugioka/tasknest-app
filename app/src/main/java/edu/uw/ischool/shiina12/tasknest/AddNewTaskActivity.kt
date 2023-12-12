@@ -28,7 +28,7 @@ import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 
 class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private lateinit var eventTitleTextView: TextView
+    private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
     private lateinit var repeatingEventCheckBox: CheckBox
@@ -36,10 +36,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var repeatingStartDateEditText: EditText
     private lateinit var repeatingEndDateEditText: EditText
     private lateinit var atTimeEditText: EditText
+    private lateinit var repeatingIntervalSpinner: Spinner
 
     private lateinit var currNest: TodoNest
     private lateinit var exitButton: ImageButton
-    private lateinit var taskEditText: EditText
     private lateinit var allDay: CheckBox
     private lateinit var createNewTaskButton: Button
 
@@ -47,6 +47,19 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_task)
 
+        findAndSetUIElements()
+        setListeners()
+
+        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
+
+        // Log the details of currNest
+        Log.d(
+            "AddNewTaskActivity",
+            "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}"
+        )
+    }
+
+    private fun findAndSetUIElements() {
         eventTitleTextView = findViewById(R.id.editTaskTitle)
         timeEditText = findViewById(R.id.editTaskStartTime)
         dateEditText = findViewById(R.id.editTaskStartDate)
@@ -61,14 +74,17 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         exitButton = findViewById(R.id.imageButtonExit)
         createNewTaskButton = findViewById(R.id.createNewTaskButton)
 
-        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
+        repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
 
-        // Log the details of currNest
-        Log.d(
-            "AddNewTaskActivity",
-            "currNest Title: ${currNest.title}, Number of Tasks: ${currNest.tasks.size}"
-        )
+        ArrayAdapter.createFromResource(
+            this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            repeatingIntervalSpinner.adapter = adapter
+        }
+    }
 
+    private fun setListeners() {
         exitButton.setOnClickListener {
             finish()
         }
@@ -98,6 +114,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
+
         dateEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
@@ -141,16 +158,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         eventTitleTextView.addTextChangedListener(textWatcher)
         timeEditText.addTextChangedListener(textWatcher)
         dateEditText.addTextChangedListener(textWatcher)
-
-        val spinner: Spinner = findViewById(R.id.intervalSpinner)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.frequency_units_events,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
     }
 
     private fun addTask() {
@@ -221,10 +228,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
-            if (eventTitleTextView.text.isNotBlank() &&
-                timeEditText.text.isNotBlank() &&
-                dateEditText.text.isNotBlank()
-            ) {
+            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
                 createNewTaskButton.isEnabled = true
             }
         }

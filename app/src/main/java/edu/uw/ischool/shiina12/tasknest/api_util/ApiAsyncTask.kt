@@ -22,8 +22,7 @@ class ApiAsyncTask internal constructor(private val mActivity: ViewTaskActivity)
             )
         } catch (userRecoverableException: UserRecoverableAuthIOException) {
             mActivity.startActivityForResult(
-                userRecoverableException.intent,
-                Constants.REQUEST_AUTHORIZATION
+                userRecoverableException.intent, Constants.REQUEST_AUTHORIZATION
             )
         } catch (e: Exception) {
             mActivity.updateStatus(
@@ -45,11 +44,8 @@ class ApiAsyncTask internal constructor(private val mActivity: ViewTaskActivity)
         get() {
             // list 10 events from the primary calendar
             val eventStrings: MutableList<String> = ArrayList()
-            val events: Events? = mActivity.mService!!.events().list("primary")
-                .setMaxResults(10)
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .execute()
+            val events: Events? = mActivity.mService!!.events().list("primary").setMaxResults(10)
+                .setOrderBy("startTime").setSingleEvents(true).execute()
 
             val items: MutableList<Event>? = events?.items
             if (items != null) {

@@ -168,9 +168,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)
         ArrayAdapter.createFromResource(
-            this,
-            R.array.frequency_units_events,
-            android.R.layout.simple_spinner_item
+            this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
@@ -203,18 +201,14 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             }
         }
 
-        builder.setView(dialogView)
-            .setTitle("Options")
-            .setPositiveButton("OK") { dialog, _ ->
+        builder.setView(dialogView).setTitle("Options").setPositiveButton("OK") { dialog, _ ->
                 // val enteredText = editText.text.toString()
                 // Do something with the entered text
 
                 dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            }.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     @Deprecated("Deprecated in Java")
@@ -228,8 +222,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
             Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
                 if (resultCode == RESULT_OK && data.extras != null) {
-                    val accountName: String? =
-                        data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    val accountName: String? = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
                     mCredential?.setSelectedAccountName(accountName)
                     val settings = getPreferences(MODE_PRIVATE)
                     val editor = settings.edit()
@@ -263,10 +256,8 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     // initialize credentials and user's Google account
     private fun initCredentials() {
         mCredential = GoogleAccountCredential.usingOAuth2(
-            applicationContext,
-            arrayListOf(CalendarScopes.CALENDAR)
-        )
-            .setBackOff(ExponentialBackOff())
+            applicationContext, arrayListOf(CalendarScopes.CALENDAR)
+        ).setBackOff(ExponentialBackOff())
 
         initCalendarBuild(mCredential)
     }
@@ -278,9 +269,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         mService = GoogleCalendar.Builder(
             transport, jsonFactory, credential
-        )
-            .setApplicationName(Constants.APPLICATION_NAME)
-            .build()
+        ).setApplicationName(Constants.APPLICATION_NAME).build()
     }
 
     private fun addCalendarEvent() {
@@ -305,8 +294,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
     private fun isGooglePlayServicesAvailable(): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
-        val connectionStatusCode =
-            apiAvailability.isGooglePlayServicesAvailable(applicationContext)
+        val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(applicationContext)
         return connectionStatusCode == ConnectionResult.SUCCESS
     }
 
@@ -324,8 +312,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
     private fun chooseAccount() {
         startActivityForResult(
-            mCredential!!.newChooseAccountIntent(),
-            Constants.REQUEST_ACCOUNT_PICKER
+            mCredential!!.newChooseAccountIntent(), Constants.REQUEST_ACCOUNT_PICKER
         )
     }
 
@@ -366,9 +353,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val dialog = apiAvailability.getErrorDialog(
-            this,
-            connectionStatusCode,
-            Constants.REQUEST_GOOGLE_PLAY_SERVICES
+            this, connectionStatusCode, Constants.REQUEST_GOOGLE_PLAY_SERVICES
         )
         dialog?.show()
     }
@@ -406,10 +391,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
-            if (eventTitleTextView.text.isNotBlank() &&
-                timeEditText.text.isNotBlank() &&
-                dateEditText.text.isNotBlank()
-            ) {
+            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
                 addEventButton.isEnabled = true
             }
         }

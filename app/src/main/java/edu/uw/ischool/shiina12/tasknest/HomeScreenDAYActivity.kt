@@ -18,10 +18,6 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -55,8 +51,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         // Iterate through each TodoNest
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today
-            val tasksForToday =
-                todoNest.tasks.filter { it.apiDateTime == today }
+            val tasksForToday = todoNest.tasks.filter { it.apiDateTime == today }
 
             // If there are tasks for today, show the nest title and tasks
             if (tasksForToday.isNotEmpty()) {
@@ -116,9 +111,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
     }
 
     private fun reformatDate(
-        inputDate: String,
-        inputPattern: String,
-        outputPattern: String
+        inputDate: String, inputPattern: String, outputPattern: String
     ): String {
         val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
         val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
