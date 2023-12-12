@@ -1,5 +1,10 @@
 package edu.uw.ischool.shiina12.tasknest.util
 
+import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 interface TodoRepository {
     fun createTodoList(nestName: String): TodoNest
     fun addTaskToList(nest: TodoNest, task: Task)
@@ -9,7 +14,7 @@ interface TodoRepository {
     fun createMultipleTodoLists(): List<TodoNest>
     fun viewTodoList(nest: TodoNest): List<Task>
     fun changeTodoListSorting(nest: TodoNest, sortingMethod: SortingMethod)
-    fun setTaskDeadline(task: Task, deadline: Long)
+    fun setTaskDeadline(task: Task, deadline: String)
     fun getNotificationsForTask(task: Task, notificationType: NotificationType)
     fun exportTasksToJson(nest: TodoNest): String
     fun getTodoNestByTitle(nestTitle: String): TodoNest?
@@ -18,25 +23,26 @@ interface TodoRepository {
 }
 
 data class TodoNest(
-    var title: String,
-    val tasks: MutableList<Task> = mutableListOf(),
+    var title: String, val tasks: MutableList<Task> = mutableListOf()
 )
 
 data class Task(
     var title: String,
-    var description: String? = "",
-    var deadline: Long? = null,
+    var apiDateTime: String,
+    var displayableStartTime: String,
+    var displayableStartDate: String,
     var isFinished: Boolean = false,
-    val dateCreated: Long = today
-)
+    val dateCreated: String = SimpleDateFormat(
+        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()
+    ).format(
+        Date()
+    ).toString()
+) : Serializable
 
 enum class SortingMethod {
-    BY_DEADLINE,
-    BY_CREATION_TIME
+    BY_DEADLINE, BY_CREATION_TIME
 }
 
 enum class NotificationType {
-    APP,
-    SMS,
-    EMAIL
+    APP, SMS, EMAIL
 }
