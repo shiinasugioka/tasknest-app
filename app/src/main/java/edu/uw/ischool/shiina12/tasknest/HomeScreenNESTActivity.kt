@@ -6,22 +6,37 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
 import java.util.concurrent.TimeUnit
+import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import edu.uw.ischool.shiina12.tasknest.util.Task
+import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
+import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
@@ -34,9 +49,34 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
 //      Identify Elements
         nest_dropdown = findViewById(R.id.nest_drop_down)
+
+        setNewDropDownValues()
+
         val view_day_button: Button = findViewById(R.id.view_day_button)
 
-        // Set Element values
+        val todoNestItemContainer: LinearLayout = findViewById(R.id.nest_layout_container)
+        val spinnerSelectedNest: String? = if (nest_dropdown.adapter.count > 0) {
+            nest_dropdown.selectedItem?.toString()
+        } else {
+            // Fallback behavior if the spinner is empty
+            // You can return a default value or handle the situation accordingly
+            "Default Nest"
+        }
+
+        setNewDropDownValues()
+
+        nest_dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>, view: View, position: Int, id: Long
+            ) {
+                val selectedNestName = parent.getItemAtPosition(position).toString()
+                loadTasksForSelectedNest(selectedNestName)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Optional: Handle the case when nothing is selected
+            }
+        }
 
         setNewDropDownValues()
 
@@ -59,7 +99,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         // New Task Button
         val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
         newTaskBtn.setOnClickListener { createNewTask() }
-
 
         // -- Notifications Code --
         // Create channels for notifications
@@ -103,6 +142,45 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         if (nest_dropdown.selectedItem != null) {
             val selectedNest = nest_dropdown.selectedItem.toString()
             todoRepo.setCurrNestName(selectedNest)
+        }
+    }
+
+    private fun loadTasksForSelectedNest(nestName: String) {
+        val todoNestItemContainer: LinearLayout = findViewById(R.id.nest_layout_container)
+        todoNestItemContainer.removeAllViews()
+
+        val selectedNest = todoRepo.getTodoNestByTitle(nestName)
+        selectedNest?.let { nest ->
+            val tasksGroupedByDeadline = nest.tasks.groupBy { it.apiDateTime }
+            tasksGroupedByDeadline.forEach { (deadline, tasks) ->
+
+                val formattedDate =
+                    reformatDate(deadline, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
+
+                if (tasks.isNotEmpty()) {
+                    // Create and add the deadline TextView
+                    val deadlineTextView = TextView(this).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        text = formattedDate // Set the formatted date text
+                        setTextColor(
+                            ContextCompat.getColor(
+                                context, R.color.primary_text
+                            )
+                        ) // Set text color
+                        textSize = 13f // Set text size
+
+                        // Additional styling if needed
+                    }
+                    todoNestItemContainer.addView(deadlineTextView)
+
+                    // Create and add the tasks view (RecyclerView or individual views)
+                    val recyclerView = createRecyclerViewForTasks(tasks, selectedNest)
+                    todoNestItemContainer.addView(recyclerView)
+                }
+            }
         }
     }
 
@@ -198,11 +276,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             todoRepo.renameNest(oldNestName, newNestName)
             setNewDropDownValues()
             Toast.makeText(
-                this,
-                "Title '$newNestName' saved!",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+                this, "Title '$newNestName' saved!", Toast.LENGTH_SHORT
+            ).show()
         }
 
         builder.setNegativeButton("Cancel") { dialog, _ ->
@@ -218,7 +293,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         popupMenu.inflate(R.menu.sort_by_menu)
 
         val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
-        applyTitleUnderline(titleItem)
+        applyTitleUnderlineInMenu(titleItem)
 
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -245,7 +320,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
-    private fun applyTitleUnderline(titleItem: MenuItem) {
+    private fun applyTitleUnderlineInMenu(titleItem: MenuItem) {
         val titleString = SpannableString(titleItem.title)
         titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
         titleItem.title = titleString
@@ -261,4 +336,50 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         startActivity(dayScreenIntent)
         overridePendingTransition(0, 0)
     }
+
+    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest): RecyclerView {
+        val recyclerView = RecyclerView(this).apply {
+            layoutManager = LinearLayoutManager(this@HomeScreenNESTActivity)
+
+            adapter = TodoAdapter(tasks, { task, _, _ ->
+                // Implement the logic to be executed when a task is checked
+                // For example: Update task, delete task, etc.
+                task.isFinished = true // Mark task as finished
+                todoRepo.modifyTask(
+                    todoNest, task.title, task
+                ) // Update the task in the todoRepo
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    todoRepo.deleteTask(todoNest, task.title)
+                    val updatedTasks = todoRepo.getTasksFromNest(todoNest)
+                    (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
+                }, 300) // Delay to match the fade-out duration
+            }, object : TodoAdapter.OnItemClickListener {
+                override fun onTaskTextClicked(currentTask: Task?) {
+                    onTaskTextClickedCalled(currentTask)
+                }
+            })
+        }
+        return recyclerView
+    }
+
+    private fun reformatDate(
+        inputDate: String, inputPattern: String, outputPattern: String
+    ): String {
+        val inputFormat = SimpleDateFormat(inputPattern, Locale.getDefault())
+        val outputFormat = SimpleDateFormat(outputPattern, Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate) ?: Date()
+
+        return outputFormat.format(date)
+    }
+
+    private fun onTaskTextClickedCalled(currentTask: Task?) {
+        val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
+        // add intents for task details
+        intent.putExtra("currentTask", currentTask)
+        Log.d(TAG, "task text clicked!")
+        startActivity(viewTaskIntent)
+    }
+
 }

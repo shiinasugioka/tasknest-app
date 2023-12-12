@@ -138,24 +138,31 @@
         app:layout_constraintTop_toBottomOf="@+id/horizontal_bar" />
 
     <!--TODO Fix the Margins of This -->
-    <LinearLayout
-        android:id="@+id/linearLayoutContainer"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="500dp"
-        android:divider="@drawable/empty_checkbox_divider"
-        android:orientation="vertical"
-        android:showDividers="middle"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/footer_items"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/day_title"
-        app:layout_constraintVertical_bias="0.81">
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-37dp">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayoutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:divider="@drawable/empty_checkbox_divider"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <!-- Your dynamic content here -->
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

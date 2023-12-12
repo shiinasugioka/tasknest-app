@@ -54,14 +54,13 @@ class NotificationScheduler {
         // Schedule an alarm to trigger the notification
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
 
         // Set the alarm based on the calculated notification time
         alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            notificationTimeInMillis,
-            pendingIntent
+            AlarmManager.RTC_WAKEUP, notificationTimeInMillis, pendingIntent
         )
     }
 
@@ -94,6 +93,7 @@ class NotificationReceiver : BroadcastReceiver() {
     }
 
     private fun createNotification(context: Context): Notification? {
+        // Read preferences to check if each notification type is enabled
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", false)
         val smsNotificationsEnabled = sharedPreferences.getBoolean("notification_sms", false)
@@ -153,8 +153,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val notificationManager = NotificationManagerCompat.from(context)
 
             if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.FOREGROUND_SERVICE
+                    context, Manifest.permission.FOREGROUND_SERVICE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 // Handle the case where the permission is not granted.
@@ -165,4 +164,3 @@ class NotificationReceiver : BroadcastReceiver() {
         }
     }
 }
-

@@ -33,7 +33,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
-        // Log.i("TaskActivity", "datepicker $month/$day/$year")
+        // Log.i("ViewTaskActivity", "datepicker $month/$day/$year")
         listener?.onDateSet(year, month, day, targetEditText)
     }
 }
