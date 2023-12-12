@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -16,9 +18,11 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import edu.uw.ischool.shiina12.tasknest.util.ColorPickerListener
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.Task
@@ -28,7 +32,7 @@ import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
-class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
+class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener, ColorPickerListener {
     private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
@@ -55,6 +59,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var buttonPurple: ImageButton
     private lateinit var buttonPink: ImageButton
     private lateinit var selectedColor: TextView
+
+    private lateinit var colorView: View
+
+    private var TAG: String = "AddNewTaskActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,12 +108,13 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     }
 
     private fun findAndSetColorButtons() {
-        Log.i("AddNewTaskActivity", "setting colors")
+        Log.i(TAG, "setting colors")
 
         colorPalette = findViewById(R.id.colorPalette)
 
         val inflater = LayoutInflater.from(this)
-        val colorView = inflater.inflate(R.layout.color_picker, null)
+        colorView = inflater.inflate(R.layout.color_picker, null)
+
         buttonRed = colorView.findViewById(R.id.buttonRed)
         buttonOrange = colorView.findViewById(R.id.buttonOrange)
         buttonYellow = colorView.findViewById(R.id.buttonYellow)
@@ -117,6 +126,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         selectedColor = colorView.findViewById(R.id.selectedColor)
 
         buttonRed.setOnClickListener {
+            Log.i(TAG, "red clicked=")
             selectedColorResId = R.drawable.red
             selectedColor.text = "red selected"
         }
@@ -152,7 +162,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             selectedColorResId = R.drawable.pink
             selectedColor.text = "pink selected"
         }
+
         colorPalette.setOnClickListener {
+            Log.i(TAG, "palette clicked")
             showColorPickerDialog(colorView)
         }
     }
@@ -160,9 +172,13 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private fun showColorPickerDialog(colorView: View) {
         val builder = AlertDialog.Builder(this)
 
+        val dialogLayout = layoutInflater.inflate(R.layout.color_picker, null)
+
         builder.setView(colorView).setTitle("Color options").setPositiveButton("OK") { dialog, _ ->
             // Apply the selected color if available
             selectedColorResId?.let {
+                Log.i(TAG, "setting colors")
+                // Notify the activity about the selected color
                 colorPalette.setImageResource(it)
             }
             // Reset the selected color for the next click
@@ -174,6 +190,11 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             dialog.dismiss()
         }.show()
     }
+    override fun onColorSelected(colorResId: Int) {
+        // Update the colorPalette in the original view
+        colorPalette.setImageResource(colorResId)
+    }
+
     private fun setListeners() {
         exitButton.setOnClickListener {
             finish()
