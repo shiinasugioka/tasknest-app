@@ -25,6 +25,8 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
+import java.util.concurrent.TimeUnit
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +47,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_nest)
 
+//      Identify Elements
         nest_dropdown = findViewById(R.id.nest_drop_down)
 
         setNewDropDownValues()
@@ -98,30 +101,35 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         newTaskBtn.setOnClickListener { createNewTask() }
 
         // -- Notifications Code --
-        // Read preferences
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", true)
-        val smsNotificationsEnabled = sharedPreferences.getBoolean("notification_sms", true)
-        val emailNotificationsEnabled = sharedPreferences.getBoolean("notification_email", true)
+        // Create channels for notifications
+        createNotificationChannel(
+            "app_channel",
+            "App Notifications",
+            "Channel for app notifications"
+        )
 
-        // Create notification channels based on preferences
-        if (appNotificationsEnabled) {
-            createNotificationChannel(
-                "app_channel", "App Notifications", "Channel for app notifications"
-            )
-        }
 
-        if (smsNotificationsEnabled) {
-            createNotificationChannel(
-                "sms_channel", "SMS Notifications", "Channel for SMS notifications"
-            )
-        }
+        createNotificationChannel(
+            "sms_channel",
+            "SMS Notifications",
+            "Channel for SMS notifications"
+        )
+//
+//        createNotificationChannel(
+//            "email_channel",
+//            "Email Notifications",
+//            "Channel for email notifications"
+//        )
+    }
 
-        if (emailNotificationsEnabled) {
-            createNotificationChannel(
-                "email_channel", "Email Notifications", "Channel for email notifications"
-            )
-        }
+    private fun testNotif() {
+
+        // Simulate an event time (e.g., current time + 10 seconds)
+        val eventTimeInMillis = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1) + TimeUnit.SECONDS.toMillis(10)
+
+
+        // Immediately show a test notification
+        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
     }
 
     override fun onStart() {
@@ -209,12 +217,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val popupMenu = PopupMenu(contextWrapper, view)
         popupMenu.inflate(R.menu.settings_popup_menu)
 
-        val titleItem1 = popupMenu.menu.findItem(R.id.app_settings_title)
-        applyTitleUnderlineInMenu(titleItem1)
-
-        val titleItem2 = popupMenu.menu.findItem(R.id.nest_settings_title)
-        applyTitleUnderlineInMenu(titleItem2)
-
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 // Group 1: Nest Settings
@@ -233,11 +235,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     // Handle Settings or other actions in this group
                     val intent = Intent(this, PreferencesActivity::class.java)
                     startActivity(intent)
-                    true
-                }
-
-                R.id.menu_google -> {
-                    // TODO Handle Google action
                     true
                 }
 
@@ -308,6 +305,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     // sort tasks by date created
 
                     true
+
                 }
 
                 R.id.menu_sort_due_date -> {

@@ -1,38 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Group 1: Nest Settings -->
     <item
-        android:id="@+id/nest_settings_title"
-        android:title="Nest Settings:              "
-        android:enabled="false"
-        android:alphabeticShortcut=" "
-        android:numericShortcut=" "
-        android:textStyle="bold" />
-    <group android:id="@+id/group_nest_settings">
-        <item
-            android:id="@+id/menu_delete_nest"
-            android:title="Delete this nest" />
-        <item
-            android:id="@+id/menu_rename_nest"
-            android:title="Rename this nest" />
-    </group>
-
-    <!-- Group 2: App Settings -->
+        android:id="@+id/menu_delete_nest"
+        android:title="Delete this nest" />
     <item
-        android:id="@+id/app_settings_title"
-        android:title="App Settings:              "
-        android:enabled="false"
-        android:alphabeticShortcut=" "
-        android:numericShortcut=" "
-        android:textStyle="bold" />
-    <group android:id="@+id/group_app_settings">
-        <item
-            android:id="@+id/menu_app_settings"
-            android:title="App Settings" />
-        <item
-            android:id="@+id/menu_google"
-            android:title="Connect with Google" />
-    </group>
+        android:id="@+id/menu_rename_nest"
+        android:title="Rename this nest" />
+    <item
+        android:id="@+id/menu_app_settings"
+        android:title="Notifications Settings"
+        />
 </menu>
 
 
