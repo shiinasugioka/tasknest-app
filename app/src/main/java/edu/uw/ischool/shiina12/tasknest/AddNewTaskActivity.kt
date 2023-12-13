@@ -288,7 +288,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             displayableStartTime = eventStartTime
         )
         //intent.putExtra("textHex", textHex)
-        Log.i(TAG, "text hex: $textHex")
+//        Log.i(TAG, "text hex: $textHex")
 
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")
