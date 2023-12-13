@@ -37,6 +37,8 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -166,6 +168,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         dateEditText.addTextChangedListener(textWatcher)
 
         addEventButton.setOnClickListener {
+            Log.i("ViewTaskActivity", "clicked")
             setEventDetails()
             addCalendarEvent()
         }
