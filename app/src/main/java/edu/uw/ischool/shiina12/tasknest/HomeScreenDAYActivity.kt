@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.ContextThemeWrapper
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -35,6 +38,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         // New Task Button
         val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
         newTaskBtn.setOnClickListener { createNewTask() }
+
+        // Settings Button Popup
+        val settingsBtn: ImageButton = findViewById(R.id.settings_button)
+        settingsBtn.setOnClickListener { showSettingsPopupMenu(it) }
 
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
         nestButton = findViewById(R.id.view_nest_button)
@@ -116,6 +123,40 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val createNewTaskIntent = Intent(this, AddNewTaskActivity::class.java)
         startActivity(createNewTaskIntent)
     }
+
+    private fun showSettingsPopupMenu(view: View) {
+        val contextWrapper = ContextThemeWrapper(this, R.style.PopupSettingsMenuStyle)
+        val popupMenu = PopupMenu(contextWrapper, view)
+        popupMenu.inflate(R.menu.settings_popup_menu)
+
+        // Identify items to remove (excluding menu_app_settings)
+        val itemsToRemove = mutableListOf<Int>()
+        for (i in 0 until popupMenu.menu.size()) {
+            val itemId = popupMenu.menu.getItem(i).itemId
+            if (itemId != R.id.menu_app_settings) {
+                itemsToRemove.add(itemId)
+            }
+        }
+
+        // Remove identified items
+        for (itemId in itemsToRemove) {
+            popupMenu.menu.removeItem(itemId)
+        }
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_app_settings -> {
+                    val intent = Intent(this, PreferencesActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
 
 
     override fun onPause() {
