@@ -20,10 +20,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.NotificationScheduler
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.text.SimpleDateFormat
+import java.util.Date
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
@@ -292,6 +295,13 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")
+
+        // Schedule notification
+        val notificationTime = Functions.getMillisFromFormattedDateTime(finalDateTime)
+        NotificationScheduler().scheduleNotification(this, notificationTime)
+        Log.i(TAG, "schedule notification for ${task.displayableStartDate} ${task.displayableStartTime}")
+
+
 
         val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
         nestScreenIntent.putExtra("currNest", currNest.title)
