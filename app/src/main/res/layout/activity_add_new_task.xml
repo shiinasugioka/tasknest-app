@@ -96,7 +96,7 @@
             android:layout_width="28dp"
             android:layout_height="31dp"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:srcCompat="@drawable/clock_1" />
 
         <CheckBox
@@ -139,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:srcCompat="@drawable/repeat_button_1" />
 
         <CheckBox
