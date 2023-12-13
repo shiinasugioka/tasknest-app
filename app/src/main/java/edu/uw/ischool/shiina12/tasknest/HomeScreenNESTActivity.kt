@@ -67,7 +67,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                 loadTasksForSelectedNest(selectedNestName)
             }
 
-
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Optional: Handle the case when nothing is selected
             }
@@ -129,6 +128,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         if (nestDropdown.selectedItem != null) {
             val selectedNest = nestDropdown.selectedItem.toString()
             todoRepo.setCurrNestName(selectedNest)
+
+            Log.d(TAG, "in set current nest home screen, selectedNest: $selectedNest")
         }
     }
 
@@ -181,6 +182,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             val currNestName = receivedIntent.getStringExtra("currNest")
             nestDropdown.setSelection(arrayAdapter.getPosition(currNestName))
         }
+        setCurrentNest()
     }
 
     private fun createNotificationChannel(channelId: String, name: String, description: String) {
@@ -310,7 +312,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             }, object : TodoAdapter.OnItemClickListener {
                 override fun onTaskTextClicked(currentTask: Task?) {
                     if (currentTask != null) {
-                        onTaskTextClickedCalled(currentTask)
+                        onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
                     }
                 }
             })
@@ -318,11 +320,13 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         return recyclerView
     }
 
-    private fun onTaskTextClickedCalled(currentTask: Task) {
+    private fun onTaskTextClickedCalled(currentTaskName: String, dateCreated: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTask", currentTask)
-        Log.d("HomeScreen", "task text clicked!")
+        intent.putExtra("currentTaskName", currentTaskName)
+        intent.putExtra("dateCreated", dateCreated)
+
+        Log.d(TAG, "task text clicked!")
         startActivity(viewTaskIntent)
     }
 

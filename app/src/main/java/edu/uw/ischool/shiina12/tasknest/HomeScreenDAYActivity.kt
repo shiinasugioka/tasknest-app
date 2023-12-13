@@ -103,7 +103,9 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                         }, 300) // Delay to match the fade-out duration
                     }, object : TodoAdapter.OnItemClickListener {
                         override fun onTaskTextClicked(currentTask: Task?) {
-                            onTaskTextClickedCalled(currentTask)
+                            if (currentTask != null) {
+                                onTaskTextClickedCalled(currentTask.title)
+                            }
                         }
                     })
                     this.adapter = adapter
@@ -170,10 +172,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun onTaskTextClickedCalled(currentTask: Task?) {
+    private fun onTaskTextClickedCalled(currentTaskName: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTask", currentTask)
+        intent.putExtra("currentTaskName", currentTaskName)
         Log.d(TAG, "task text clicked!")
         startActivity(viewTaskIntent)
     }

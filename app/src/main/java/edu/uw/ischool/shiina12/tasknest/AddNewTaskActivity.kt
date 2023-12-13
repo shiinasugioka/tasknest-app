@@ -51,8 +51,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     }*/
     private lateinit var textHex: String
 
-    private var TAG: String = "AddNewTaskActivity"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_new_task)
@@ -62,6 +60,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
 //        currNest = todoRepo.getTodoNestByTitle("Personal") ?: todoRepo.createTodoList("Personal")
 
+        Log.d(TAG, "curr nest name: ${todoRepo.getCurrNestName()}")
         currNest = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())!!
 
         // Log the details of currNest
