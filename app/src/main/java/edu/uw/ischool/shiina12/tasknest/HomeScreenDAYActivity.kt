@@ -80,33 +80,6 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 linearLayoutContainer.addView(titleTextView)
                 nestHeaderMap[todoNest] = titleTextView
 
-//<<<<<<< HEAD
-//                // Create and add the RecyclerView for tasks
-//                val recyclerView = RecyclerView(this).apply {
-//                    layoutManager = LinearLayoutManager(this@HomeScreenDAYActivity)
-//
-//                    val adapter = TodoAdapter(tasksForToday, { task, _, _ ->
-//                        task.isFinished = true // Mark task as finished
-//                        todoRepo.modifyTask(
-//                            todoNest, task.title, task
-//                        ) // Update the task in the todoRepo
-//
-//                        Handler(Looper.getMainLooper()).postDelayed({
-//                            todoRepo.deleteTask(todoNest, task.title)
-//                            val updatedTasks = todoRepo.getTasksForToday()
-//                            (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
-//                        }, 300) // Delay to match the fade-out duration
-//                    }, object : TodoAdapter.OnItemClickListener {
-//                        override fun onTaskTextClicked(currentTask: Task?) {
-//                            if (currentTask != null) {
-//                                onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
-//                            }
-//                        }
-//                    })
-//                    this.adapter = adapter
-//                }
-//=======
-//>>>>>>> main
 
                 // Create and add the RecyclerView for tasks
                 val recyclerView = createRecyclerViewForTasks(todoNest, tasksForToday)
