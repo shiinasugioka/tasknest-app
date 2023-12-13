@@ -292,7 +292,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")
-        finish()
+
+        val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+        nestScreenIntent.putExtra("currNest", currNest.title)
+        startActivity(nestScreenIntent)
     }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {

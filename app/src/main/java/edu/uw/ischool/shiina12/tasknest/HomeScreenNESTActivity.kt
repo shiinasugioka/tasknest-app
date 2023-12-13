@@ -8,11 +8,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.ContextThemeWrapper
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -179,6 +176,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val arrayAdapter =
             ArrayAdapter<Any?>(this, R.layout.spinner_dropdown_text, nestDropdownItems)
         nestDropdown.adapter = arrayAdapter
+        val receivedIntent = intent
+        if (receivedIntent.hasExtra("currNest")) {
+            val currNestName = receivedIntent.getStringExtra("currNest")
+            nestDropdown.setSelection(arrayAdapter.getPosition(currNestName))
+        }
     }
 
     private fun createNotificationChannel(channelId: String, name: String, description: String) {
