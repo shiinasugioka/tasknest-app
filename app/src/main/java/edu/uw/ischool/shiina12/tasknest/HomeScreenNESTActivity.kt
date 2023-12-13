@@ -65,9 +65,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             override fun onItemSelected(
                 parent: AdapterView<*>, view: View, position: Int, id: Long
             ) {
+                setCurrentNest()
                 val selectedNestName = parent.getItemAtPosition(position).toString()
                 loadTasksForSelectedNest(selectedNestName)
             }
+
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Optional: Handle the case when nothing is selected
