@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit
 import android.telephony.SmsManager
 import androidx.core.content.ContextCompat
 
+private const val tag = "notifs"
+
 class NotificationScheduler {
 
 

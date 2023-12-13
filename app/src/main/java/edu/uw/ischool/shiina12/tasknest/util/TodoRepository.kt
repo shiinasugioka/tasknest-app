@@ -32,11 +32,7 @@ data class Task(
     var displayableStartTime: String,
     var displayableStartDate: String,
     var isFinished: Boolean = false,
-    val dateCreated: String = SimpleDateFormat(
-        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()
-    ).format(
-        Date()
-    ).toString()
+    val dateCreated: String
 ) : Serializable
 
 enum class SortingMethod {

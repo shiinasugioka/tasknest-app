@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import edu.uw.ischool.shiina12.tasknest.R
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
+
+
 class TodoAdapter(
     private var items: List<Task>,
     private val onItemChecked: (Task, Int, ViewHolder) -> Unit, // Add a callback for when an item is checked
+    private val onTaskDeleted: (Task) -> Unit,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
@@ -26,6 +29,7 @@ class TodoAdapter(
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
         val textView: TextView = view.findViewById(R.id.todoTextView)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -68,6 +72,14 @@ class TodoAdapter(
             }
         } else {
             holder.itemView.alpha = 1f // Ensure full opacity if not finished
+            if (task.isFinished) {
+                holder.itemView.animate()
+                    .alpha(0f)
+                    .setDuration(300)
+                    .withEndAction {
+                        onTaskDeleted(task) // Notify that a task has been deleted
+                    }
+            }
         }
     }
 

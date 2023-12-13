@@ -36,6 +36,11 @@ import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 class HomeScreenNESTActivity : AppCompatActivity() {
 
     private lateinit var nestDropdown: Spinner
+    private val nestHeaderMap = mutableMapOf<String, TextView>() // Maps deadline to headers
+    private val nestRecyclerViewMap =
+        mutableMapOf<String, RecyclerView>() // Maps deadline to RecyclerViews
+
+    private lateinit var nest_dropdown: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +65,20 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         nestDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>, view: View, position: Int, id: Long
+                parent: AdapterView<*>, view: View?, position: Int, id: Long
             ) {
-                setCurrentNest()
-                val selectedNestName = parent.getItemAtPosition(position).toString()
-                loadTasksForSelectedNest(selectedNestName)
+                if (view != null) {
+                    setCurrentNest()
+                    val selectedNestName = parent.getItemAtPosition(position).toString()
+                    loadTasksForSelectedNest(selectedNestName)
+                }
             }
-
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Optional: Handle the case when nothing is selected
             }
         }
+
 
         setNewDropDownValues()
 
@@ -129,6 +136,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         if (nestDropdown.selectedItem != null) {
             val selectedNest = nestDropdown.selectedItem.toString()
             todoRepo.setCurrNestName(selectedNest)
+
+            Log.d(TAG, "in set current nest home screen, selectedNest: $selectedNest")
         }
     }
 
@@ -164,7 +173,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     todoNestItemContainer.addView(deadlineTextView)
 
                     // Create and add the tasks view (RecyclerView or individual views)
-                    val recyclerView = createRecyclerViewForTasks(tasks, selectedNest)
+                    val recyclerView =
+                        createRecyclerViewForTasks(tasks, selectedNest, formattedDate)
                     todoNestItemContainer.addView(recyclerView)
 
                     hasTasks = true // Tasks are found
@@ -203,6 +213,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             val currNestName = receivedIntent.getStringExtra("currNest")
             nestDropdown.setSelection(arrayAdapter.getPosition(currNestName))
         }
+        setCurrentNest()
     }
 
     private fun createNotificationChannel(channelId: String, name: String, description: String) {
@@ -312,40 +323,55 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest): RecyclerView {
-        val recyclerView = RecyclerView(this).apply {
+    private fun createRecyclerViewForTasks(
+        tasks: List<Task>, todoNest: TodoNest, deadline: String
+    ): RecyclerView {
+        return RecyclerView(this).apply {
             layoutManager = LinearLayoutManager(this@HomeScreenNESTActivity)
-
             adapter = TodoAdapter(tasks, { task, _, _ ->
                 // Implement the logic to be executed when a task is checked
-                // For example: Update task, delete task, etc.
-                task.isFinished = true // Mark task as finished
-                todoRepo.modifyTask(
-                    todoNest, task.title, task
-                ) // Update the task in the todoRepo
+                task.isFinished = true
+                todoRepo.modifyTask(todoNest, task.title, task)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     todoRepo.deleteTask(todoNest, task.title)
                     val updatedTasks = todoRepo.getTasksFromNest(todoNest)
                     (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
-                }, 300) // Delay to match the fade-out duration
+                }, 300)
+            }, {
+                handleTaskDeleted(todoNest, deadline)
             }, object : TodoAdapter.OnItemClickListener {
                 override fun onTaskTextClicked(currentTask: Task?) {
                     if (currentTask != null) {
-                        onTaskTextClickedCalled(currentTask)
+                        onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
                     }
                 }
             })
         }
-        return recyclerView
     }
 
-    private fun onTaskTextClickedCalled(currentTask: Task) {
+    private fun handleTaskDeleted(todoNest: TodoNest, deadline: String) {
+        if (todoNest.tasks.none { it.apiDateTime == deadline }) {
+            // Remove header and RecyclerView for this deadline
+            nestHeaderMap[deadline]?.let { headerView ->
+                findViewById<LinearLayout>(R.id.nest_layout_container).removeView(headerView)
+            }
+            nestRecyclerViewMap[deadline]?.let { recyclerView ->
+                findViewById<LinearLayout>(R.id.nest_layout_container).removeView(recyclerView)
+            }
+            nestHeaderMap.remove(deadline)
+            nestRecyclerViewMap.remove(deadline)
+        }
+    }
+
+    private fun onTaskTextClickedCalled(currentTaskName: String, dateCreated: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTask", currentTask)
-        Log.d("HomeScreen", "task text clicked!")
+        Log.d(TAG, "from NEST: current task name: $currentTaskName, created on $dateCreated")
+        viewTaskIntent.putExtra("currentTaskName", currentTaskName)
+        viewTaskIntent.putExtra("dateCreated", dateCreated)
+
+        Log.d(TAG, "from NEST: task text clicked!")
         startActivity(viewTaskIntent)
     }
-
 }
