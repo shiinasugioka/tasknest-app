@@ -37,6 +37,8 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -166,6 +168,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         dateEditText.addTextChangedListener(textWatcher)
 
         addEventButton.setOnClickListener {
+            Log.i("ViewTaskActivity", "clicked")
             setEventDetails()
             addCalendarEvent()
         }
@@ -295,18 +298,18 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
-//        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-//        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-//        val LAZoneId = ZoneId.of("America/Los_Angeles")
-//        val formattedDateTime = localDateTime.atZone(LAZoneId)
+        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val LAZoneId = ZoneId.of("America/Los_Angeles")
+        val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
-        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        Log.i(TAG, "formatted: $formattedDateTime")
-        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
 
-        finalDateTime = formattedDateTime
-//            .format(iso8601Formatter)
+//        Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
+//        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+//        Log.i(TAG, "formatted: $formattedDateTime")
+//        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
+
+        finalDateTime = formattedDateTime.format(iso8601Formatter)
         finalTitle = eventTitleText
     }
 
