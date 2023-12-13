@@ -154,8 +154,6 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 nestHeaderMap.remove(todoNest)
                 nestRecyclerViewMap.remove(todoNest)
 
-                linearLayoutContainer.requestLayout()
-
                 Snackbar.make(findViewById(android.R.id.content), "The ${todoNest.title} nest is now empty!", Snackbar.LENGTH_SHORT).show()
             }
         } else {
