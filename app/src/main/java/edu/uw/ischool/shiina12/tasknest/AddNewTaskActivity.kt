@@ -17,10 +17,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
-import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
@@ -50,9 +50,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
     private lateinit var selectedColor: TextView
-    /*private val colorView: View by lazy {
-        LayoutInflater.from(this).inflate(R.layout.color_picker, null)
-    }*/
     private lateinit var textHex: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +76,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         timeEditText = findViewById(R.id.editTaskStartTime)
         dateEditText = findViewById(R.id.editTaskStartDate)
 
+        eventTitleTextView.addTextChangedListener(watcher)
+        timeEditText.addTextChangedListener(watcher)
+        dateEditText.addTextChangedListener(watcher)
+
         repeatingEventCheckBox = findViewById(R.id.checkboxRepeating)
         repeatingEventLayout = findViewById(R.id.repeatingEventOptions)
         repeatingStartDateEditText = findViewById(R.id.repeatingStartDate)
@@ -88,6 +89,18 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         exitButton = findViewById(R.id.imageButtonExit)
         createNewTaskButton = findViewById(R.id.createNewTaskButton)
+        createNewTaskButton.isEnabled = false
+
+        createNewTaskButton.setOnClickListener {
+            if (createNewTaskButton.isEnabled) {
+                // Perform the action when the button is enabled
+                Log.i("Savebtn Test", "Working")
+                addTask()
+            } else {
+                // Show a Toast if the button is disabled
+                showToast("Please fill out all fields.")
+            }
+        }
 
         repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
 
@@ -101,6 +114,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun findAndSetColorButtons() {
         Log.i(TAG, "setting colors")
 
@@ -110,8 +127,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             Log.i(TAG, "palette clicked")
             showColorPickerDialog()
         }
-
-
     }
 
     private fun showColorPickerDialog() {
@@ -204,11 +219,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             finish()
         }
 
-        createNewTaskButton.setOnClickListener {
-            Log.i("Savebtn Test", "Working")
-            addTask()
-        }
-
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, timeEditText)
 
@@ -269,10 +279,31 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
                 timeEditText.visibility = View.GONE
             }
         }
+    }
 
-        eventTitleTextView.addTextChangedListener(textWatcher)
-        timeEditText.addTextChangedListener(textWatcher)
-        dateEditText.addTextChangedListener(textWatcher)
+    private fun checkFieldsForEmptyValues() {
+        val title = eventTitleTextView.text.toString().trim()
+        val time = timeEditText.text.toString().trim()
+        val date = dateEditText.text.toString().trim()
+        // Get text from more EditText fields as needed
+
+        // Enable the button if all fields are filled, disable otherwise
+        createNewTaskButton.isEnabled = title.isNotEmpty() && time.isNotEmpty() && date.isNotEmpty()
+    }
+
+    // watcher for button
+    private val watcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            checkFieldsForEmptyValues()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // Not used
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Not used
+        }
     }
 
     private fun addTask() {
@@ -295,9 +326,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             dateCreated = currentDate
         )
 
-        //intent.putExtra("textHex", textHex)
-//        Log.i(TAG, "text hex: $textHex")
-
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")
 
@@ -315,18 +343,5 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val formattedDate = Functions.getFormattedDateOnDateSet(year, month, day)
         targetEditText?.setText(formattedDate, TextView.BufferType.EDITABLE)
     }
-
-    private var textWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
-                createNewTaskButton.isEnabled = true
-            }
-        }
-
-    }
-
 }
+
