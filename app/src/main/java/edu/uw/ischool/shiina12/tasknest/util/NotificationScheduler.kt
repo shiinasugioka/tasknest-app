@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit
 import android.telephony.SmsManager
 import androidx.core.content.ContextCompat
 
+private const val tag = "notifs"
+
 class NotificationScheduler {
 
     // TODO: Call MyNotificationScheduler.scheduleNotification when adding a new task to the nest
@@ -32,8 +34,6 @@ class NotificationScheduler {
         // Immediately show a test notification
         NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
      */
-
-    private val tag = "NotificationScheduler"
 
     fun scheduleNotification(context: Context, eventTimeInMillis: Long) {
         // Read preferences to get notification time before the event

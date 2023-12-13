@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.ContextThemeWrapper
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -21,7 +22,6 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TodoAdapter
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.text.SimpleDateFormat
-import android.view.View
 import java.util.Date
 import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -34,15 +34,11 @@ class HomeScreenDAYActivity : AppCompatActivity() {
     private val nestRecyclerViewMap = mutableMapOf<TodoNest, RecyclerView>()
     private lateinit var linearLayoutContainer: LinearLayout
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.homescreen_view_by_day)
 
         val linearLayoutContainer: LinearLayout = findViewById(R.id.linearLayoutContainer)
-
-
 
         // New Task Button
         val newTaskBtn: ImageButton = findViewById(R.id.new_task_button)
@@ -53,11 +49,9 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val settingsBtn: ImageButton = findViewById(R.id.settings_button)
         settingsBtn.setOnClickListener { showSettingsPopupMenu(it) }
 
-
         // Get today's date in ISO to compare with task deadlines
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
         val today = dateFormat.format(Date())
-
         val formattedDate =
             Functions.reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "MMMM d, yyyy")
 
@@ -65,15 +59,17 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         val dateTextView = findViewById<TextView>(R.id.day_title)
         dateTextView.text = formattedDate
 
+        // Iterate through each TodoNest
+        val todayFormatted =
+            Functions.reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
 
         // Iterate through each TodoNest
-        val todayFormatted = Functions.reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
-
-// Iterate through each TodoNest
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
             // Filter tasks for today using simplified date format
             val tasksForToday = todoNest.tasks.filter {
-                val taskDateFormatted = Functions.reformatDate(it.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
+                val taskDateFormatted = Functions.reformatDate(
+                    it.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd"
+                )
                 taskDateFormatted == todayFormatted
             }
 
@@ -84,6 +80,33 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 linearLayoutContainer.addView(titleTextView)
                 nestHeaderMap[todoNest] = titleTextView
 
+//<<<<<<< HEAD
+//                // Create and add the RecyclerView for tasks
+//                val recyclerView = RecyclerView(this).apply {
+//                    layoutManager = LinearLayoutManager(this@HomeScreenDAYActivity)
+//
+//                    val adapter = TodoAdapter(tasksForToday, { task, _, _ ->
+//                        task.isFinished = true // Mark task as finished
+//                        todoRepo.modifyTask(
+//                            todoNest, task.title, task
+//                        ) // Update the task in the todoRepo
+//
+//                        Handler(Looper.getMainLooper()).postDelayed({
+//                            todoRepo.deleteTask(todoNest, task.title)
+//                            val updatedTasks = todoRepo.getTasksForToday()
+//                            (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
+//                        }, 300) // Delay to match the fade-out duration
+//                    }, object : TodoAdapter.OnItemClickListener {
+//                        override fun onTaskTextClicked(currentTask: Task?) {
+//                            if (currentTask != null) {
+//                                onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
+//                            }
+//                        }
+//                    })
+//                    this.adapter = adapter
+//                }
+//=======
+//>>>>>>> main
 
                 // Create and add the RecyclerView for tasks
                 val recyclerView = createRecyclerViewForTasks(todoNest, tasksForToday)
@@ -130,14 +153,12 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
-
         popupMenu.show()
     }
-
-
 
     override fun onPause() {
         super.onPause()
@@ -150,11 +171,14 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun onTaskTextClickedCalled(currentTask: Task?) {
+    private fun onTaskTextClickedCalled(currentTaskName: String, dateCreated: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTask", currentTask)
-        Log.d(TAG, "task text clicked!")
+        Log.d(TAG, "from DAY: current task name: $currentTaskName, created on $dateCreated")
+        viewTaskIntent.putExtra("currentTaskName", currentTaskName)
+        viewTaskIntent.putExtra("dateCreated", dateCreated)
+
+        Log.d(TAG, "from DAY: task text clicked!")
         startActivity(viewTaskIntent)
     }
 
@@ -183,7 +207,9 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 handleTaskDeleted(todoNest, deletedTask.title)
             }, object : TodoAdapter.OnItemClickListener {
                 override fun onTaskTextClicked(currentTask: Task?) {
-                    onTaskTextClickedCalled(currentTask)
+                    if (currentTask != null) {
+                        onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
+                    }
                 }
             })
         }
@@ -216,7 +242,11 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 nestHeaderMap.remove(todoNest)
                 nestRecyclerViewMap.remove(todoNest)
 
-                Snackbar.make(findViewById(android.R.id.content), "The ${todoNest.title} nest is now empty!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "The ${todoNest.title} nest is now empty!",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         } else {
             nestRecyclerViewMap[todoNest]?.adapter?.let { adapter ->
@@ -224,12 +254,4 @@ class HomeScreenDAYActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
-
-
-
-
-
 }
