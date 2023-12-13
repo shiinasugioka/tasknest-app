@@ -139,8 +139,10 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val selectedNest = todoRepo.getTodoNestByTitle(nestName)
         selectedNest?.let { nest ->
             val tasksGroupedByDeadline = nest.tasks.groupBy { it.apiDateTime }
-            tasksGroupedByDeadline.forEach { (deadline, tasks) ->
 
+            var hasTasks = false // Flag to check if there are any tasks
+
+            tasksGroupedByDeadline.forEach { (deadline, tasks) ->
                 val formattedDate =
                     Functions.reformatDate(deadline, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
 
@@ -151,25 +153,45 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
-                        text = formattedDate // Set the formatted date text
+                        text = formattedDate
                         setTextColor(
                             ContextCompat.getColor(
                                 context, R.color.primary_text
                             )
-                        ) // Set text color
-                        textSize = 13f // Set text size
-
-                        // Additional styling if needed
+                        )
+                        textSize = 13f
                     }
                     todoNestItemContainer.addView(deadlineTextView)
 
                     // Create and add the tasks view (RecyclerView or individual views)
                     val recyclerView = createRecyclerViewForTasks(tasks, selectedNest)
                     todoNestItemContainer.addView(recyclerView)
+
+                    hasTasks = true // Tasks are found
                 }
+            }
+
+            if (!hasTasks) {
+                // If no tasks were found, display a message
+                val noTasksTextView = TextView(this).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    text = "No tasks for this nest."
+                    setTextColor(
+                        ContextCompat.getColor(
+                            context, R.color.primary_text
+                        )
+                    )
+                    textSize = 13f
+                }
+                todoNestItemContainer.addView(noTasksTextView)
             }
         }
     }
+
+
 
     private fun setNewDropDownValues() {
         val nestDropdownItems = todoRepo.getAllNestTitles()
