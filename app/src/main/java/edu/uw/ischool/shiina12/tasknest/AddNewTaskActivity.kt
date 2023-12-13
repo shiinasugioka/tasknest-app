@@ -46,6 +46,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
     private lateinit var selectedColor: TextView
+
     /*private val colorView: View by lazy {
         LayoutInflater.from(this).inflate(R.layout.color_picker, null)
     }*/
@@ -288,11 +289,14 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             displayableStartTime = eventStartTime
         )
         //intent.putExtra("textHex", textHex)
-        Log.i(TAG, "text hex: $textHex")
+//        Log.i(TAG, "text hex: $textHex")
 
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")
-        finish()
+
+        val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
+        nestScreenIntent.putExtra("currNest", currNest.title)
+        startActivity(nestScreenIntent)
     }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
@@ -317,5 +321,4 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         }
 
     }
-
 }

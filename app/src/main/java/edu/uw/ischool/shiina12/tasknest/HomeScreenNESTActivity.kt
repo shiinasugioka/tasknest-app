@@ -44,8 +44,8 @@ import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 class HomeScreenNESTActivity : AppCompatActivity() {
 
     private lateinit var nestDropdown: Spinner
-    private val nestHeaderMap = mutableMapOf<Long, TextView>() // Maps deadline to headers
-    private val nestRecyclerViewMap = mutableMapOf<Long, RecyclerView>() // Maps deadline to RecyclerViews
+    private val nestHeaderMap = mutableMapOf<String, TextView>() // Maps deadline to headers
+    private val nestRecyclerViewMap = mutableMapOf<String, RecyclerView>() // Maps deadline to RecyclerViews
 
     private lateinit var nest_dropdown: Spinner
 
@@ -71,19 +71,19 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         setNewDropDownValues()
 
         nestDropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>, view: View, position: Int, id: Long
-            ) {
-                setCurrentNest()
-                val selectedNestName = parent.getItemAtPosition(position).toString()
-                loadTasksForSelectedNest(selectedNestName)
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (view != null) {
+                    setCurrentNest()
+                    val selectedNestName = parent.getItemAtPosition(position).toString()
+                    loadTasksForSelectedNest(selectedNestName)
+                }
             }
-
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Optional: Handle the case when nothing is selected
             }
         }
+
 
         setNewDropDownValues()
 
@@ -177,7 +177,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
                         // Create and add the tasks view (RecyclerView or individual views)
                         val recyclerView =
-                            createRecyclerViewForTasks(tasks, selectedNest, deadline)
+                            createRecyclerViewForTasks(tasks, selectedNest, formattedDate)
                         todoNestItemContainer.addView(recyclerView)
                     }
                 }
@@ -337,7 +337,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest, deadline: Long): RecyclerView {
+    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest, deadline: String): RecyclerView {
         return RecyclerView(this).apply {
             layoutManager = LinearLayoutManager(this@HomeScreenNESTActivity)
             adapter = TodoAdapter(tasks, { task, position, viewHolder ->
@@ -352,12 +352,18 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                 }, 300)
             }, { deletedTask ->
                 handleTaskDeleted(todoNest, deadline)
+            },object : TodoAdapter.OnItemClickListener {
+                override fun onTaskTextClicked(currentTask: Task?) {
+                    if (currentTask != null) {
+                        onTaskTextClickedCalled(currentTask)
+                    }
+                }
             })
         }
     }
 
-    private fun handleTaskDeleted(todoNest: TodoNest, deadline: Long) {
-        if (todoNest.tasks.none { it.deadline == deadline }) {
+    private fun handleTaskDeleted(todoNest: TodoNest, deadline: String) {
+        if (todoNest.tasks.none { it.apiDateTime == deadline }) {
             // Remove header and RecyclerView for this deadline
             nestHeaderMap[deadline]?.let { headerView ->
                 findViewById<LinearLayout>(R.id.nest_layout_container).removeView(headerView)
@@ -381,7 +387,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             )
             textSize = 13f // Set text size
             setTypeface(null, Typeface.BOLD) // Set text style to bold
-            setTextColor(ContextCompat.getColor(context, R.color.primary_text)) // Set text color
+            setTextColor(
+                ContextCompat.getColor(
+                    context, R.color.primary_text
+                )
+            ) // Set text color
 
             val leftPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
             val topPaddingInPixels = (8 * resources.displayMetrics.density).toInt() // Example for 8dp

@@ -67,9 +67,15 @@ class HomeScreenDAYActivity : AppCompatActivity() {
 
 
         // Iterate through each TodoNest
+        val todayFormatted = Functions.reformatDate(today, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
+
+// Iterate through each TodoNest
         todoRepo.createMultipleTodoLists().forEach { todoNest ->
-            // Filter tasks for today
-            val tasksForToday = todoNest.tasks.filter { it.apiDateTime == today }
+            // Filter tasks for today using simplified date format
+            val tasksForToday = todoNest.tasks.filter {
+                val taskDateFormatted = Functions.reformatDate(it.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
+                taskDateFormatted == todayFormatted
+            }
 
             // If there are tasks for today, show the nest title and tasks
             if (tasksForToday.isNotEmpty()) {
@@ -157,7 +163,11 @@ class HomeScreenDAYActivity : AppCompatActivity() {
             text = title
             textSize = 13f
             setTypeface(null, Typeface.BOLD)
-            setTextColor(ContextCompat.getColor(context, R.color.primary_text))
+            setTextColor(
+                ContextCompat.getColor(
+                    context, R.color.primary_text
+                )
+            ) // Set text color
             val leftPaddingInPixels = (16 * resources.displayMetrics.density).toInt()
             val topPaddingInPixels = (1 * resources.displayMetrics.density).toInt()
             setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
@@ -171,6 +181,10 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                 handleTaskChecked(todoNest, task)
             }, { deletedTask ->
                 handleTaskDeleted(todoNest, deletedTask.title)
+            }, object : TodoAdapter.OnItemClickListener {
+                override fun onTaskTextClicked(currentTask: Task?) {
+                    onTaskTextClickedCalled(currentTask)
+                }
             })
         }
     }
