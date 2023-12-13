@@ -166,6 +166,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         dateEditText.addTextChangedListener(textWatcher)
 
         addEventButton.setOnClickListener {
+            Log.i("ViewTaskActivity", "clicked")
             setEventDetails()
             addCalendarEvent()
         }
