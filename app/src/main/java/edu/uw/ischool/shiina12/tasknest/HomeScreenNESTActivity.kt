@@ -84,10 +84,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val settingsBtn: ImageButton = findViewById(R.id.settings_button)
         settingsBtn.setOnClickListener { showSettingsPopupMenu(it) }
 
-        // Sort By Button Popup
-        val sortButton: ImageButton = findViewById(R.id.sort_button)
-        sortButton.setOnClickListener { showSortByPopupMenu(it) }
-
         // New Nest Button
         val newNestBtn: Button = findViewById(R.id.new_nest_button)
         newNestBtn.setOnClickListener { createNest() }
@@ -277,45 +273,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
 
         builder.show()
-    }
-
-    private fun showSortByPopupMenu(view: View) {
-        val contextWrapper = ContextThemeWrapper(this, R.style.PopupSortByMenuStyle)
-        val popupMenu = PopupMenu(contextWrapper, view)
-        popupMenu.inflate(R.menu.sort_by_menu)
-
-        val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
-        applyTitleUnderlineInMenu(titleItem)
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_sort_date_created -> {
-                    // TODO Handle sorting by date created
-                    // depends on how the task list is populated. (start from beginning of task array)
-                    // could reorganize into a new array
-                    // todoRepo.todoNests.sortBy { it.dateCreated }
-                    // sort tasks by date created
-
-                    true
-
-                }
-
-                R.id.menu_sort_due_date -> {
-                    // TODO Handle sorting by due date
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        popupMenu.show()
-    }
-
-    private fun applyTitleUnderlineInMenu(titleItem: MenuItem) {
-        val titleString = SpannableString(titleItem.title)
-        titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
-        titleItem.title = titleString
     }
 
     override fun onPause() {
