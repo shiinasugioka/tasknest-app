@@ -116,7 +116,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
 
         // Immediately show a test notification
-        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
+        NotificationScheduler().scheduleNotification(this, eventTimeInMillis, "Test")
     }
 
     override fun onStart() {

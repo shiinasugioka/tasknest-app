@@ -298,7 +298,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         // Schedule notification
         val notificationTime = Functions.getMillisFromFormattedDateTime(finalDateTime)
-        NotificationScheduler().scheduleNotification(this, notificationTime)
+        NotificationScheduler().scheduleNotification(this, notificationTime, taskTitle)
         Log.i(TAG, "schedule notification for ${task.displayableStartDate} ${task.displayableStartTime}")
 
 

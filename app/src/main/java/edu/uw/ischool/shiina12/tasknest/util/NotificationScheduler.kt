@@ -25,7 +25,7 @@ class NotificationScheduler {
 
     private val tag = "NotificationScheduler"
 
-    fun scheduleNotification(context: Context, eventTimeInMillis: Long) {
+    fun scheduleNotification(context: Context, eventTimeInMillis: Long, taskTitle: String) {
         // Read preferences to get notification time before the event
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val notificationTimeBeforeEvent = sharedPreferences.getString("notification_frequency", "1")
@@ -44,6 +44,7 @@ class NotificationScheduler {
         // Schedule an alarm to trigger the notification
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
+        intent.putExtra("taskTitle", taskTitle)
         val pendingIntent = PendingIntent.getBroadcast(
             context, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
@@ -72,12 +73,13 @@ class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            val notification = createNotification(it)
+            val taskTitle = intent?.getStringExtra("taskTitle") ?: "Default Title"
+            val notification = createNotification(it, taskTitle)
             showNotification(it, notification)
         }
     }
 
-    private fun createNotification(context: Context): Notification? {
+    private fun createNotification(context: Context, TaskTitle: String): Notification? {
         // Read preferences to check if each notification type is enabled
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", false)
@@ -93,7 +95,7 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, "app_channel")
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("TaskNest Notification")
+            .setContentTitle("TaskNest: $TaskTitle")
             .setContentText("You have a task due soon!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
