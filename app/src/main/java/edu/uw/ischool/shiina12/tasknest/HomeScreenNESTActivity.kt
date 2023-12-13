@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -39,6 +40,9 @@ import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 
 class HomeScreenNESTActivity : AppCompatActivity() {
+
+    private val nestHeaderMap = mutableMapOf<Long, TextView>() // Maps deadline to headers
+    private val nestRecyclerViewMap = mutableMapOf<Long, RecyclerView>() // Maps deadline to RecyclerViews
 
     private lateinit var nest_dropdown: Spinner
 
@@ -161,7 +165,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         todoNestItemContainer.removeAllViews()
 
         val selectedNest = todoRepo.getTodoNestByTitle(nestName)
-            selectedNest?.let { nest ->
+        selectedNest?.let { nest ->
                 val tasksGroupedByDeadline = nest.tasks.groupBy { it.deadline }
                 tasksGroupedByDeadline.forEach { (deadline, tasks) ->
                     if (tasks.isNotEmpty()) {
@@ -185,7 +189,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                         todoNestItemContainer.addView(deadlineTextView)
 
                         // Create and add the tasks view (RecyclerView or individual views)
-                        val recyclerView = createRecyclerViewForTasks(tasks, selectedNest)
+                        val recyclerView =
+                            deadline?.let { createRecyclerViewForTasks(tasks, selectedNest, it) }
                         todoNestItemContainer.addView(recyclerView)
                     }
                 }
@@ -359,28 +364,59 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest): RecyclerView {
-        val recyclerView = RecyclerView(this).apply {
+    private fun createRecyclerViewForTasks(tasks: List<Task>, todoNest: TodoNest, deadline: Long): RecyclerView {
+        return RecyclerView(this).apply {
             layoutManager = LinearLayoutManager(this@HomeScreenNESTActivity)
-            adapter = TodoAdapter(tasks) { task, position, viewHolder ->
+            adapter = TodoAdapter(tasks, { task, position, viewHolder ->
                 // Implement the logic to be executed when a task is checked
-                // For example: Update task, delete task, etc.
-                task.isFinished = true // Mark task as finished
-                todoRepo.modifyTask(
-                    todoNest,
-                    task.title,
-                    task
-                ) // Update the task in the todoRepo
+                task.isFinished = true
+                todoRepo.modifyTask(todoNest, task.title, task)
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     todoRepo.deleteTask(todoNest, task.title)
                     val updatedTasks = todoRepo.getTasksFromNest(todoNest)
                     (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
-                }, 300) // Delay to match the fade-out duration
-            }
+                }, 300)
+            }, { deletedTask ->
+                handleTaskDeleted(todoNest, deadline)
+            })
         }
-        return recyclerView
     }
+
+    private fun handleTaskDeleted(todoNest: TodoNest, deadline: Long) {
+        if (todoNest.tasks.none { it.deadline == deadline }) {
+            // Remove header and RecyclerView for this deadline
+            nestHeaderMap[deadline]?.let { headerView ->
+                findViewById<LinearLayout>(R.id.nest_layout_container).removeView(headerView)
+            }
+            nestRecyclerViewMap[deadline]?.let { recyclerView ->
+                findViewById<LinearLayout>(R.id.nest_layout_container).removeView(recyclerView)
+            }
+            nestHeaderMap.remove(deadline)
+            nestRecyclerViewMap.remove(deadline)
+        }
+    }
+
+    private fun createDeadlineTextView(deadline: Long?): TextView {
+        return TextView(this).apply {
+            deadline?.let {
+                text = formatDate(it) // Set the formatted date text
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            textSize = 13f // Set text size
+            setTypeface(null, Typeface.BOLD) // Set text style to bold
+            setTextColor(ContextCompat.getColor(context, R.color.primary_text)) // Set text color
+
+            val leftPaddingInPixels = (16 * resources.displayMetrics.density).toInt() // Example for 16dp
+            val topPaddingInPixels = (8 * resources.displayMetrics.density).toInt() // Example for 8dp
+            setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
+        }
+    }
+
+
 
     fun formatDate(timestamp: Long): String {
         val deadlineDate = Date(timestamp)

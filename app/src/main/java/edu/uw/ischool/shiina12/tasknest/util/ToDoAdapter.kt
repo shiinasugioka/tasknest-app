@@ -14,7 +14,8 @@ import edu.uw.ischool.shiina12.tasknest.R
 
 class TodoAdapter(
     private var items: List<Task>,
-    private val onItemChecked: (Task, Int, ViewHolder) -> Unit // Add a callback for when an item is checked
+    private val onItemChecked: (Task, Int, ViewHolder) -> Unit, // Add a callback for when an item is checked
+    private val onTaskDeleted: (Task) -> Unit
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,22 +40,18 @@ class TodoAdapter(
 
         // Set a click listener for the checkbox
         holder.checkBox.setOnClickListener {
-            onItemChecked(task, position, holder) // Call the passed in callback function
+            task.isFinished = !task.isFinished
+            onItemChecked(task, position, holder)
             updateTextAppearance(holder.textView, task.isFinished)
 
-        }
-
-        if (task.isFinished) {
-            holder.itemView.animate()
-                .alpha(0f)
-                .setDuration(300)
-                .withEndAction {
-                    // Remove the item after fade-out completes
-                    items = items.filter { it != task }
-                    notifyItemRemoved(position)
-                }
-        } else {
-            holder.itemView.alpha = 1f // Ensure full opacity if not finished
+            if (task.isFinished) {
+                holder.itemView.animate()
+                    .alpha(0f)
+                    .setDuration(300)
+                    .withEndAction {
+                        onTaskDeleted(task) // Notify that a task has been deleted
+                    }
+            }
         }
     }
 
