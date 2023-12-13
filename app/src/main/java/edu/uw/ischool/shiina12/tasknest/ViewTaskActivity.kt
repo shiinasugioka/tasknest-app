@@ -33,17 +33,21 @@ import edu.uw.ischool.shiina12.tasknest.api_util.Constants
 import edu.uw.ischool.shiina12.tasknest.api_util.CreateEventTask
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
-const val TAG = "TaskActivity"
+const val TAG = "ViewTaskActivity"
 
-class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private lateinit var eventTitleTextView: TextView
+class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
+    private val currentTask: Task = intent.getSerializableExtra("currentTask") as Task
+
+    private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
     private lateinit var allDay: CheckBox
@@ -55,6 +59,11 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
     private lateinit var exitButton: ImageButton
+
+    // values from currentTask object
+    private lateinit var currentTaskTitle: String
+    private lateinit var currentTaskStartDate: String
+    private lateinit var currentTaskStartTime: String
 
     // values to be sent to API
     private lateinit var eventTitleText: String
@@ -71,28 +80,52 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_task)
 
+        findAndInitializeUIElements()
+
+        setListeners()
+        initCredentials()
+
+    }
+
+    private fun findAndInitializeUIElements() {
         // UI elements
-        eventTitleTextView = findViewById(R.id.editTextTask)
-        timeEditText = findViewById(R.id.editTextTime)
-        dateEditText = findViewById(R.id.editTextDate)
+        eventTitleTextView = findViewById(R.id.editTaskTitle)
+        timeEditText = findViewById(R.id.editTaskStartTime)
+        dateEditText = findViewById(R.id.editTaskStartDate)
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
-        Log.i("TaskActivity", "found exit button")
 
-        //val editText = dialogView.findViewById<EditText>(R.id.editText)
+        // UI elements for API
+        addEventButton = findViewById(R.id.buttonGoogleCalendar)
+        apiResultsText = ""
+        apiStatusText = ""
+
+        // data from current task
+        currentTaskTitle = currentTask.title
+        currentTaskStartDate = currentTask.displayableStartDate
+        currentTaskStartTime = currentTask.displayableStartTime
+
+        eventTitleTextView.setText(currentTaskTitle)
+        timeEditText.setText(currentTaskStartTime)
+        dateEditText.setText(currentTaskStartDate)
+
+        addEventButton.isEnabled = false
+    }
+
+    private fun setListeners() {
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, timeEditText)
 
         val datePickerFragment = DatePickerFragment()
         datePickerFragment.setListener(this, dateEditText)
 
-        timeEditText.setOnFocusChangeListener { view, hasFocus ->
+        timeEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 timePickerFragment.show(supportFragmentManager, "timePicker")
             }
         }
-        dateEditText.setOnFocusChangeListener { view, hasFocus ->
+        dateEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 datePickerFragment.show(supportFragmentManager, "datePicker")
             }
@@ -104,7 +137,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             }
         }
 
-        allDay.setOnCheckedChangeListener { buttonView, isChecked ->
+        allDay.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
                 timeEditText.visibility = View.VISIBLE
             } else {
@@ -116,18 +149,9 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
             finish()
         }
 
-        // UI elements for API
-        addEventButton = findViewById(R.id.buttonGoogleCalendar)
-        apiResultsText = ""
-        apiStatusText = ""
-
-        initCredentials()
-
         eventTitleTextView.addTextChangedListener(textWatcher)
         timeEditText.addTextChangedListener(textWatcher)
         dateEditText.addTextChangedListener(textWatcher)
-
-        addEventButton.isEnabled = false
 
         addEventButton.setOnClickListener {
             setEventDetails()
@@ -139,15 +163,13 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
         val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
-        startsOn = dialogView.findViewById(R.id.startsOn)
-        endsOn = dialogView.findViewById(R.id.endsOn)
+        startsOn = dialogView.findViewById(R.id.repeatingStartDate)
+        endsOn = dialogView.findViewById(R.id.repeatingEndDate)
         atTime = dialogView.findViewById(R.id.reminderTime)
 
         val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)
         ArrayAdapter.createFromResource(
-            this,
-            R.array.frequency_units_events,
-            android.R.layout.simple_spinner_item
+            this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
@@ -162,36 +184,32 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         val atTimeFragment = TimePickerFragment()
         atTimeFragment.setListener(this, atTime)
 
-        startsOn.setOnFocusChangeListener { view, hasFocus ->
+        startsOn.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 startDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        endsOn.setOnFocusChangeListener { view, hasFocus ->
+        endsOn.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 endDateFragment.show(supportFragmentManager, "datePicker")
             }
         }
 
-        atTime.setOnFocusChangeListener { view, hasFocus ->
+        atTime.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 atTimeFragment.show(supportFragmentManager, "timePicker")
             }
         }
 
-        builder.setView(dialogView)
-            .setTitle("Options")
-            .setPositiveButton("OK") { dialog, _ ->
-                // val enteredText = editText.text.toString()
-                // Do something with the entered text
+        builder.setView(dialogView).setTitle("Options").setPositiveButton("OK") { dialog, _ ->
+            // val enteredText = editText.text.toString()
+            // Do something with the entered text
 
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+            dialog.dismiss()
+        }.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }.show()
     }
 
     @Deprecated("Deprecated in Java")
@@ -205,8 +223,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
             Constants.REQUEST_ACCOUNT_PICKER -> if (data != null) {
                 if (resultCode == RESULT_OK && data.extras != null) {
-                    val accountName: String? =
-                        data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    val accountName: String? = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
                     mCredential?.setSelectedAccountName(accountName)
                     val settings = getPreferences(MODE_PRIVATE)
                     val editor = settings.edit()
@@ -240,10 +257,8 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     // initialize credentials and user's Google account
     private fun initCredentials() {
         mCredential = GoogleAccountCredential.usingOAuth2(
-            applicationContext,
-            arrayListOf(CalendarScopes.CALENDAR)
-        )
-            .setBackOff(ExponentialBackOff())
+            applicationContext, arrayListOf(CalendarScopes.CALENDAR)
+        ).setBackOff(ExponentialBackOff())
 
         initCalendarBuild(mCredential)
     }
@@ -255,9 +270,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
         mService = GoogleCalendar.Builder(
             transport, jsonFactory, credential
-        )
-            .setApplicationName(Constants.APPLICATION_NAME)
-            .build()
+        ).setApplicationName(Constants.APPLICATION_NAME).build()
     }
 
     private fun addCalendarEvent() {
@@ -270,20 +283,24 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
-        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-        val LAZoneId = ZoneId.of("America/Los_Angeles")
-        val formattedDateTime = localDateTime.atZone(LAZoneId)
+//        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+//        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+//        val LAZoneId = ZoneId.of("America/Los_Angeles")
+//        val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
+        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        Log.i(TAG, "formatted: $formattedDateTime")
+        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
 
-        finalDateTime = formattedDateTime.format(iso8601Formatter)
+        finalDateTime = formattedDateTime
+//            .format(iso8601Formatter)
         finalTitle = eventTitleText
     }
 
     private fun isGooglePlayServicesAvailable(): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
-        val connectionStatusCode =
-            apiAvailability.isGooglePlayServicesAvailable(applicationContext)
+        val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(applicationContext)
         return connectionStatusCode == ConnectionResult.SUCCESS
     }
 
@@ -301,8 +318,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
 
     private fun chooseAccount() {
         startActivityForResult(
-            mCredential!!.newChooseAccountIntent(),
-            Constants.REQUEST_ACCOUNT_PICKER
+            mCredential!!.newChooseAccountIntent(), Constants.REQUEST_ACCOUNT_PICKER
         )
     }
 
@@ -343,38 +359,19 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
     fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val dialog = apiAvailability.getErrorDialog(
-            this,
-            connectionStatusCode,
-            Constants.REQUEST_GOOGLE_PLAY_SERVICES
+            this, connectionStatusCode, Constants.REQUEST_GOOGLE_PLAY_SERVICES
         )
         dialog?.show()
     }
 
     override fun onTimeSet(hourOfDay: Int, minute: Int, targetEditText: EditText?) {
-        var correctedHour = hourOfDay
-        var isAm = true
-        if (hourOfDay > 12) {
-            correctedHour = hourOfDay - 12
-            isAm = false
-        } else if (hourOfDay == 0) {
-            correctedHour = 12
-        }
-
-        var formattedTime: String = if (minute < 10) {
-            "$correctedHour:0$minute"
-        } else {
-            "$correctedHour:$minute"
-        }
-
-        formattedTime += if (isAm) " AM" else " PM"
+        val formattedTime = Functions.getFormattedTimeOnTimeSet(hourOfDay, minute)
         targetEditText?.setText(formattedTime, TextView.BufferType.EDITABLE)
     }
 
     override fun onDateSet(year: Int, month: Int, day: Int, targetEditText: EditText?) {
-        // Do something with the date the user picks.
-        val correctedMonth: Int = month + 1
-        Log.i("TaskActivity", "in main $correctedMonth/$day/$year")
-        targetEditText?.setText("$correctedMonth/$day/$year", TextView.BufferType.EDITABLE)
+        val formattedDate = Functions.getFormattedDateOnDateSet(year, month, day)
+        targetEditText?.setText(formattedDate, TextView.BufferType.EDITABLE)
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {
@@ -383,10 +380,7 @@ class TaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
-            if (eventTitleTextView.text.isNotBlank() &&
-                timeEditText.text.isNotBlank() &&
-                dateEditText.text.isNotBlank()
-            ) {
+            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
                 addEventButton.isEnabled = true
             }
         }

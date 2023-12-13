@@ -9,12 +9,16 @@ import java.io.IOException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * This class contains the actual data that is passed into the API.
+ * Given user input, the API will add an event to the user's Google
+ * calendar account.
+ *
+ * If there are problems with the API it probably isn't this file.
+ **/
 class CreateEventTask internal constructor(
-    private var mService: Calendar?,
-    finalDateTime: String,
-    finalTitle: String
-) :
-    AsyncTask<Void?, Void?, Void?>() {
+    private var mService: Calendar?, finalDateTime: String, finalTitle: String
+) : AsyncTask<Void?, Void?, Void?>() {
 
     private val givenStartDateTime = finalDateTime
     private val givenFinalTitle = finalTitle
@@ -35,19 +39,14 @@ class CreateEventTask internal constructor(
 
         val eventStartDateTime = givenStartDateTime
 
-        val event: Event = Event()
-            .setSummary(eventTitle)
+        val event: Event = Event().setSummary(eventTitle)
 
         val startDateTime = DateTime(eventStartDateTime)
-        val start = EventDateTime()
-            .setDateTime(startDateTime)
-            .setTimeZone("America/Los_Angeles")
+        val start = EventDateTime().setDateTime(startDateTime).setTimeZone("America/Los_Angeles")
         event.setStart(start)
 
         val endDateTime = DateTime(givenEndDateTime)
-        val end = EventDateTime()
-            .setDateTime(endDateTime)
-            .setTimeZone("America/Los_Angeles")
+        val end = EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles")
         event.setEnd(end)
 
         val calendarId = "primary"

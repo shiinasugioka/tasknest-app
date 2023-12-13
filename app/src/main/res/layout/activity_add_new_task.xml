@@ -18,8 +18,8 @@
             android:layout_marginStart="52dp"
             android:layout_marginTop="36dp"
             android:background="@null"
-            android:minHeight="48dp"
             android:contentDescription="Exit button"
+            android:minHeight="48dp"
             app:srcCompat="@drawable/exit_btn" />
 
         <TextView
@@ -30,7 +30,9 @@
             android:layout_marginTop="40dp"
             android:fontFamily="@font/poppins"
             android:minHeight="48dp"
+            android:paddingTop="5dp"
             android:text="Add New Task"
+            android:textColor="@color/primary_text"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -40,21 +42,22 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/colorPalette"
             android:layout_width="29dp"
             android:layout_height="36dp"
             android:layout_marginStart="52dp"
+            android:layout_marginTop="4dp"
             app:srcCompat="@drawable/color_palette_1" />
 
         <EditText
-            android:id="@+id/editTextTask"
+            android:id="@+id/editTaskTitle"
             android:layout_width="224dp"
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
             android:fontFamily="@font/poppins"
+            android:hint="Task Title"
             android:inputType="text"
             android:minHeight="48dp"
-            android:hint="Task Title"
             android:paddingBottom="0dp" />
     </LinearLayout>
 
@@ -67,12 +70,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/calendar__2__1" />
 
 
         <EditText
-            android:id="@+id/editTextDate"
+            android:id="@+id/editTaskStartDate"
             android:layout_width="224dp"
             android:layout_height="42dp"
             android:layout_marginStart="24dp"
@@ -80,7 +83,7 @@
             android:fontFamily="@font/poppins"
             android:hint="Enter date"
             android:minHeight="48dp"
-            android:paddingBottom="0dp"/>
+            android:paddingBottom="0dp" />
 
     </LinearLayout>
 
@@ -93,7 +96,7 @@
             android:layout_width="28dp"
             android:layout_height="31dp"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:srcCompat="@drawable/clock_1" />
 
         <CheckBox
@@ -101,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
             android:paddingTop="5dp"
             android:paddingBottom="0dp"
@@ -115,7 +118,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/editTextTime"
+            android:id="@+id/editTaskStartTime"
             android:layout_width="224dp"
             android:layout_height="41dp"
             android:layout_marginStart="108dp"
@@ -136,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:srcCompat="@drawable/repeat_button_1" />
 
         <CheckBox
@@ -144,11 +147,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
             android:paddingTop="5dp"
             android:paddingBottom="0dp"
             android:text="Repeating Event"
+            android:textColor="@color/primary_text"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -158,7 +162,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,26 +173,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
-                android:text="Repeat Every"></TextView>
+                android:fontFamily="@font/poppins"
+                android:text="Repeat Every" />
 
             <EditText
                 android:id="@+id/timeInterval"
-                android:hint="##"
-                android:minHeight="48dp"
                 android:layout_width="52dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="20dp"
+                android:hint="##"
+                android:paddingStart="11dp"
                 android:inputType="number"
-                ></EditText>
+                android:minHeight="48dp" />
 
             <Spinner
                 android:id="@+id/intervalSpinner"
                 android:layout_width="154dp"
-                android:minHeight="48dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:minHeight="48dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -200,20 +206,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="8dp"
-                android:text="at"
                 android:fontFamily="@font/poppins"
                 android:paddingBottom="0dp"
-                ></TextView>
+                android:text="at" />
 
             <EditText
                 android:id="@+id/reminderTime"
-                android:hint="HH:MM"
                 android:layout_width="120dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins"
-                android:paddingBottom="0dp"></EditText>
+                android:hint="HH:MM"
+                android:paddingBottom="0dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -225,21 +230,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="65dp"
                 android:layout_marginTop="8dp"
-                android:text="Starts on"
                 android:fontFamily="@font/poppins"
-                android:paddingBottom="0dp"></TextView>
+                android:paddingBottom="0dp"
+                android:text="Starts on" />
 
             <EditText
-                android:id="@+id/startsOn"
-                android:hint="MM/DD/YYYY"
-                android:minHeight="48dp"
+                android:id="@+id/repeatingStartDate"
                 android:layout_width="164dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
-                android:inputType="textNoSuggestions"
                 android:fontFamily="@font/poppins"
-                android:paddingBottom="0dp"></EditText>
+                android:hint="MM/DD/YYYY"
+                android:inputType="textNoSuggestions"
+                android:minHeight="48dp"
+                android:paddingBottom="0dp" />
 
 
         </LinearLayout>
@@ -253,16 +258,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="72dp"
                 android:layout_marginTop="8dp"
-                android:text="Ends on"></TextView>
+                android:text="Ends on" />
 
             <EditText
-                android:id="@+id/endsOn"
-                android:hint="MM/DD/YYYY"
+                android:id="@+id/repeatingEndDate"
                 android:layout_width="164dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="12dp"
-                android:minHeight="48dp"
-                android:layout_marginTop="8dp"></EditText>
+                android:layout_marginTop="8dp"
+                android:hint="MM/DD/YYYY"
+                android:minHeight="48dp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -273,13 +278,13 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/createNewTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Create New Task"
             android:fontFamily="@font/poppins"
-            android:paddingBottom="0dp"/>
+            android:paddingBottom="0dp"
+            android:text="Create New Task" />
     </LinearLayout>
 
 </LinearLayout>

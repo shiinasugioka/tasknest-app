@@ -12,12 +12,12 @@
             android:icon="@drawable/app_notification"
             android:defaultValue="false"/>
 
-        <CheckBoxPreference
-            android:key="notification_email"
-            android:title="Email Notifications"
-            android:summary="Enable email notifications"
-            android:icon="@drawable/email_notification"
-            android:defaultValue="false"/>
+<!--        <CheckBoxPreference-->
+<!--            android:key="notification_email"-->
+<!--            android:title="Email Notifications"-->
+<!--            android:summary="Enable email notifications"-->
+<!--            android:icon="@drawable/email_notification"-->
+<!--            android:defaultValue="false"/>-->
 
         <CheckBoxPreference
             android:key="notification_sms"
@@ -26,12 +26,12 @@
             android:icon="@drawable/sms_notification"
             android:defaultValue="false"/>
 
-        <EditTextPreference
-            android:key="email_address"
-            android:title="Email Address"
-            android:summary="Enter your email address"
-            android:inputType="textEmailAddress"
-            android:dependency="notification_email"/>
+<!--        <EditTextPreference-->
+<!--            android:key="email_address"-->
+<!--            android:title="Email Address"-->
+<!--            android:summary="Enter your email address"-->
+<!--            android:inputType="textEmailAddress"-->
+<!--            android:dependency="notification_email"/>-->
 
         <EditTextPreference
             android:key="sms_number"
@@ -50,7 +50,8 @@
             android:title="Frequency"
             android:summary="Enter notification frequency"
             android:inputType="number"
-            android:defaultValue="2"/>
+            android:defaultValue="1"/>
+
 
         <ListPreference
             android:key="frequency_unit"
@@ -59,7 +60,7 @@
             android:dialogTitle="Select Frequency Unit"
             android:entries="@array/frequency_units"
             android:entryValues="@array/frequency_units_values"
-            android:defaultValue="days"/>
+            android:defaultValue="minutes"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

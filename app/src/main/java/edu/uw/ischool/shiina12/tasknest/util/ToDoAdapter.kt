@@ -15,8 +15,13 @@ import edu.uw.ischool.shiina12.tasknest.R
 class TodoAdapter(
     private var items: List<Task>,
     private val onItemChecked: (Task, Int, ViewHolder) -> Unit, // Add a callback for when an item is checked
-    private val onTaskDeleted: (Task) -> Unit
+    private val onTaskDeleted: (Task) -> Unit,
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onTaskTextClicked(currentTask: Task?)
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val checkBox: CheckBox = view.findViewById(R.id.todoCheckBox)
@@ -40,10 +45,31 @@ class TodoAdapter(
 
         // Set a click listener for the checkbox
         holder.checkBox.setOnClickListener {
-            task.isFinished = !task.isFinished
-            onItemChecked(task, position, holder)
+            onItemChecked(task, position, holder) // Call the passed in callback function
             updateTextAppearance(holder.textView, task.isFinished)
+        }
 
+        holder.textView.setOnClickListener {
+            val currentNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
+            val currentTask: Task? = currentNest?.tasks?.find {
+                it.title == holder.textView.text
+            }
+
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                if (currentTask != null) {
+                    onTaskTextClicked(currentTask)
+                }
+            }
+        }
+
+        if (task.isFinished) {
+            holder.itemView.animate().alpha(0f).setDuration(300).withEndAction {
+                // Remove the item after fade-out completes
+                items = items.filter { it != task }
+                notifyItemRemoved(position)
+            }
+        } else {
+            holder.itemView.alpha = 1f // Ensure full opacity if not finished
             if (task.isFinished) {
                 holder.itemView.animate()
                     .alpha(0f)
@@ -72,6 +98,12 @@ class TodoAdapter(
         items = newItems
         notifyDataSetChanged()
     }
+
+    private fun onTaskTextClicked(currentTask: Task) {
+        listener.onTaskTextClicked(currentTask)
+    }
 }
+
+
 
 
