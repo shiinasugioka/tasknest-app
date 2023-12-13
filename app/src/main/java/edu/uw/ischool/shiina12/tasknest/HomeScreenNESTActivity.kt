@@ -65,9 +65,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             override fun onItemSelected(
                 parent: AdapterView<*>, view: View, position: Int, id: Long
             ) {
+                setCurrentNest()
                 val selectedNestName = parent.getItemAtPosition(position).toString()
                 loadTasksForSelectedNest(selectedNestName)
             }
+
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Optional: Handle the case when nothing is selected
@@ -83,10 +85,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         // Settings Button Popup
         val settingsBtn: ImageButton = findViewById(R.id.settings_button)
         settingsBtn.setOnClickListener { showSettingsPopupMenu(it) }
-
-        // Sort By Button Popup
-        val sortButton: ImageButton = findViewById(R.id.sort_button)
-        sortButton.setOnClickListener { showSortByPopupMenu(it) }
 
         // New Nest Button
         val newNestBtn: Button = findViewById(R.id.new_nest_button)
@@ -279,45 +277,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun showSortByPopupMenu(view: View) {
-        val contextWrapper = ContextThemeWrapper(this, R.style.PopupSortByMenuStyle)
-        val popupMenu = PopupMenu(contextWrapper, view)
-        popupMenu.inflate(R.menu.sort_by_menu)
-
-        val titleItem = popupMenu.menu.findItem(R.id.sort_menu_title)
-        applyTitleUnderlineInMenu(titleItem)
-
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_sort_date_created -> {
-                    // TODO Handle sorting by date created
-                    // depends on how the task list is populated. (start from beginning of task array)
-                    // could reorganize into a new array
-                    // todoRepo.todoNests.sortBy { it.dateCreated }
-                    // sort tasks by date created
-
-                    true
-
-                }
-
-                R.id.menu_sort_due_date -> {
-                    // TODO Handle sorting by due date
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        popupMenu.show()
-    }
-
-    private fun applyTitleUnderlineInMenu(titleItem: MenuItem) {
-        val titleString = SpannableString(titleItem.title)
-        titleString.setSpan(UnderlineSpan(), 0, titleString.length, 0)
-        titleItem.title = titleString
-    }
-
     override fun onPause() {
         super.onPause()
         overridePendingTransition(0, 0)
@@ -361,7 +320,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
         intent.putExtra("currentTask", currentTask)
-        Log.d(TAG, "task text clicked!")
+        Log.d("HomeScreen", "task text clicked!")
         startActivity(viewTaskIntent)
     }
 

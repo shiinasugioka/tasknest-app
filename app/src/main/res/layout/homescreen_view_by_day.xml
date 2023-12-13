@@ -103,7 +103,9 @@
         <ImageButton
             android:id="@+id/sort_button"
             style="@style/sort_button"
-            app:srcCompat="@drawable/round_sort_24" />
+            android:visibility="invisible"
+            app:srcCompat="@drawable/round_sort_24"
+            tools:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/settings_button"

@@ -2,7 +2,6 @@ package edu.uw.ischool.shiina12.tasknest
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -46,15 +45,13 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
-    private lateinit var buttonRed: ImageButton
-    private lateinit var buttonOrange: ImageButton
-    private lateinit var buttonYellow: ImageButton
-    private lateinit var buttonGreen: ImageButton
-    private lateinit var buttonBlue: ImageButton
-    private lateinit var buttonGray: ImageButton
-    private lateinit var buttonPurple: ImageButton
-    private lateinit var buttonPink: ImageButton
     private lateinit var selectedColor: TextView
+    /*private val colorView: View by lazy {
+        LayoutInflater.from(this).inflate(R.layout.color_picker, null)
+    }*/
+    private lateinit var textHex: String
+
+    private var TAG: String = "AddNewTaskActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,70 +99,92 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     }
 
     private fun findAndSetColorButtons() {
-        Log.i("AddNewTaskActivity", "setting colors")
+        Log.i(TAG, "setting colors")
 
         colorPalette = findViewById(R.id.colorPalette)
 
+        colorPalette.setOnClickListener {
+            Log.i(TAG, "palette clicked")
+            showColorPickerDialog()
+        }
+
+
+    }
+
+    private fun showColorPickerDialog() {
+        val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
         val colorView = inflater.inflate(R.layout.color_picker, null)
-        buttonRed = colorView.findViewById(R.id.buttonRed)
-        buttonOrange = colorView.findViewById(R.id.buttonOrange)
-        buttonYellow = colorView.findViewById(R.id.buttonYellow)
-        buttonGreen = colorView.findViewById(R.id.buttonGreen)
-        buttonBlue = colorView.findViewById(R.id.buttonBlue)
-        buttonGray = colorView.findViewById(R.id.buttonGray)
-        buttonPurple = colorView.findViewById(R.id.buttonPurple)
-        buttonPink = colorView.findViewById(R.id.buttonPink)
+
+        val buttonRed: ImageButton = colorView.findViewById(R.id.buttonRed)
+        val buttonOrange: ImageButton = colorView.findViewById(R.id.buttonOrange)
+        val buttonYellow: ImageButton = colorView.findViewById(R.id.buttonYellow)
+        val buttonGreen: ImageButton = colorView.findViewById(R.id.buttonGreen)
+        val buttonBlue: ImageButton = colorView.findViewById(R.id.buttonBlue)
+        val buttonGray: ImageButton = colorView.findViewById(R.id.buttonGray)
+        val buttonPurple: ImageButton = colorView.findViewById(R.id.buttonPurple)
+        val buttonPink: ImageButton = colorView.findViewById(R.id.buttonPink)
         selectedColor = colorView.findViewById(R.id.selectedColor)
+        // val buttonNoColor: ImageButton = colorView.findViewById(R.id.buttonNoColor)
 
         buttonRed.setOnClickListener {
+            Log.i(TAG, "red clicked=")
             selectedColorResId = R.drawable.red
             selectedColor.text = "red selected"
+            textHex = "BD1E1E"
         }
         buttonOrange.setOnClickListener {
             selectedColorResId = R.drawable.orange
             selectedColor.text = "orange selected"
+            textHex = "EF8354"
         }
         buttonYellow.setOnClickListener {
             selectedColorResId = R.drawable.yellow
             selectedColor.text = "yellow selected"
+            textHex = "EFEB94"
         }
 
         buttonGreen.setOnClickListener {
             selectedColorResId = R.drawable.green
             selectedColor.text = "green selected"
+            textHex = "50754F"
         }
 
         buttonBlue.setOnClickListener {
             selectedColorResId = R.drawable.blue
             selectedColor.text = "blue selected"
+            textHex = "92B8C8"
         }
 
         buttonGray.setOnClickListener {
             selectedColorResId = R.drawable.gray
             selectedColor.text = "gray selected"
+            textHex = "4F5D75"
         }
 
         buttonPurple.setOnClickListener {
             selectedColorResId = R.drawable.purple
             selectedColor.text = "purple selected"
+            textHex = "9A53A0"
         }
         buttonPink.setOnClickListener {
             selectedColorResId = R.drawable.pink
             selectedColor.text = "pink selected"
+            textHex = "F2AFE7"
         }
-        colorPalette.setOnClickListener {
-            showColorPickerDialog(colorView)
-        }
-    }
 
-    private fun showColorPickerDialog(colorView: View) {
-        val builder = AlertDialog.Builder(this)
+        /*buttonNoColor.setOnClickListener {
+            selectedColorResId = R.drawable.nocolor
+            selectedColor.text = "no color selected"
+            textHex = "FFFFFF"
+        }*/
 
         builder.setView(colorView).setTitle("Color options").setPositiveButton("OK") { dialog, _ ->
             // Apply the selected color if available
             selectedColorResId?.let {
-                colorPalette.setImageResource(it)
+                Log.i(TAG, "setting colors")
+                // Update the image resource
+                colorPalette?.setImageResource(it)
             }
             // Reset the selected color for the next click
             selectedColorResId = null
@@ -176,6 +195,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             dialog.dismiss()
         }.show()
     }
+
     private fun setListeners() {
         exitButton.setOnClickListener {
             finish()
@@ -267,6 +287,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             displayableStartDate = eventStartDate,
             displayableStartTime = eventStartTime
         )
+        //intent.putExtra("textHex", textHex)
+//        Log.i(TAG, "text hex: $textHex")
 
         todoRepo.addTaskToList(currNest, task)
         Log.i(TAG, "result: $task")

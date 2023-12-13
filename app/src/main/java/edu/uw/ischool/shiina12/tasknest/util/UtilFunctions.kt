@@ -5,7 +5,7 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * An object that contains commonly used functions across different activities and files
+ * Contains commonly used functions across different activities and files
  */
 object UtilFunctions {
 
