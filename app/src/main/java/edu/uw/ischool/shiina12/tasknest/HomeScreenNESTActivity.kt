@@ -48,6 +48,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     private val nestRecyclerViewMap = mutableMapOf<String, RecyclerView>() // Maps deadline to RecyclerViews
 
     private lateinit var nest_dropdown: Spinner
+    private var textHex: String = "FFFFF"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,6 +194,9 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         if (receivedIntent.hasExtra("currNest")) {
             val currNestName = receivedIntent.getStringExtra("currNest")
             nestDropdown.setSelection(arrayAdapter.getPosition(currNestName))
+        }
+        if (receivedIntent.hasExtra("textHex")) {
+            textHex = receivedIntent.getStringExtra("textHex").toString()
         }
     }
 
@@ -403,8 +407,6 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             setPadding(leftPaddingInPixels, topPaddingInPixels, paddingRight, paddingBottom)
         }
     }
-
-
 
     private fun onTaskTextClickedCalled(currentTask: Task) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)

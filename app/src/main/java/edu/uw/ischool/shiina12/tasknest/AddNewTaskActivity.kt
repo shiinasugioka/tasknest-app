@@ -47,7 +47,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
     private lateinit var selectedColor: TextView
-    private lateinit var textHex: String
+    private var textHex: String = "FFFFFF"
 
     private var TAG: String = "AddNewTaskActivity"
 
@@ -327,6 +327,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
         nestScreenIntent.putExtra("currNest", currNest.title)
+        intent.putExtra("textHex", textHex)
         startActivity(nestScreenIntent)
     }
 
