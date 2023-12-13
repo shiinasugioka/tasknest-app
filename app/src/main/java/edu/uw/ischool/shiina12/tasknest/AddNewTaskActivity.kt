@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
@@ -88,6 +89,17 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         createNewTaskButton = findViewById(R.id.createNewTaskButton)
         createNewTaskButton.isEnabled = false
 
+        createNewTaskButton.setOnClickListener {
+            if (createNewTaskButton.isEnabled) {
+                // Perform the action when the button is enabled
+                Log.i("Savebtn Test", "Working")
+                addTask()
+            } else {
+                // Show a Toast if the button is disabled
+                showToast("Please fill out all fields.")
+            }
+        }
+
         repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
 
         findAndSetColorButtons()
@@ -98,6 +110,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             repeatingIntervalSpinner.adapter = adapter
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun findAndSetColorButtons() {
@@ -199,11 +215,6 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private fun setListeners() {
         exitButton.setOnClickListener {
             finish()
-        }
-
-        createNewTaskButton.setOnClickListener {
-            Log.i("Savebtn Test", "Working")
-            addTask()
         }
 
         val timePickerFragment = TimePickerFragment()
