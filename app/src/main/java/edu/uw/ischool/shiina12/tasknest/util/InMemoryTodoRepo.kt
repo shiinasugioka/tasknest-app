@@ -23,8 +23,12 @@ object InMemoryTodoRepository : TodoRepository {
         currentDate = dateFormat.format(Date()).toString()
 
         val defaultTask = Task(
-            title = "Add more tasks with the plus button!", apiDateTime = currentDate, // or any other default deadline
-            isFinished = false, displayableStartTime = "", displayableStartDate = ""
+            title = "Add more tasks with the plus button!",
+            apiDateTime = currentDate, // or any other default deadline
+            isFinished = false,
+            displayableStartTime = "",
+            displayableStartDate = "",
+            dateCreated = currentDate
         )
 
         val defaultTodoNest = TodoNest(

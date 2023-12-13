@@ -20,10 +20,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
@@ -280,12 +284,17 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val finalDateTime =
             Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+        val currentDate = dateFormat.format(Date()).toString()
+
         val task = Task(
             title = taskTitle,
             apiDateTime = finalDateTime,
             displayableStartDate = eventStartDate,
-            displayableStartTime = eventStartTime
+            displayableStartTime = eventStartTime,
+            dateCreated = currentDate
         )
+
         //intent.putExtra("textHex", textHex)
 //        Log.i(TAG, "text hex: $textHex")
 

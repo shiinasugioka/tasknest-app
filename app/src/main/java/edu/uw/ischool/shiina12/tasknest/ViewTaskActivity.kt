@@ -39,8 +39,8 @@ import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
-import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
     private lateinit var currentTask: Task
@@ -99,29 +99,28 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         apiResultsText = ""
         apiStatusText = ""
 
-        // data from current task
-        val receivedIntent = intent
-        if (receivedIntent != null) {
-            val currentTaskName: String? = intent.getStringExtra("currentTaskName")
-            val dateTaskCreated: String? = intent.getStringExtra("dateCreated")
+        val currentTaskName = intent.getStringExtra("currentTaskName")
+        val dateTaskCreated = intent.getStringExtra("dateCreated")
 
-            val currNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
-            if (currNest != null) {
-                for (task in currNest.tasks) {
-                    if (task.title == currentTaskName && task.dateCreated == dateTaskCreated) {
-                        currentTask = task
-                    }
+        Log.d(TAG, "intent task name: $currentTaskName, date: $dateTaskCreated")
+
+        val currNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
+        if (currNest != null) {
+            for (task in currNest.tasks) {
+                Log.d(TAG, "task: ${task.title}, taskdate: ${task.dateCreated}")
+                if (task.title == currentTaskName && task.dateCreated == dateTaskCreated) {
+                    currentTask = task
                 }
             }
-
-            currentTaskTitle = currentTask.title
-            currentTaskStartDate = currentTask.displayableStartTime
-            currentTaskStartTime = currentTask.displayableStartTime
-
-            eventTitleTextView.setText(currentTaskTitle)
-            timeEditText.setText(currentTaskStartTime)
-            dateEditText.setText(currentTaskStartDate)
         }
+
+        currentTaskTitle = currentTask.title
+        currentTaskStartDate = currentTask.displayableStartTime
+        currentTaskStartTime = currentTask.displayableStartTime
+
+        eventTitleTextView.setText(currentTaskTitle)
+        timeEditText.setText(currentTaskStartTime)
+        dateEditText.setText(currentTaskStartDate)
 
         addEventButton.isEnabled = false
     }

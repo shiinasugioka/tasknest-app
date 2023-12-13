@@ -104,7 +104,7 @@ class HomeScreenDAYActivity : AppCompatActivity() {
                     }, object : TodoAdapter.OnItemClickListener {
                         override fun onTaskTextClicked(currentTask: Task?) {
                             if (currentTask != null) {
-                                onTaskTextClickedCalled(currentTask.title)
+                                onTaskTextClickedCalled(currentTask.title, currentTask.dateCreated)
                             }
                         }
                     })
@@ -172,11 +172,14 @@ class HomeScreenDAYActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    private fun onTaskTextClickedCalled(currentTaskName: String) {
+    private fun onTaskTextClickedCalled(currentTaskName: String, dateCreated: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTaskName", currentTaskName)
-        Log.d(TAG, "task text clicked!")
+        Log.d(TAG, "from DAY: current task name: $currentTaskName, created on $dateCreated")
+        viewTaskIntent.putExtra("currentTaskName", currentTaskName)
+        viewTaskIntent.putExtra("dateCreated", dateCreated)
+
+        Log.d(TAG, "from DAY: task text clicked!")
         startActivity(viewTaskIntent)
     }
 

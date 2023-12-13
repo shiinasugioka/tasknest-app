@@ -323,10 +323,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     private fun onTaskTextClickedCalled(currentTaskName: String, dateCreated: String) {
         val viewTaskIntent = Intent(this, ViewTaskActivity::class.java)
         // add intents for task details
-        intent.putExtra("currentTaskName", currentTaskName)
-        intent.putExtra("dateCreated", dateCreated)
+        Log.d(TAG, "from NEST: current task name: $currentTaskName, created on $dateCreated")
+        viewTaskIntent.putExtra("currentTaskName", currentTaskName)
+        viewTaskIntent.putExtra("dateCreated", dateCreated)
 
-        Log.d(TAG, "task text clicked!")
+        Log.d(TAG, "from NEST: task text clicked!")
         startActivity(viewTaskIntent)
     }
 
