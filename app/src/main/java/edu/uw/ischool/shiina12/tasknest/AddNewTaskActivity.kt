@@ -46,6 +46,7 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var colorPalette: ImageView
     private var selectedColorResId: Int? = null
     private lateinit var selectedColor: TextView
+
     /*private val colorView: View by lazy {
         LayoutInflater.from(this).inflate(R.layout.color_picker, null)
     }*/
@@ -320,5 +321,4 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         }
 
     }
-
 }
