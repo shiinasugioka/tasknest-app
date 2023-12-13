@@ -314,9 +314,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         val startTimeDate = "$eventStartDate $eventStartTime"
         val finalDateTime =
-            Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "YYYY-MM-DDThh:mm:ss.sssZ")
+            Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-DDThh:mm:ss.sssZ", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
         val currentDate = dateFormat.format(Date()).toString()
 
         val task = Task(

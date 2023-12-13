@@ -20,6 +20,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -37,8 +38,6 @@ import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.TodoNest
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
 import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
@@ -290,6 +289,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
     private fun addCalendarEvent() {
         CreateEventTask(mService, finalDateTime, finalTitle).execute()
+        Toast.makeText(this, "Added to Google Calendar!", Toast.LENGTH_SHORT).show()
     }
 
     private fun setEventDetails() {
@@ -385,13 +385,19 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
+                addEventButton.isEnabled = true
+                Log.i(TAG, "add event button enabled")
+            }
+        }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
             if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
                 addEventButton.isEnabled = true
+                Log.i(TAG, "add event button enabled")
             }
         }
     }
