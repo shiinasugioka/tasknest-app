@@ -115,7 +115,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         }
 
         currentTaskTitle = currentTask.title
-        currentTaskStartDate = currentTask.displayableStartTime
+        currentTaskStartDate = currentTask.displayableStartDate
         currentTaskStartTime = currentTask.displayableStartTime
 
         eventTitleTextView.setText(currentTaskTitle)
@@ -295,18 +295,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
-//        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-//        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-//        val LAZoneId = ZoneId.of("America/Los_Angeles")
-//        val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
         Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
-        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        Log.i(TAG, "formatted: $formattedDateTime")
-        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
+        val formattedDateTime = Functions.reformatDate(
+            combinedDateTimeString, "M/d/yyyy h:mm a", "YYYY-MM-DDThh:mm:ss.sssZ"
+        )
 
         finalDateTime = formattedDateTime
-//            .format(iso8601Formatter)
         finalTitle = eventTitleText
     }
 
@@ -396,6 +391,5 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
                 addEventButton.isEnabled = true
             }
         }
-
     }
 }

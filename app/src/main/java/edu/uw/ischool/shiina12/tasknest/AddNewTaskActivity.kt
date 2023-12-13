@@ -314,9 +314,9 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         val startTimeDate = "$eventStartDate $eventStartTime"
         val finalDateTime =
-            Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            Functions.reformatDate(startTimeDate, "M/d/yyyy h:mm a", "YYYY-MM-DDThh:mm:ss.sssZ")
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-DDThh:mm:ss.sssZ", Locale.getDefault())
         val currentDate = dateFormat.format(Date()).toString()
 
         val task = Task(
@@ -333,8 +333,10 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         // Schedule notification
         val notificationTime = Functions.getMillisFromFormattedDateTime(finalDateTime)
         NotificationScheduler().scheduleNotification(this, notificationTime, taskTitle)
-        Log.i(TAG, "schedule notification for ${task.displayableStartDate} ${task.displayableStartTime}")
-
+        Log.i(
+            TAG,
+            "schedule notification for ${task.displayableStartDate} ${task.displayableStartTime}"
+        )
 
 
         val nestScreenIntent = Intent(this, HomeScreenNESTActivity::class.java)
