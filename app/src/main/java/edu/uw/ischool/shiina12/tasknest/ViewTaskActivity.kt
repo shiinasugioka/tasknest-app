@@ -85,7 +85,6 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         setListeners()
         initCredentials()
-
     }
 
     private fun findAndInitializeUIElements() {
