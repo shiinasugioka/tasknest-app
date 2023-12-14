@@ -62,7 +62,10 @@ dependencies {
     // API Dependencies
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.34.1")
     implementation("com.google.apis:google-api-services-calendar:v3-rev305-1.23.0")
-//    implementation("com.google.apis:google-api-services-gmail:v1-rev83-1.31.5")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("com.google.api-client:google-api-client:1.23.0")
+    implementation("com.google.apis:google-api-services-gmail:v1-rev83-1.23.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0-M1")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.guava:guava:31.1-android")
     implementation("com.google.api-client:google-api-client-android:1.23.0") {
