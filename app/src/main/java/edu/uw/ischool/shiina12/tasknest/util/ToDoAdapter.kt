@@ -101,7 +101,7 @@ class TodoAdapter(
         } catch (e: IllegalArgumentException) {
             // Handle the case where colorHex is not a valid color
             e.printStackTrace()
-            textView.setBackgroundColor(Color.TRANSPARENT) // or set a default color
+            textView.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 
