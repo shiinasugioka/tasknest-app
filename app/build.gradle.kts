@@ -64,6 +64,7 @@ dependencies {
     implementation("com.google.apis:google-api-services-calendar:v3-rev305-1.23.0")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("com.google.api-client:google-api-client:1.23.0")
+    implementation("com.sun.mail:android-mail:1.6.0")
     implementation("com.google.apis:google-api-services-gmail:v1-rev83-1.23.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0-M1")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
