@@ -175,8 +175,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
                     // Create and add the tasks view (RecyclerView or individual views)
                     val recyclerView =
-                        createRecyclerViewForTasks(tasks, selectedNest, deadline)
-                    todoNestItemContainer.addView(recyclerView)
+                        createRecyclerViewForTasks(tasks, selectedNest, deadline, this) {
+                            finish()
+                            startActivity(intent)
+                        }
+                        todoNestItemContainer.addView(recyclerView)
 
                     hasTasks = true // Tasks are found
                 }
@@ -329,7 +332,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
     }
 
     private fun createRecyclerViewForTasks(
-        tasks: List<Task>, todoNest: TodoNest, deadline: String
+        tasks: List<Task>,
+        todoNest: TodoNest,
+        deadline: String,
+        context: Context,
+        recreate: () -> Unit
     ): RecyclerView {
         return RecyclerView(this).apply {
             layoutManager = LinearLayoutManager(this@HomeScreenNESTActivity)
@@ -344,7 +351,9 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                     (this.adapter as? TodoAdapter)?.updateItems(updatedTasks)
                 }, 300)
             }, {
-                handleTaskDeleted(todoNest, deadline)
+                handleTaskDeleted(todoNest, deadline, recreate)
+
+
             }, object : TodoAdapter.OnItemClickListener {
                 override fun onTaskTextClicked(currentTask: Task?) {
                     if (currentTask != null) {
@@ -355,7 +364,8 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleTaskDeleted(todoNest: TodoNest, deadline: String) {
+    private fun handleTaskDeleted(todoNest: TodoNest, deadline: String, recreate: () -> Unit) {
+        Log.i("INFO", "remove view")
         if (todoNest.tasks.none { it.apiDateTime == deadline }) {
             // Remove header and RecyclerView for this deadline
             nestHeaderMap[deadline]?.let { headerView ->
@@ -363,9 +373,11 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             }
             nestRecyclerViewMap[deadline]?.let { recyclerView ->
                 findViewById<LinearLayout>(R.id.nest_layout_container).removeView(recyclerView)
+
             }
             nestHeaderMap.remove(deadline)
             nestRecyclerViewMap.remove(deadline)
+            recreate()
         }
     }
 

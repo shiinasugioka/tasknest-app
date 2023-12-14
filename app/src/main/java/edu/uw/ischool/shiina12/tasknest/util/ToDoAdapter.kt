@@ -51,6 +51,12 @@ class TodoAdapter(
         holder.checkBox.setOnClickListener {
             onItemChecked(task, position, holder) // Call the passed in callback function
             updateTextAppearance(holder.textView, task.isFinished, task)
+            holder.itemView.animate().alpha(0f).setDuration(300).withEndAction {
+                // Remove the item after fade-out completes
+                items = items.filter { it != task }
+                notifyItemRemoved(position)
+                onTaskDeleted(task) // Notify that a task has been deleted
+            }
         }
         //Log.i("ToDoAdapter", holder.itemView.toString())
 
@@ -68,21 +74,6 @@ class TodoAdapter(
         }
 
         if (task.isFinished) {
-            holder.itemView.animate().alpha(0f).setDuration(300).withEndAction {
-                // Remove the item after fade-out completes
-                items = items.filter { it != task }
-                notifyItemRemoved(position)
-            }
-        } else {
-            holder.itemView.alpha = 1f // Ensure full opacity if not finished
-            if (task.isFinished) {
-                holder.itemView.animate()
-                    .alpha(0f)
-                    .setDuration(300)
-                    .withEndAction {
-                        onTaskDeleted(task) // Notify that a task has been deleted
-                    }
-            }
         }
     }
 
