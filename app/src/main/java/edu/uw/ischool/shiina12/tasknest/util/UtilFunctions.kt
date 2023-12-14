@@ -46,4 +46,15 @@ object UtilFunctions {
 
         return "$correctedMonth/$day/$year"
     }
+
+    fun getMillisFromFormattedDateTime(dateTimeString: String): Long {
+        try {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+            val date = dateFormat.parse(dateTimeString)
+            return date?.time ?: 0
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return 0
+    }
 }

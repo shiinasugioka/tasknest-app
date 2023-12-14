@@ -20,22 +20,14 @@ import java.util.concurrent.TimeUnit
 import android.telephony.SmsManager
 import androidx.core.content.ContextCompat
 
+private const val tag = "notifs"
+
 class NotificationScheduler {
 
-    // TODO: Call MyNotificationScheduler.scheduleNotification when adding a new task to the nest
-
-    /* Sample code
-
-        // Simulate an event time (e.g., current time + 10 seconds)
-        val eventTimeInMillis = System.currentTimeMillis() + 10000
-
-        // Immediately show a test notification
-        NotificationScheduler().scheduleNotification(this, eventTimeInMillis)
-     */
 
     private val tag = "NotificationScheduler"
 
-    fun scheduleNotification(context: Context, eventTimeInMillis: Long) {
+    fun scheduleNotification(context: Context, eventTimeInMillis: Long, taskTitle: String) {
         // Read preferences to get notification time before the event
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val notificationTimeBeforeEvent = sharedPreferences.getString("notification_frequency", "1")
@@ -54,6 +46,7 @@ class NotificationScheduler {
         // Schedule an alarm to trigger the notification
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, NotificationReceiver::class.java)
+        intent.putExtra("taskTitle", taskTitle)
         val pendingIntent = PendingIntent.getBroadcast(
             context, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
@@ -79,20 +72,16 @@ class NotificationScheduler {
 }
 
 class NotificationReceiver : BroadcastReceiver() {
-    private val MY_PERMISSIONS_REQUEST_SEND_SMS = 123
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            if (hasSmsPermission(it)) {
-                val notification = createNotification(it)
-                showNotification(it, notification)
-            } else {
-                requestSmsPermission(it)
-            }
+            val taskTitle = intent?.getStringExtra("taskTitle") ?: "Default Title"
+            val notification = createNotification(it, taskTitle)
+            showNotification(it, notification)
         }
     }
 
-    private fun createNotification(context: Context): Notification? {
+    private fun createNotification(context: Context, TaskTitle: String): Notification? {
         // Read preferences to check if each notification type is enabled
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val appNotificationsEnabled = sharedPreferences.getBoolean("notification_app", false)
@@ -108,8 +97,8 @@ class NotificationReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, "app_channel")
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Event Notification")
-            .setContentText("Your event is about to start!")
+            .setContentTitle("TaskNest: $TaskTitle")
+            .setContentText("You have a task due soon!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
 
@@ -117,35 +106,20 @@ class NotificationReceiver : BroadcastReceiver() {
             builder.setChannelId("app_channel")
         }
 
-        if (smsNotificationsEnabled) {
-            builder.setChannelId("sms_channel")
-            val smsNumber = sharedPreferences.getString("sms_number", "")
-            if (!smsNumber.isNullOrBlank()) {
-                sendSms(context, smsNumber, "Your event is about to start!")
-            }
-        }
+//        if (smsNotificationsEnabled) {
+//            builder.setChannelId("sms_channel")
+//            val smsNumber = sharedPreferences.getString("sms_number", "")
+//            if (!smsNumber.isNullOrBlank()) {
+//                sendSms(context, smsNumber, "Your event is about to start!")
+//            }
+//        }
 
         return builder.build()
     }
 
     private fun sendSms(context: Context, phoneNumber: String, message: String) {
-        val smsManager = SmsManager.getDefault()
-        smsManager.sendTextMessage(phoneNumber, null, message, null, null)
-    }
-
-    private fun hasSmsPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.SEND_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestSmsPermission(context: Context) {
-        ActivityCompat.requestPermissions(
-            context as Activity,
-            arrayOf(Manifest.permission.SEND_SMS),
-            MY_PERMISSIONS_REQUEST_SEND_SMS
-        )
+//        val smsManager = SmsManager.getDefault()
+//        smsManager.sendTextMessage(phoneNumber, null, message, null, null)
     }
 
     private fun showNotification(context: Context, notification: Notification?) {

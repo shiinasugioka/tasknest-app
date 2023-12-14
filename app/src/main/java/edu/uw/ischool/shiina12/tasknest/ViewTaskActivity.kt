@@ -20,6 +20,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -36,16 +37,16 @@ import edu.uw.ischool.shiina12.tasknest.util.DatePickerListener
 import edu.uw.ischool.shiina12.tasknest.util.Task
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerFragment
 import edu.uw.ischool.shiina12.tasknest.util.TimePickerListener
+import edu.uw.ischool.shiina12.tasknest.util.TodoNest
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.google.api.services.calendar.Calendar as GoogleCalendar
+import edu.uw.ischool.shiina12.tasknest.util.InMemoryTodoRepository as todoRepo
 import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
-const val TAG = "ViewTaskActivity"
-
 class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerListener {
-    private val currentTask: Task = intent.getSerializableExtra("currentTask") as Task
+    private lateinit var currentTask: Task
 
     private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
@@ -101,7 +102,21 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         apiResultsText = ""
         apiStatusText = ""
 
-        // data from current task
+        val currentTaskName = intent.getStringExtra("currentTaskName")
+        val dateTaskCreated = intent.getStringExtra("dateCreated")
+
+        Log.d(TAG, "intent task name: $currentTaskName, date: $dateTaskCreated")
+
+        val currNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
+        if (currNest != null) {
+            for (task in currNest.tasks) {
+                Log.d(TAG, "task: ${task.title}, taskdate: ${task.dateCreated}")
+                if (task.title == currentTaskName && task.dateCreated == dateTaskCreated) {
+                    currentTask = task
+                }
+            }
+        }
+
         currentTaskTitle = currentTask.title
         currentTaskStartDate = currentTask.displayableStartDate
         currentTaskStartTime = currentTask.displayableStartTime
@@ -154,6 +169,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         dateEditText.addTextChangedListener(textWatcher)
 
         addEventButton.setOnClickListener {
+            Log.i("ViewTaskActivity", "clicked")
             setEventDetails()
             addCalendarEvent()
         }
@@ -275,6 +291,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
     private fun addCalendarEvent() {
         CreateEventTask(mService, finalDateTime, finalTitle).execute()
+        Toast.makeText(this, "Added to Google Calendar!", Toast.LENGTH_SHORT).show()
     }
 
     private fun setEventDetails() {
@@ -283,18 +300,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
-//        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-//        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
-//        val LAZoneId = ZoneId.of("America/Los_Angeles")
-//        val formattedDateTime = localDateTime.atZone(LAZoneId)
+        val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
+        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val LAZoneId = ZoneId.of("America/Los_Angeles")
+        val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        Log.i(TAG, "iso8601Formatter: $iso8601Formatter")
-        val formattedDateTime = Functions.reformatDate(combinedDateTimeString, "M/d/yyyy h:mm a", "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        Log.i(TAG, "formatted: $formattedDateTime")
-        Log.i(TAG, "isoFormatter: ${formattedDateTime.format(iso8601Formatter)}")
 
-        finalDateTime = formattedDateTime
-//            .format(iso8601Formatter)
+        finalDateTime = formattedDateTime.format(iso8601Formatter)
         finalTitle = eventTitleText
     }
 
@@ -375,15 +387,20 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     }
 
     private var textWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
+                addEventButton.isEnabled = true
+                Log.i(TAG, "add event button enabled")
+            }
+        }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
             if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
                 addEventButton.isEnabled = true
+                Log.i(TAG, "add event button enabled")
             }
         }
-
     }
 }
