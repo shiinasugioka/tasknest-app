@@ -148,48 +148,48 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
 
         buttonRed.setOnClickListener {
             Log.i(TAG, "red clicked=")
-            selectedColorResId = R.drawable.red
+            selectedColorResId = R.drawable.red_faded
             selectedColor.text = "red selected"
-            textHex = "BD1E1E"
+            textHex = "#D18B85"
         }
         buttonOrange.setOnClickListener {
-            selectedColorResId = R.drawable.orange
+            selectedColorResId = R.drawable.orange_faded
             selectedColor.text = "orange selected"
-            textHex = "EF8354"
+            textHex = "#EBBC9D"
         }
         buttonYellow.setOnClickListener {
-            selectedColorResId = R.drawable.yellow
+            selectedColorResId = R.drawable.yellow_faded
             selectedColor.text = "yellow selected"
-            textHex = "EFEB94"
+            textHex = "#F1F0BB"
         }
 
         buttonGreen.setOnClickListener {
-            selectedColorResId = R.drawable.green
+            selectedColorResId = R.drawable.green_faded
             selectedColor.text = "green selected"
-            textHex = "50754F"
+            textHex = "#A4B49E"
         }
 
         buttonBlue.setOnClickListener {
-            selectedColorResId = R.drawable.blue
+            selectedColorResId = R.drawable.blue_faded
             selectedColor.text = "blue selected"
-            textHex = "92B8C8"
+            textHex = "#C5D6E0"
         }
 
         buttonGray.setOnClickListener {
-            selectedColorResId = R.drawable.gray
+            selectedColorResId = R.drawable.gray_faded
             selectedColor.text = "gray selected"
-            textHex = "4F5D75"
+            textHex = "#A2A8B6"
         }
 
         buttonPurple.setOnClickListener {
-            selectedColorResId = R.drawable.purple
+            selectedColorResId = R.drawable.purple_faded
             selectedColor.text = "purple selected"
-            textHex = "9A53A0"
+            textHex = "#C4A4CF"
         }
         buttonPink.setOnClickListener {
-            selectedColorResId = R.drawable.pink
+            selectedColorResId = R.drawable.pink_faded
             selectedColor.text = "pink selected"
-            textHex = "F2AFE7"
+            textHex = "#F0D3F1"
         }
 
         /*buttonNoColor.setOnClickListener {
@@ -324,7 +324,8 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             apiDateTime = finalDateTime,
             displayableStartDate = eventStartDate,
             displayableStartTime = eventStartTime,
-            dateCreated = currentDate
+            dateCreated = currentDate,
+            colorHex = textHex
         )
 
         todoRepo.addTaskToList(currNest, task)

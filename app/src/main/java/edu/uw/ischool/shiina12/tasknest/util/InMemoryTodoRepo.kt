@@ -28,7 +28,8 @@ object InMemoryTodoRepository : TodoRepository {
             isFinished = false,
             displayableStartTime = "",
             displayableStartDate = "",
-            dateCreated = currentDate
+            dateCreated = currentDate,
+            colorHex = "#FFFFF"
         )
 
         val defaultTodoNest = TodoNest(

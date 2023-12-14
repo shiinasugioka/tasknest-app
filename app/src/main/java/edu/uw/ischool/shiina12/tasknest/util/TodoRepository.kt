@@ -32,7 +32,8 @@ data class Task(
     var displayableStartTime: String,
     var displayableStartDate: String,
     var isFinished: Boolean = false,
-    val dateCreated: String
+    val dateCreated: String,
+    var colorHex: String
 ) : Serializable
 
 enum class SortingMethod {
