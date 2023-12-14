@@ -14,25 +14,25 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/red"/>
+            android:src="@drawable/red_faded"/>
         <ImageButton
             android:id="@+id/buttonOrange"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/orange"/>
+            android:src="@drawable/orange_faded"/>
         <ImageButton
             android:id="@+id/buttonYellow"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/yellow"/>
+            android:src="@drawable/yellow_faded"/>
         <ImageButton
             android:id="@+id/buttonGreen"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/green"/>
+            android:src="@drawable/green_faded"/>
 
     </LinearLayout>
     <LinearLayout
@@ -45,28 +45,28 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/blue"/>
+            android:src="@drawable/blue_faded"/>
 
         <ImageButton
             android:id="@+id/buttonGray"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/gray"/>
+            android:src="@drawable/gray_faded"/>
 
         <ImageButton
             android:id="@+id/buttonPurple"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/purple"/>
+            android:src="@drawable/purple_faded"/>
 
         <ImageButton
             android:id="@+id/buttonPink"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:src="@drawable/pink"/>
+            android:src="@drawable/pink_faded"/>
 
     </LinearLayout>
     <LinearLayout

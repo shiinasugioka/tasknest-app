@@ -2,6 +2,7 @@ package edu.uw.ischool.shiina12.tasknest.util
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,17 +40,19 @@ class TodoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = items[position]
+        Log.i("ToDoAdapter", task.toString())
         holder.textView.text = task.title
         holder.checkBox.isChecked = task.isFinished
 
         // Set initial text appearance
-        updateTextAppearance(holder.textView, task.isFinished)
+        updateTextAppearance(holder.textView, task.isFinished, task)
 
         // Set a click listener for the checkbox
         holder.checkBox.setOnClickListener {
             onItemChecked(task, position, holder) // Call the passed in callback function
-            updateTextAppearance(holder.textView, task.isFinished)
+            updateTextAppearance(holder.textView, task.isFinished, task)
         }
+        //Log.i("ToDoAdapter", holder.itemView.toString())
 
         holder.textView.setOnClickListener {
             val currentNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
@@ -83,13 +86,22 @@ class TodoAdapter(
         }
     }
 
-    private fun updateTextAppearance(textView: TextView, isFinished: Boolean) {
+    private fun updateTextAppearance(textView: TextView, isFinished: Boolean, task: Task) {
         if (isFinished) {
             textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             textView.setTextColor(Color.GRAY)
         } else {
             textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             textView.setTextColor(ContextCompat.getColor(textView.context, R.color.primary_text))
+        }
+        // Set background color based on colorHex
+        try {
+            // Set background color based on colorHex
+            textView.setBackgroundColor(Color.parseColor(task.colorHex))
+        } catch (e: IllegalArgumentException) {
+            // Handle the case where colorHex is not a valid color
+            e.printStackTrace()
+            textView.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 

@@ -127,6 +127,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         addEventButton.isEnabled = true
     }
 
+
     private fun setListeners() {
         val timePickerFragment = TimePickerFragment()
         timePickerFragment.setListener(this, timeEditText)
