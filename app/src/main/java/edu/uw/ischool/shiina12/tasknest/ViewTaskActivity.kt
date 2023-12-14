@@ -27,6 +27,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.util.DateTime
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.calendar.CalendarScopes
 import edu.uw.ischool.shiina12.tasknest.api_util.ApiAsyncTask
@@ -51,11 +52,9 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
-    private lateinit var allDay: CheckBox
-    private lateinit var repeatingEvent: CheckBox
-    private lateinit var startsOn: EditText
-    private lateinit var endsOn: EditText
-    private lateinit var atTime: EditText
+    private lateinit var allDayCheckbox: CheckBox
+    private lateinit var repeatEventCheckbox: CheckBox
+    private var repeatEndsOnEditText: EditText? = null
     private lateinit var addEventButton: Button
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
@@ -70,8 +69,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     private lateinit var eventTitleText: String
     private lateinit var eventStartTimeText: String
     private lateinit var eventStartDateText: String
-    private lateinit var finalDateTime: String
-    private lateinit var finalTitle: String
+    private var repeatEndDateText: String = ""
+    private var repeatingInterval: String = ""
+
+    private var finalDateTime: String = ""
+    private var finalTitle: String = ""
+    private var finalRepeatEnd: String = ""
+    private var finalRepeatingInterval: String = ""
 
     private var mCredential: GoogleAccountCredential? = null  // user's google account
     var mService: GoogleCalendar? = null  // user's google calendar
@@ -92,9 +96,10 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         eventTitleTextView = findViewById(R.id.editTaskTitle)
         timeEditText = findViewById(R.id.editTaskStartTime)
         dateEditText = findViewById(R.id.editTaskStartDate)
-        repeatingEvent = findViewById(R.id.checkboxRepeating)
-        allDay = findViewById(R.id.allDayCheckBox)
+        repeatEventCheckbox = findViewById(R.id.checkboxRepeating)
+        allDayCheckbox = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
+        repeatEndsOnEditText = null
 
         // UI elements for API
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
@@ -103,8 +108,6 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         val currentTaskName = intent.getStringExtra("currentTaskName")
         val dateTaskCreated = intent.getStringExtra("dateCreated")
-
-        Log.d(TAG, "intent task name: $currentTaskName, date: $dateTaskCreated")
 
         val currNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
         if (currNest != null) {
@@ -146,13 +149,13 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             }
         }
 
-        repeatingEvent.setOnClickListener {
-            if (repeatingEvent.isChecked) {
+        repeatEventCheckbox.setOnClickListener {
+            if (repeatEventCheckbox.isChecked) {
                 showCustomDialog()
             }
         }
 
-        allDay.setOnCheckedChangeListener { _, isChecked ->
+        allDayCheckbox.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
                 timeEditText.visibility = View.VISIBLE
             } else {
@@ -179,9 +182,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         val builder = AlertDialog.Builder(this)
         val inflater = LayoutInflater.from(this)
         val dialogView = inflater.inflate(R.layout.repeating_dialog_layout, null)
-        startsOn = dialogView.findViewById(R.id.repeatingStartDate)
-        endsOn = dialogView.findViewById(R.id.repeatingEndDate)
-        atTime = dialogView.findViewById(R.id.reminderTime)
+        repeatEndsOnEditText = dialogView.findViewById(R.id.repeatingEndDate)
 
         val spinner: Spinner = dialogView.findViewById(R.id.intervalSpinner)
         ArrayAdapter.createFromResource(
@@ -191,39 +192,28 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             spinner.adapter = adapter
         }
 
-        val startDateFragment = DatePickerFragment()
-        startDateFragment.setListener(this, startsOn)
+        repeatingInterval = spinner.selectedItem.toString()
 
-        val endDateFragment = DatePickerFragment()
-        endDateFragment.setListener(this, endsOn)
+        if (repeatEndsOnEditText != null) {
+            val endDateFragment = DatePickerFragment()
 
-        val atTimeFragment = TimePickerFragment()
-        atTimeFragment.setListener(this, atTime)
+            endDateFragment.setListener(this, repeatEndsOnEditText!!)
 
-        startsOn.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                startDateFragment.show(supportFragmentManager, "datePicker")
+            repeatEndsOnEditText!!.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    endDateFragment.show(supportFragmentManager, "datePicker")
+                }
             }
         }
 
-        endsOn.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                endDateFragment.show(supportFragmentManager, "datePicker")
-            }
-        }
-
-        atTime.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                atTimeFragment.show(supportFragmentManager, "timePicker")
-            }
-        }
-
-        builder.setView(dialogView).setTitle("Options").setPositiveButton("OK") { dialog, _ ->
+        builder.setView(dialogView).setTitle("Options").setPositiveButton("OK")
+        { dialog, _ ->
             // val enteredText = editText.text.toString()
             // Do something with the entered text
 
             dialog.dismiss()
-        }.setNegativeButton("Cancel") { dialog, _ ->
+        }.setNegativeButton("Cancel")
+        { dialog, _ ->
             dialog.dismiss()
         }.show()
     }
@@ -290,24 +280,52 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     }
 
     private fun addCalendarEvent() {
-        CreateEventTask(mService, finalDateTime, finalTitle).execute()
+        CreateEventTask(
+            mService, finalDateTime, finalTitle, finalRepeatEnd, finalRepeatingInterval
+        ).execute()
         Toast.makeText(this, "Added to Google Calendar!", Toast.LENGTH_SHORT).show()
     }
 
     private fun setEventDetails() {
+
+        // title
         eventTitleText = eventTitleTextView.text.toString()
+
+        // date time
         eventStartTimeText = timeEditText.text.toString()
         eventStartDateText = dateEditText.text.toString()
 
         val combinedDateTimeString = "$eventStartDateText $eventStartTimeText"
+
+        // repeating
+        var formattedRepeatEnd = ""
+        if (repeatEndsOnEditText != null) {
+            repeatEndDateText = repeatEndsOnEditText!!.text.toString()
+            val combinedRepeatEnd = "$repeatEndDateText $eventStartTimeText"
+
+            val repeatEnd = parseDateTimeIntoAPIFormat(combinedRepeatEnd)
+
+            val endRepeatingDateTime = DateTime(repeatEnd)
+
+            formattedRepeatEnd = endRepeatingDateTime.toStringRfc3339()
+        }
+
+        // repeating interval
+        finalRepeatingInterval = repeatingInterval
+
+        // values sent to API
+        finalDateTime = parseDateTimeIntoAPIFormat(combinedDateTimeString)
+        finalTitle = eventTitleText
+        finalRepeatEnd = formattedRepeatEnd
+    }
+
+    private fun parseDateTimeIntoAPIFormat(input: String): String {
         val formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")
-        val localDateTime = LocalDateTime.parse(combinedDateTimeString, formatter)
+        val localDateTime = LocalDateTime.parse(input, formatter)
         val LAZoneId = ZoneId.of("America/Los_Angeles")
         val formattedDateTime = localDateTime.atZone(LAZoneId)
         val iso8601Formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-
-        finalDateTime = formattedDateTime.format(iso8601Formatter)
-        finalTitle = eventTitleText
+        return formattedDateTime.format(iso8601Formatter)
     }
 
     private fun isGooglePlayServicesAvailable(): Boolean {
