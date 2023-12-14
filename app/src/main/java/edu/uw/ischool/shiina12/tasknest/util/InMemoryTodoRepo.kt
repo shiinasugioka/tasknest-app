@@ -28,7 +28,8 @@ object InMemoryTodoRepository : TodoRepository {
             isFinished = false,
             displayableStartTime = "",
             displayableStartDate = "",
-            dateCreated = currentDate
+            dateCreated = currentDate,
+            colorHex = "#FFFFF"
         )
 
         val defaultTodoNest = TodoNest(
@@ -56,20 +57,19 @@ object InMemoryTodoRepository : TodoRepository {
     }
 
     fun getTasksForToday(): List<Task> {
-        val todayInstant = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(currentDate))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+        val todayInstant = Instant.from(formatter.parse(currentDate))
         val todayDate = ZonedDateTime.ofInstant(todayInstant, ZoneId.systemDefault()).toLocalDate()
 
         return todoNests.flatMap { nest ->
             nest.tasks.filter { task ->
-                val taskInstant =
-                    Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(task.apiDateTime))
-                val taskDate =
-                    ZonedDateTime.ofInstant(taskInstant, ZoneId.systemDefault()).toLocalDate()
+                val taskInstant = Instant.from(formatter.parse(task.apiDateTime))
+                val taskDate = ZonedDateTime.ofInstant(taskInstant, ZoneId.systemDefault()).toLocalDate()
                 taskDate.isEqual(todayDate)
             }
         }
-
     }
+
 
     fun setCurrNestName(nestName: String) {
         this.currNest = nestName
