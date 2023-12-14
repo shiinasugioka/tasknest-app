@@ -60,6 +60,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
     private lateinit var apiResultsText: String
     private lateinit var apiStatusText: String
     private lateinit var exitButton: ImageButton
+    private lateinit var saveButton: Button
 
     // values from currentTask object
     private lateinit var currentTaskTitle: String
@@ -96,6 +97,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         repeatingEvent = findViewById(R.id.checkboxRepeating)
         allDay = findViewById(R.id.allDayCheckBox)
         exitButton = findViewById(R.id.imageButtonExit)
+        saveButton = findViewById(R.id.saveButton)
 
         // UI elements for API
         addEventButton = findViewById(R.id.buttonGoogleCalendar)
@@ -174,7 +176,17 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
             setEventDetails()
             addCalendarEvent()
         }
+        saveButton.setOnClickListener {
+            // updateEvent()
+        }
     }
+
+    /*private fun updateEvent() {
+        val currNest: TodoNest? = todoRepo.getTodoNestByTitle(todoRepo.getCurrNestName())
+        if (currNest != null) {
+            todoRepo.modifyTask(currNest, currentTaskTitle, todoRepo.)
+        }
+    }*/
 
     private fun showCustomDialog() {
         val builder = AlertDialog.Builder(this)

@@ -115,7 +115,7 @@ object InMemoryTodoRepository : TodoRepository {
             it.title = updatedTask.title
             it.apiDateTime = updatedTask.apiDateTime
             it.isFinished = updatedTask.isFinished
-        }
+        }add
     }
 
     override fun deleteTask(nest: TodoNest, taskTitle: String) {
