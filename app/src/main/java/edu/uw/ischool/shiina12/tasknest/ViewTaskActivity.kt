@@ -125,7 +125,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         timeEditText.setText(currentTaskStartTime)
         dateEditText.setText(currentTaskStartDate)
 
-        addEventButton.isEnabled = false
+        addEventButton.isEnabled = true
     }
 
     private fun setListeners() {
@@ -388,7 +388,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
     private var textWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
+            if (eventTitleTextView.text.isNotEmpty() && timeEditText.text.isNotEmpty() && dateEditText.text.isNotEmpty()) {
                 addEventButton.isEnabled = true
                 Log.i(TAG, "add event button enabled")
             }
@@ -397,7 +397,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(s: Editable?) {
-            if (eventTitleTextView.text.isNotBlank() && timeEditText.text.isNotBlank() && dateEditText.text.isNotBlank()) {
+            if (eventTitleTextView.text.isNotEmpty() && timeEditText.text.isNotEmpty() && dateEditText.text.isNotEmpty()) {
                 addEventButton.isEnabled = true
                 Log.i(TAG, "add event button enabled")
             }
