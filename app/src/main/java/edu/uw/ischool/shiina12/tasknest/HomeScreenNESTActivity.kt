@@ -148,14 +148,14 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
         val selectedNest = todoRepo.getTodoNestByTitle(nestName)
         selectedNest?.let { nest ->
-            val tasksGroupedByDeadline = nest.tasks.groupBy { it.apiDateTime }
+            val tasksGroupedByDeadline = nest.tasks.groupBy { task ->
+                // Extract the date part from apiDateTime
+                Functions.reformatDate(task.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
+            }
 
             var hasTasks = false // Flag to check if there are any tasks
 
             tasksGroupedByDeadline.forEach { (deadline, tasks) ->
-                val formattedDate =
-                    Functions.reformatDate(deadline, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
-
                 if (tasks.isNotEmpty()) {
                     // Create and add the deadline TextView
                     val deadlineTextView = TextView(this).apply {
@@ -163,7 +163,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
-                        text = formattedDate
+                        text = deadline
                         setTextColor(
                             ContextCompat.getColor(
                                 context, R.color.primary_text
@@ -175,7 +175,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
 
                     // Create and add the tasks view (RecyclerView or individual views)
                     val recyclerView =
-                        createRecyclerViewForTasks(tasks, selectedNest, formattedDate)
+                        createRecyclerViewForTasks(tasks, selectedNest, deadline)
                     todoNestItemContainer.addView(recyclerView)
 
                     hasTasks = true // Tasks are found
@@ -201,6 +201,7 @@ class HomeScreenNESTActivity : AppCompatActivity() {
             }
         }
     }
+
 
 
 
