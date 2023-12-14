@@ -149,61 +149,53 @@ class HomeScreenNESTActivity : AppCompatActivity() {
         val selectedNest = todoRepo.getTodoNestByTitle(nestName)
         selectedNest?.let { nest ->
             val tasksGroupedByDeadline = nest.tasks.groupBy { task ->
-                // Extract the date part from apiDateTime
-                Functions.reformatDate(task.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "EEEE, MM/dd")
-            }
+                Functions.reformatDate(task.apiDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "yyyy-MM-dd")
+            }.toSortedMap()
 
-            var hasTasks = false // Flag to check if there are any tasks
-
-            tasksGroupedByDeadline.forEach { (deadline, tasks) ->
-                if (tasks.isNotEmpty()) {
-                    // Create and add the deadline TextView
-                    val deadlineTextView = TextView(this).apply {
-                        layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        text = deadline
-                        setTextColor(
-                            ContextCompat.getColor(
-                                context, R.color.primary_text
-                            )
-                        )
-                        textSize = 13f
-                    }
+            if (tasksGroupedByDeadline.isEmpty()) {
+                addNoTasksMessage(todoNestItemContainer)
+            } else {
+                tasksGroupedByDeadline.forEach { (deadline, tasks) ->
+                    val formattedDeadline = Functions.reformatDate(deadline, "yyyy-MM-dd", "EEEE, MM/dd")
+                    val deadlineTextView = createDeadlineTextView(formattedDeadline)
                     todoNestItemContainer.addView(deadlineTextView)
 
-                    // Create and add the tasks view (RecyclerView or individual views)
-                    val recyclerView =
-                        createRecyclerViewForTasks(tasks, selectedNest, deadline, this) {
-                            finish()
-                            startActivity(intent)
-                        }
-                        todoNestItemContainer.addView(recyclerView)
-
-                    hasTasks = true // Tasks are found
+                    val recyclerView = createRecyclerViewForTasks(tasks, selectedNest, deadline, this) {
+                        finish()
+                        startActivity(intent)
+                    }
+                    todoNestItemContainer.addView(recyclerView)
                 }
-            }
-
-            if (!hasTasks) {
-                // If no tasks were found, display a message
-                val noTasksTextView = TextView(this).apply {
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    text = "No tasks for this nest."
-                    setTextColor(
-                        ContextCompat.getColor(
-                            context, R.color.primary_text
-                        )
-                    )
-                    textSize = 13f
-                }
-                todoNestItemContainer.addView(noTasksTextView)
             }
         }
     }
+
+
+        private fun createDeadlineTextView(deadline: String): TextView {
+            return TextView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                text = deadline
+                setTextColor(ContextCompat.getColor(context, R.color.primary_text))
+                textSize = 16f // Adjust as needed
+            }
+        }
+
+        private fun addNoTasksMessage(container: LinearLayout) {
+            val noTasksTextView = TextView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                text = "No tasks for this nest."
+                setTextColor(ContextCompat.getColor(context, R.color.primary_text))
+                textSize = 13f
+            }
+            container.addView(noTasksTextView)
+        }
+
 
 
 
