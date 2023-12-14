@@ -85,7 +85,6 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         setListeners()
         initCredentials()
-
     }
 
     private fun findAndInitializeUIElements() {
@@ -127,6 +126,7 @@ class ViewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerList
 
         addEventButton.isEnabled = true
     }
+
 
     private fun setListeners() {
         val timePickerFragment = TimePickerFragment()
