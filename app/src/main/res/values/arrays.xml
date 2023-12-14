@@ -11,9 +11,9 @@
         <item>days</item>
     </string-array>
     <string-array name="frequency_units_events">
-        <item>Days</item>
-        <item>Weeks</item>
-        <item>Months</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
     </string-array>
 
 

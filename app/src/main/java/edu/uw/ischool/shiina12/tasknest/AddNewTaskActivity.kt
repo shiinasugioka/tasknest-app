@@ -36,12 +36,12 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
     private lateinit var eventTitleTextView: EditText
     private lateinit var timeEditText: EditText
     private lateinit var dateEditText: EditText
-    private lateinit var repeatingEventCheckBox: CheckBox
-    private lateinit var repeatingEventLayout: LinearLayout
-    private lateinit var repeatingStartDateEditText: EditText
-    private lateinit var repeatingEndDateEditText: EditText
-    private lateinit var atTimeEditText: EditText
-    private lateinit var repeatingIntervalSpinner: Spinner
+//    private lateinit var repeatingEventCheckBox: CheckBox
+//    private lateinit var repeatingEventLayout: LinearLayout
+//    private lateinit var repeatingStartDateEditText: EditText
+//    private lateinit var repeatingEndDateEditText: EditText
+//    private lateinit var atTimeEditText: EditText
+//    private lateinit var repeatingIntervalSpinner: Spinner
 
     private lateinit var currNest: TodoNest
     private lateinit var exitButton: ImageButton
@@ -81,11 +81,11 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         timeEditText.addTextChangedListener(watcher)
         dateEditText.addTextChangedListener(watcher)
 
-        repeatingEventCheckBox = findViewById(R.id.checkboxRepeating)
-        repeatingEventLayout = findViewById(R.id.repeatingEventOptions)
-        repeatingStartDateEditText = findViewById(R.id.repeatingStartDate)
-        repeatingEndDateEditText = findViewById(R.id.repeatingEndDate)
-        atTimeEditText = findViewById(R.id.reminderTime)
+//        repeatingEventCheckBox = findViewById(R.id.checkboxRepeating)
+//        repeatingEventLayout = findViewById(R.id.repeatingEventOptions)
+//        repeatingStartDateEditText = findViewById(R.id.repeatingStartDate)
+//        repeatingEndDateEditText = findViewById(R.id.repeatingEndDate)
+//        atTimeEditText = findViewById(R.id.reminderTime)
         allDay = findViewById(R.id.allDayCheckBox)
 
         exitButton = findViewById(R.id.imageButtonExit)
@@ -103,16 +103,16 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             }
         }
 
-        repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
+//        repeatingIntervalSpinner = findViewById(R.id.intervalSpinner)
 
         findAndSetColorButtons()
 
-        ArrayAdapter.createFromResource(
-            this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            repeatingIntervalSpinner.adapter = adapter
-        }
+//        ArrayAdapter.createFromResource(
+//            this, R.array.frequency_units_events, android.R.layout.simple_spinner_item
+//        ).also { adapter ->
+//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            repeatingIntervalSpinner.adapter = adapter
+//        }
     }
 
     private fun showToast(message: String) {
@@ -226,14 +226,14 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
         val datePickerFragment = DatePickerFragment()
         datePickerFragment.setListener(this, dateEditText)
 
-        val startDateFragment = DatePickerFragment()
-        startDateFragment.setListener(this, repeatingStartDateEditText)
-
-        val endDateFragment = DatePickerFragment()
-        endDateFragment.setListener(this, repeatingEndDateEditText)
-
-        val atTimeFragment = TimePickerFragment()
-        atTimeFragment.setListener(this, atTimeEditText)
+//        val startDateFragment = DatePickerFragment()
+//        startDateFragment.setListener(this, repeatingStartDateEditText)
+//
+//        val endDateFragment = DatePickerFragment()
+//        endDateFragment.setListener(this, repeatingEndDateEditText)
+//
+//        val atTimeFragment = TimePickerFragment()
+//        atTimeFragment.setListener(this, atTimeEditText)
 
         timeEditText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
@@ -247,31 +247,31 @@ class AddNewTaskActivity : AppCompatActivity(), TimePickerListener, DatePickerLi
             }
         }
 
-        repeatingStartDateEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                startDateFragment.show(supportFragmentManager, "datePicker")
-            }
-        }
+//        repeatingStartDateEditText.setOnFocusChangeListener { view, hasFocus ->
+//            if (hasFocus) {
+//                startDateFragment.show(supportFragmentManager, "datePicker")
+//            }
+//        }
 
-        repeatingEndDateEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                endDateFragment.show(supportFragmentManager, "datePicker")
-            }
-        }
+//        repeatingEndDateEditText.setOnFocusChangeListener { view, hasFocus ->
+//            if (hasFocus) {
+//                endDateFragment.show(supportFragmentManager, "datePicker")
+//            }
+//        }
 
-        atTimeEditText.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) {
-                atTimeFragment.show(supportFragmentManager, "timePicker")
-            }
-        }
+//        atTimeEditText.setOnFocusChangeListener { view, hasFocus ->
+//            if (hasFocus) {
+//                atTimeFragment.show(supportFragmentManager, "timePicker")
+//            }
+//        }
 
-        repeatingEventCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                repeatingEventLayout.visibility = View.VISIBLE
-            } else {
-                repeatingEventLayout.visibility = View.INVISIBLE
-            }
-        }
+//        repeatingEventCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//                repeatingEventLayout.visibility = View.VISIBLE
+//            } else {
+//                repeatingEventLayout.visibility = View.INVISIBLE
+//            }
+//        }
 
         allDay.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!isChecked) {

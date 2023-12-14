@@ -8,6 +8,7 @@ import com.google.api.services.calendar.model.EventDateTime
 import java.io.IOException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import edu.uw.ischool.shiina12.tasknest.util.UtilFunctions as Functions
 
 /**
  * This class contains the actual data that is passed into the API.
@@ -17,11 +18,17 @@ import java.time.format.DateTimeFormatter
  * If there are problems with the API it probably isn't this file.
  **/
 class CreateEventTask internal constructor(
-    private var mService: Calendar?, finalDateTime: String, finalTitle: String
+    private var mService: Calendar?,
+    finalDateTime: String,
+    finalTitle: String,
+    finalRepeatEnd: String,
+    finalRepeatingInterval: String
 ) : AsyncTask<Void?, Void?, Void?>() {
 
     private val givenStartDateTime = finalDateTime
     private val givenFinalTitle = finalTitle
+    private val givenRepeatEnd = finalRepeatEnd
+    private val repeatingInterval = finalRepeatingInterval
 
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
@@ -33,6 +40,7 @@ class CreateEventTask internal constructor(
         val eventTitle = givenFinalTitle
 
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
         val formattedStart = ZonedDateTime.parse(givenStartDateTime, formatter)
         val formattedEndTime = formattedStart.plusHours(1)
         val givenEndDateTime = formattedEndTime.format(formatter)
@@ -48,6 +56,26 @@ class CreateEventTask internal constructor(
         val endDateTime = DateTime(givenEndDateTime)
         val end = EventDateTime().setDateTime(endDateTime).setTimeZone("America/Los_Angeles")
         event.setEnd(end)
+
+        if (givenRepeatEnd != "" && repeatingInterval != "") {
+            val repeatEnd = DateTime(givenRepeatEnd)
+            val rEnd = EventDateTime().setDateTime(repeatEnd)
+                .setTimeZone("America/Los_Angeles").dateTime.toString()
+
+            val formattedREnd =
+                Functions.reformatDate(rEnd, "yyyy-MM-dd'T'HH:mm:ss.SSS", "yyyyMMdd'T'HHmmss'Z'")
+
+
+            var rInterval = "WEEKLY"
+            if (repeatingInterval == "Daily") {
+                rInterval = "DAILY"
+            } else if (repeatingInterval == "Monthly") {
+                rInterval = "MONTHLY"
+            }
+
+            val recurrence = "RRULE:FREQ=$rInterval;UNTIL=$formattedREnd"
+            event.setRecurrence(listOf(recurrence));
+        }
 
         val calendarId = "primary"
 
