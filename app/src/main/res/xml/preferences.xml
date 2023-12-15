@@ -19,12 +19,12 @@
             android:icon="@drawable/email_notification"
             android:defaultValue="false"/>
 
-        <CheckBoxPreference
-            android:key="notification_sms"
-            android:title="SMS Notifications"
-            android:summary="Enable SMS notifications"
-            android:icon="@drawable/sms_notification"
-            android:defaultValue="false"/>
+<!--        <CheckBoxPreference-->
+<!--            android:key="notification_sms"-->
+<!--            android:title="SMS Notifications"-->
+<!--            android:summary="Enable SMS notifications"-->
+<!--            android:icon="@drawable/sms_notification"-->
+<!--            android:defaultValue="false"/>-->
 
         <EditTextPreference
             android:key="email_address"
@@ -33,12 +33,12 @@
             android:inputType="textEmailAddress"
             android:dependency="notification_email"/>
 
-        <EditTextPreference
-            android:key="sms_number"
-            android:title="SMS Number"
-            android:summary="Enter your phone number"
-            android:inputType="phone"
-            android:dependency="notification_sms"/>
+<!--        <EditTextPreference-->
+<!--            android:key="sms_number"-->
+<!--            android:title="SMS Number"-->
+<!--            android:summary="Enter your phone number"-->
+<!--            android:inputType="phone"-->
+<!--            android:dependency="notification_sms"/>-->
     </PreferenceCategory>
 
     <!-- Notification Frequency Preferences -->
